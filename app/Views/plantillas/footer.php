@@ -37,7 +37,7 @@
     </div>
 
     <div class="container text-center border-bottom">
-        <div class="row ps-5 pe-5 pt-2">
+        <div class="row ps-5 pe-5 pt-2 justify-content-center">
             <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 text-center">
                 <ul class="list-unstyled">
                     <li><b>Marcas</b></li>
@@ -64,7 +64,7 @@
                     <li><a href="<?php echo base_url('ayuda#sucursal'); ?>" class="text-dark text-decoration-none opacity-75">Sucursales</a></li>
                 </ul>
             </div>
-            <div class="col-xl-3 col-lg-3 col-md-12 col-sm-6 text-center">
+            <div class="col-xl-3 col-lg-3 col-md-12 col-sm-6 text-center d-none">
                 <ul class="list-unstyled">
                     <li><b>¿Preguntas o Comentarios?</b></li>
                     <li><a href="<?php echo base_url('consultas'); ?>" class="text-dark text-decoration-none opacity-75">Consultas</a></li>

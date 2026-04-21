@@ -62,10 +62,10 @@
                             </a> 
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item item__li-a-3" href="<?php echo base_url('altaDeProductos'); ?>"><b>Producto</b></a></li>
-                                <li><a class="dropdown-item item__li-a-3" href="<?php echo base_url('altaDeCategorias'); ?>"><b>Categoria</b></a></li>
+                                <li style="display:none;"><a class="dropdown-item item__li-a-3" href="<?php echo base_url('altaDeCategorias'); ?>"><b>Categoria</b></a></li>
                                 <li><a class="dropdown-item item__li-a-3" href="<?php echo base_url('altaDeUsuarios'); ?>"><b>Usuario</b></a></li>
-                                <li><a class="dropdown-item item__li-a-3" href="<?php echo base_url('altaDePerfiles'); ?>"><b>Perfil</b></a></li>
-                                <li><a class="dropdown-item item__li-a-3" href="<?php echo base_url('altaDeMarcas'); ?>"><b>Marca</b></a></li>
+                                <li style="display:none;"><a class="dropdown-item item__li-a-3" href="<?php echo base_url('altaDePerfiles'); ?>"><b>Perfil</b></a></li>
+                                <li style="display:none;"><a class="dropdown-item item__li-a-3" href="<?php echo base_url('altaDeMarcas'); ?>"><b>Marca</b></a></li>
                             </ul>
                         </div>
                     </div>
@@ -77,10 +77,10 @@
                             </a> 
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item item__li-a-3" href="<?php echo base_url('mostrarListaProductos'); ?>"><b>Lista de Productos</b></a></li>
-                                <li><a class="dropdown-item item__li-a-3" href="<?php echo base_url('mostrarListaCategorias'); ?>"><b>Lista de Categorias</b></a></li>
-                                <li><a class="dropdown-item item__li-a-3" href="<?php echo base_url('mostrarListaUsuarios'); ?>"><b>Lista de Usuarios</b></a></li>
-                                <li><a class="dropdown-item item__li-a-3" href="<?php echo base_url('mostrarListaPerfiles'); ?>"><b>Lista de Perfiles</b></a></li>
-                                <li><a class="dropdown-item item__li-a-3" href="<?php echo base_url('mostrarListaMarcas'); ?>"><b>Lista de Marcas</b></a></li>
+                                <li style="display:none;"><a class="dropdown-item item__li-a-3" href="<?php echo base_url('mostrarListaCategorias'); ?>"><b>Lista de Categorias</b></a></li>
+                                <li ><a class="dropdown-item item__li-a-3" href="<?php echo base_url('mostrarListaUsuarios'); ?>"><b>Lista de Usuarios</b></a></li>
+                                <li style="display:none;"><a class="dropdown-item item__li-a-3" href="<?php echo base_url('mostrarListaPerfiles'); ?>"><b>Lista de Perfiles</b></a></li>
+                                <li style="display:none;"><a class="dropdown-item item__li-a-3" href="<?php echo base_url('mostrarListaMarcas'); ?>"><b>Lista de Marcas</b></a></li>
                             </ul>
                         </div>
                     </div>
@@ -92,10 +92,10 @@
                             </a> 
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item item__li-a-3" href="<?php echo base_url('mostrarListaProductosActualizarEliminar'); ?>"><b>Producto</b></a></li>
-                                <li><a class="dropdown-item item__li-a-3" href="<?php echo base_url('mostrarListaCategoriasActualizarEliminar'); ?>"><b>Categoria</b></a></li>
-                                <li><a class="dropdown-item item__li-a-3" href="<?php echo base_url('mostrarListaUsuariosActualizarEliminar'); ?>"><b>Usuario</b></a></li>
-                                <li><a class="dropdown-item item__li-a-3" href="<?php echo base_url('mostrarListaPerfilesActualizarEliminar'); ?>"><b>Perfil</b></a></li>
-                                <li><a class="dropdown-item item__li-a-3" href="<?php echo base_url('mostrarListaMarcasActualizarEliminar'); ?>"><b>Marca</b></a></li>
+                                <li style="display:none;"><a class="dropdown-item item__li-a-3" href="<?php echo base_url('mostrarListaCategoriasActualizarEliminar'); ?>"><b>Categoria</b></a></li>
+                                <li ><a class="dropdown-item item__li-a-3" href="<?php echo base_url('mostrarListaUsuariosActualizarEliminar'); ?>"><b>Usuario</b></a></li>
+                                <li style="display:none;"><a class="dropdown-item item__li-a-3" href="<?php echo base_url('mostrarListaPerfilesActualizarEliminar'); ?>"><b>Perfil</b></a></li>
+                                <li style="display:none;"><a class="dropdown-item item__li-a-3" href="<?php echo base_url('mostrarListaMarcasActualizarEliminar'); ?>"><b>Marca</b></a></li>
                             </ul>
                         </div>
                     </div>
@@ -107,7 +107,7 @@
                             </a> 
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item item__li-a-3" href="<?php echo base_url('mostrarListaVentas'); ?>"><b>Ventas</b></a></li>
-                                <li><a class="dropdown-item item__li-a-3" href="<?php echo base_url('mostrarListaConsultas'); ?>"><b>Consultas</b></a></li>
+                                <li style="display:none;"><a class="dropdown-item item__li-a-3" href="<?php echo base_url('mostrarListaConsultas'); ?>"><b>Consultas</b></a></li>
                             </ul>
                         </div>
                     </div>
@@ -149,9 +149,9 @@
                             <li class="nav-item">
                                 <a class="nav-link item__li-a-1" href="<?php echo base_url('contacto'); ?>"><b>Contacto</b></a>
                             </li>
-                            <li class="nav-item">
+                            <!-- <li class="nav-item">
                                 <a class="nav-link item__li-a-1" href="<?php echo base_url('consultas'); ?>"><b>Consultas</b></a>
-                            </li>
+                            </li> -->
                         </ul>
                     </div>
                 <?php endif; ?>
