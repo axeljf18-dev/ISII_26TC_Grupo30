@@ -73,7 +73,7 @@
         </div>
     </div>
 
-    <p class="text-center opacity-75 pt-3">&copy; 2025 NetShop | Todos los derechos reservados | País: Argentina | Provincia: Corrientes | Localidad: Corrientes Capital</p>
+    <p class="text-center opacity-75 pt-3">&copy; 2026 NetShop | Todos los derechos reservados | País: Argentina | Provincia: Corrientes | Localidad: Corrientes Capital</p>
     <?php endif; ?>
     <script src="<?= base_url('assets/js/bootstrap.bundle.min.js'); ?>"></script>
 </footer>

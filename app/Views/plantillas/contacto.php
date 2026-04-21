@@ -34,7 +34,7 @@
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 pt-3 pb-2 border-top">
             <p class="text-center ps-2 pe-2">¿Tienes alguna duda? Envíanos un correo a: <b>contacto.netshop.ns@gmail.com</b></p>
         </div>
-        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 pt-3 pb-2 border-top">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 pt-3 pb-2 border-top d-none">
             <p class="text-center ps-2 pe-2">¡Estamos aquí para ayudarte! Podés dejarnos tu consulta haciendo clic en el siguiente enlace: 
                 <a href="<?php echo base_url('consultas'); ?>" class="text-dark"><b>Consultas</b></a>
             </p>
