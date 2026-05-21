@@ -8,14 +8,14 @@
             <div class="row mt-3">
                 <!-- Campo oculto para el id -->
                 <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
-                    <input type="hidden" name="id" readonly value="<?= $producto['id']; ?>" class="w-100 ps-2 pe-2 pt-1 pb-1 border shadow">
+                    <input type="hidden" name="id" readonly value="<?= $producto['id_producto']; ?>" class="w-100 ps-2 pe-2 pt-1 pb-1 border shadow">
                 </div>
 
                 <div class="col-12 mt-2 d-flex justify-content-center">
                     <label for="nombre"><b>Producto</b></label>      
                 </div>
                 <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
-                    <input type="text" id="nombre" name="nombre" placeholder="Ingrese el nombre del producto..." value="<?= session()->getFlashdata('limpiarProductoValor') ? '' : $producto['nombre_producto'] ?>" class="w-100 ps-2 pe-2 pt-1 pb-1 border shadow">
+                    <input type="text" id="nombre" name="nombre" placeholder="Ingrese el nombre del producto..." value="<?= session()->getFlashdata('limpiarProductoValor') ? '' : $producto['nombre'] ?>" class="w-100 ps-2 pe-2 pt-1 pb-1 border shadow">
                 </div>
                 <?php if($validation->getError('nombre')) {?> 
                     <div class="text-center mt-2"> 
@@ -46,8 +46,8 @@
                     <select name="categoria" id="categoria" class="opacity-75 w-100 p-2 border shadow" style="cursor: pointer;">
                         <option value="" <?= session()->getFlashdata('limpiarProductoValor') ? 'selected' : '' ?>>Seleccionar Categoria</option>
                         <?php foreach($categorias as $categoria): ?>
-                            <option value="<?= $categoria['id']; ?>" 
-                                <?= (!session()->getFlashdata('limpiarProductoValor') && $categoria['id'] == $producto['categoria_id'] ? 'selected' : '') ?>>
+                            <option value="<?= $categoria['id_categoria']; ?>" 
+                                <?= (!session()->getFlashdata('limpiarProductoValor') && $categoria['id_categoria'] == $producto['id_categoria'] ? 'selected' : '') ?>>
                                 <?= $categoria['descripcion']; ?>
                             </option>
                         <?php endforeach; ?>
@@ -69,7 +69,7 @@
                         <option value="">Seleccionar Marca</option>
                         <?php foreach($marcas as $marca): ?>
                             <option value="<?= $marca['id_marca']; ?>" 
-                                <?= (!session()->getFlashdata('limpiarProductoValor') && $marca['id_marca'] == $producto['marca_id'] ? 'selected' : '') ?>>
+                                <?= (!session()->getFlashdata('limpiarProductoValor') && $marca['id_marca'] == $producto['id_marca'] ? 'selected' : '') ?>>
                                 <?= $marca['descripcion']; ?>
                             </option>
                         <?php endforeach; ?>
@@ -145,9 +145,11 @@
                 <div class="col-12 mt-2">
                     <p class="ps-5 pe-5">El tamaño del archivo no debe superar los 8 MB</p>
                 </div>
-                <div class="col-12 mt-2 d-flex justify-content-center">
-                    <img src="<?= base_url('assets/uploads/' . $producto['imagen']); ?>" alt="Imagen actual" style="max-width:200px;">
-                </div>
+                <?php if(!session()->getFlashdata('limpiarImagenValor')): ?>
+                    <div class="col-12 mt-2 d-flex justify-content-center">
+                        <img src="<?= base_url('assets/uploads/' . $producto['imagen']); ?>" alt="Imagen actual" style="max-width:200px;">
+                    </div>
+                <?php endif; ?>
                 <div class="col-12 ps-5 pe-5">
                     <input type="file" id="imagen" name="imagen" accept="image/png, image/jpg, image/jpeg" class="opacity-75 w-100">
                 </div>
@@ -158,9 +160,31 @@
                 <?php }?>
             </div>
 
+            <div class="row mt-3">
+                <div class="col-12 mt-2 d-flex justify-content-center">
+                    <label for="proveedor"><b>Proveedor</b></label>      
+                </div>
+                <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
+                    <select name="proveedor" id="proveedor" class="opacity-75 w-100 p-2 border shadow" style="cursor: pointer;">
+                        <option value="">Seleccionar Proveedor</option>
+                        <?php foreach($proveedores as $prov): ?>
+                            <option value="<?= $prov['id_proveedor']; ?>" 
+                                <?= (!session()->getFlashdata('limpiarProductoValor') && $prov['id_proveedor'] == $producto['id_proveedor'] ? 'selected' : '') ?>>
+                                <?= $prov['nombre']; ?> <?= $prov['apellido']; ?> (<?= $prov['email']; ?>)
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <?php if($validation->getError('proveedor')) {?> 
+                    <div class="text-center mt-2"> 
+                        <p class="fs-6 text-danger"><b><?= $validation->getError('proveedor'); ?></b></p>
+                    </div> 
+                <?php }?>
+            </div>
+
             <div class="mt-3 d-flex justify-content-center"> 
                 <input type="submit" value="Editar" class="text-white w-25 me-5 rounded-2 conteiner__form-div-input-agregarCancelar">
-                <a href= "<?php echo base_url('limpiarProductoAct/' . $producto['id']); ?>" class="w-25 ms-3 btn btn-danger text-white rounded-2"><b>Borrar</b></a>
+                <a href= "<?php echo base_url('limpiarProductoAct/' . $producto['id_producto']); ?>" class="w-25 ms-3 btn btn-danger text-white rounded-2"><b>Borrar</b></a>
             </div>
         </form>
     </div>

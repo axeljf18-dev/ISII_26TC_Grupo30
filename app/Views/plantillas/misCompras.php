@@ -56,14 +56,14 @@
                         <?php $numero = 0; ?>
                         <?php foreach($ventas as $venta): ?>
                             <?php foreach($usuarios as $usuario): ?>
-                                <?php if($usuario['id_usuario'] == $venta['usuario_id']): ?>
+                                <?php if($usuario['id_usuario'] == $venta['id_usuario']): ?>
                                 <tr>
                                     <td class="text-center"><?= $usuario['nombre'] ?>, <?= $usuario['apellido'] ?></td>
                                     <td class="text-center"><?= $venta['fecha'] ?></td>
                                     <td class="text-center">$<?= number_format($venta['total_venta'], 2) ?></td>
                                     <td class="text-center">
                                         <div class="text-center">
-                                            <a href="<?= base_url('vistaDetalleCompra/' . $venta['id']) ?>" class="text-decoration-none">
+                                            <a href="<?= base_url('vistaDetalleCompra/' . $venta['id_venta_cabecera']) ?>" class="text-decoration-none">
                                                 <b class="text-white p-1 bg-opacity-75 rounded-2">Detalles</b>
                                             </a>
                                         </div>

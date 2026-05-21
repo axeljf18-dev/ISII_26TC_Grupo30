@@ -78,7 +78,7 @@
                         <option value="">Seleccionar Perfil</option>
                         <?php foreach($perfiles as $perfil): ?>
                             <option value="<?= $perfil['id_perfil']; ?>" 
-                                <?= (!session()->getFlashdata('limpiarUsuarioValor') && $perfil['id_perfil'] == $usuario['perfil_id'] ? 'selected' : '') ?>>
+                                <?= (!session()->getFlashdata('limpiarUsuarioValor') && $perfil['id_perfil'] == $usuario['id_perfil'] ? 'selected' : '') ?>>
                                 <?= $perfil['descripcion']; ?>
                             </option>
                         <?php endforeach; ?>
@@ -87,6 +87,62 @@
                 <?php if($validation->getError('perfil')) {?> 
                     <div class="text-center mt-2"> 
                         <p class="fs-6 text-danger"><b><?= $error = $validation->getError('perfil'); ?> </b></p>
+                    </div> 
+                <?php }?>
+
+                <div class="col-12 mt-2 d-flex justify-content-center">
+                    <label for="barrio"><b>Barrio</b></label>      
+                </div>
+                <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
+                    <input type="text" id="barrio" name="barrio" placeholder="Ingrese el barrio..." value="<?= session()->getFlashdata('limpiarUsuarioValor') ? '' : $direccion['barrio'] ?>" class="w-100 ps-2 pe-2 pt-1 pb-1 border shadow">
+                </div>
+                <?php if($validation->getError('barrio')) {?> 
+                    <div class="text-center mt-2"> 
+                        <p class="fs-6 text-danger"><b><?= $validation->getError('barrio'); ?></b></p>
+                    </div> 
+                <?php }?>
+
+                <div class="col-12 mt-2 d-flex justify-content-center">
+                    <label for="calle"><b>Calle</b></label>      
+                </div>
+                <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
+                    <input type="text" id="calle" name="calle" placeholder="Ingrese la calle..." value="<?= session()->getFlashdata('limpiarUsuarioValor') ? '' : $direccion['calle'] ?>" class="w-100 ps-2 pe-2 pt-1 pb-1 border shadow">
+                </div>
+                <?php if($validation->getError('calle')) {?> 
+                    <div class="text-center mt-2"> 
+                        <p class="fs-6 text-danger"><b><?= $validation->getError('calle'); ?></b></p>
+                    </div> 
+                <?php }?>
+
+                <div class="col-12 mt-2 d-flex justify-content-center">
+                    <label for="numero"><b>Número</b></label>      
+                </div>
+                <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
+                    <input type="number" id="numero" name="numero" placeholder="Ingrese el número..." value="<?= session()->getFlashdata('limpiarUsuarioValor') ? '' : $direccion['numero'] ?>" class="w-100 ps-2 pe-2 pt-1 pb-1 border shadow">
+                </div>
+                <?php if($validation->getError('numero')) {?> 
+                    <div class="text-center mt-2"> 
+                        <p class="fs-6 text-danger"><b><?= $validation->getError('numero'); ?></b></p>
+                    </div> 
+                <?php }?>
+
+                <div class="col-12 mt-2 d-flex justify-content-center">
+                    <label for="localidad"><b>Localidad</b></label>      
+                </div>
+                <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
+                    <select id="localidad" name="localidad" class="opacity-75 w-100 p-2 border shadow" style="cursor: pointer;">
+                        <option value="" disabled selected>Seleccione una localidad | provincia</option>
+                        <?php foreach($localidades as $loc): ?>
+                            <option value="<?= $loc['id_localidad'] ?>" 
+                                <?= (!session()->getFlashdata('limpiarUsuarioValor') && isset($direccion['id_localidad']) && $loc['id_localidad'] == $direccion['id_localidad'] ? 'selected' : '') ?>>
+                                <?= esc($loc['localidad_nombre']) ?> | <?= esc($loc['provincia_nombre']) ?> (<?= esc($loc['codigo_postal']) ?>)
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <?php if($validation->getError('localidad')) {?> 
+                    <div class="text-center mt-2"> 
+                        <p class="fs-6 text-danger"><b><?= $validation->getError('localidad'); ?></b></p>
                     </div> 
                 <?php }?>
             </div>

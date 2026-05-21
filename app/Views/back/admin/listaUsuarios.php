@@ -66,7 +66,7 @@
                                 <p class="mb-0"><?php echo $usuario['email']; ?></p>
                             </div>
                             <div class="col-xl-2 col-lg-2 col-md-2 col-sm-3 col-3 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
-                                <p class="mb-0"><?php echo $usuario['perfiles_descripcion']; ?></p>
+                                <p class="mb-0"><?php echo $usuario['perfil_descripcion']; ?></p>
                             </div>
                         </div>
                     <?php endif; ?>
@@ -74,4 +74,9 @@
             <?php endif; ?>
         </div>
     </div>
+    <?php if(isset($pager)): ?>
+        <div class="d-flex justify-content-end mt-3">
+            <?= $pager->links('default', 'my_template') ?>
+        </div>
+    <?php endif; ?>
 </main>

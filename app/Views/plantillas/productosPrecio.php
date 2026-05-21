@@ -33,7 +33,7 @@
                             <?php if($marca['activo'] == 1): ?>
                                 <a href="<?php echo base_url('marca/' . $marca['id_marca']); ?>" class="text-decoration-none text-dark opacity-75 mt-1 mb-1"><?php echo $marca['descripcion']; ?> 
                                     <?php foreach($productosTotal as $producto2): ?>
-                                        <?php if($producto2['eliminado'] == 'NO' && $producto2['marca_id'] == $marca['id_marca']): ?>
+                                        <?php if($producto2['eliminado'] == 'NO' && $producto2['id_marca'] == $marca['id_marca']): ?>
                                             <?php ++$acumuladorMarca; ?>
                                         <?php endif; ?>
                                     <?php endforeach; ?>
@@ -66,14 +66,14 @@
                     </div>
                 </div>
                 <?php foreach($productos as $producto): ?>
-                    <?php if($producto['eliminado'] == 'NO'): ?>
+                    <?php if($producto['eliminado'] == 'NO' && $producto['activo_marca'] == 1 && $producto['activo_categoria'] == 1): ?>
                         <div class="row g-0 pt-2 pb-2 border-bottom">
                             <div class="col-md-4 d-flex justify-content-center align-items-center">
                                 <img src="<?= base_url('assets/uploads/' . $producto['imagen']); ?>" class="img-fluid rounded-start" width="300px" alt="Producto">
                             </div>
                             <div class="col-md-8">
                                 <div class="card-body">
-                                    <h5 class="card-title text-dark"><b><?php echo $producto['nombre_producto']; ?></b></h5>
+                                    <h5 class="card-title text-dark"><b><?php echo $producto['nombre']; ?></b></h5>
                                     <p class="card-text text-dark opacity-75"><?php echo $producto['descripcion']; ?></p>
                                     <?php if($producto['precio'] > $producto['precio_vta']): ?>
                                         <span class="text-decoration-line-through text-decoration-none text-dark text-opacity-75">$<?php echo number_format($producto['precio'], 2); ?></span>
@@ -94,7 +94,7 @@
                                         <p class="card-text text-dark opacity-75 mb-0">Disponibles: <?php echo $producto['stock']; ?></p>
                                         <p class="card-text text-dark mb-1"><b>¡Últimos disponibles!</b></p>
                                     <?php endif; ?>
-                                    <form action="<?= base_url('enviar-formCarritoAgregar/' . $producto['id']); ?>" method="post">
+                                    <form action="<?= base_url('enviar-formCarritoAgregar/' . $producto['id_producto']); ?>" method="post">
                                         <?= csrf_field() ?>
                                         <input type="submit" value="Añadir al carrito" class="text-white w-100 rounded-2 conteiner__div-boton-carrito" style="font-weight: bold;">
                                     </form>

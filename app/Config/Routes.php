@@ -31,10 +31,10 @@ $routes->get('/productosMenorPrecioCategoria/(:num)', 'Home::productosMenorPreci
 $routes->get('/productosMayorPrecioBuscador/(:any)', 'Home::productosMayorPrecioBuscador/$1', ['filter' => 'adminAuth']);
 $routes->get('/productosMenorPrecioBuscador/(:any)', 'Home::productosMenorPrecioBuscador/$1', ['filter' => 'adminAuth']);
 
-// Consulta
-$routes->get('/consultas', 'Home::consultas', ['filter' => 'adminAuth']);
-$routes->post('/enviar-formConsulta', 'Consulta_controller::formValidation', ['filter' => 'adminAuth']);
-$routes->get('/limpiarConsulta', 'Consulta_controller::limpiarDatos', ['filter' => 'adminAuth']);
+// // Consulta
+// $routes->get('/consultas', 'Home::consultas', ['filter' => 'adminAuth']);
+// $routes->post('/enviar-formConsulta', 'Consulta_controller::formValidation', ['filter' => 'adminAuth']);
+// $routes->get('/limpiarConsulta', 'Consulta_controller::limpiarDatos', ['filter' => 'adminAuth']);
 
 // Registro y Inicio de sesión
 $routes->get('/registrarse', 'Usuario_controller::registrarse', ['filter' => 'auth']);
@@ -52,9 +52,11 @@ $routes->get('/borrar-producto/(:any)', 'Carrito_controller::eliminarProducto/$1
 $routes->get('/borrar-carrito', 'Carrito_controller::eliminarCarrito', ['filter' => ['adminAuth', 'carritoAuth']]);
 $routes->get('/suma-carrito/(:any)', 'Carrito_controller::suma/$1', ['filter' => ['adminAuth', 'carritoAuth']]);
 $routes->get('/resta-carrito/(:any)', 'Carrito_controller::resta/$1', ['filter' => ['adminAuth', 'carritoAuth']]);
-$routes->get('/comprar-carrito', 'Venta_controller::registrarVenta', ['filter' => ['adminAuth', 'carritoAuth']]);
+$routes->post('/comprar-carrito', 'Venta_controller::registrarVenta', ['filter' => ['adminAuth', 'carritoAuth']]);
 $routes->get('/vistaDetalleCompra/(:num)', 'Venta_controller::verFactura/$1', ['filter' => ['adminAuth', 'carritoAuth']]);
 $routes->get('/misCompras', 'Venta_controller::misCompras', ['filter' => ['adminAuth', 'carritoAuth']]);
+
+$routes->post('/enviar-formActualizaCarrito', 'Carrito_controller::update', ['filter' => ['adminAuth', 'carritoAuth']]);
 
 
 
@@ -78,64 +80,64 @@ $routes->post('/enviar-formUsuarioActQuery', 'Usuario_controller::buscadorUsuari
 $routes->post('/enviar-formUsuarioParaActivarQuery', 'Usuario_controller::buscadorUsuariosParaActivar', ['filter' => 'usuarioAuth']);
 
 // Vista de Productos
-$routes->get('/mostrarListaProductos', 'Producto_controller::index', ['filter' => 'usuarioAuth']);
-$routes->get('/mostrarListaProductosDesactivados', 'Producto_controller::indexDesactivados', ['filter' => 'usuarioAuth']);
-$routes->get('/mostrarListaProductosParaActivar', 'Producto_controller::indexParaActivar', ['filter' => 'usuarioAuth']);
-$routes->get('/mostrarListaProductosActualizarEliminar', 'Producto_controller::indexActualizarEliminar', ['filter' => 'usuarioAuth']);
-$routes->get('/altaDeProductos', 'Producto_controller::crearProducto', ['filter' => 'usuarioAuth']);
-$routes->post('/enviar-formProducto', 'Producto_controller::formValidation', ['filter' => 'usuarioAuth']);
-$routes->get('/actualizarProductos/(:num)', 'Producto_controller::actualizarProducto/$1', ['filter' => 'usuarioAuth']);
-$routes->post('/enviar-formProductoActualizar', 'Producto_controller::formValidationUpdate', ['filter' => 'usuarioAuth']);
-$routes->get('/eliminarProductos/(:num)', 'Producto_controller::eliminarProducto/$1', ['filter' => 'usuarioAuth']);
-$routes->get('/activarProductos/(:num)', 'Producto_controller::activarProducto/$1', ['filter' => 'usuarioAuth']);
-$routes->get('/limpiarProducto', 'Producto_controller::limpiarDatos', ['filter' => 'usuarioAuth']);
-$routes->get('/limpiarProductoAct/(:num)', 'Producto_controller::limpiarDatosAct/$1', ['filter' => 'usuarioAuth']);
-$routes->post('/enviar-formProductoQuery', 'Producto_controller::buscadorProductos', ['filter' => 'usuarioAuth']);
-$routes->post('/enviar-formProductoDesactivadoQuery', 'Producto_controller::buscadorProductosDesactivados', ['filter' => 'usuarioAuth']);
-$routes->post('/enviar-formProductoActQuery', 'Producto_controller::buscadorProductosAct', ['filter' => 'usuarioAuth']);
-$routes->post('/enviar-formProductoParaActivarQuery', 'Producto_controller::buscadorProductosParaActivar', ['filter' => 'usuarioAuth']);
+$routes->get('/mostrarListaProductos', 'Producto_controller::listarProductos', ['filter' => 'usuarioAuth']);
+$routes->get('/mostrarListaProductosDesactivados', 'Producto_controller::listarProductosDesactivados', ['filter' => 'usuarioAuth']);
+$routes->get('/mostrarListaProductosParaActivar', 'Producto_controller::listarProductosParaActivar', ['filter' => 'usuarioAuth']);
+$routes->get('/mostrarListaProductosActualizarEliminar', 'Producto_controller::listarProductosParaActualizarEliminar', ['filter' => 'usuarioAuth']);
+$routes->get('/altaDeProductos', 'Producto_controller::mostrarFormularioCrearProducto', ['filter' => 'usuarioAuth']);
+$routes->post('/enviar-formProducto', 'Producto_controller::registrarProducto', ['filter' => 'usuarioAuth']);
+$routes->get('/actualizarProductos/(:num)', 'Producto_controller::mostrarFormularioActualizarProducto/$1', ['filter' => 'usuarioAuth']);
+$routes->post('/enviar-formProductoActualizar', 'Producto_controller::actualizarProducto', ['filter' => 'usuarioAuth']);
+$routes->get('/eliminarProductos/(:num)', 'Producto_controller::desactivarProducto/$1', ['filter' => 'usuarioAuth']);
+$routes->get('/activarProductos/(:num)', 'Producto_controller::reactivarProducto/$1', ['filter' => 'usuarioAuth']);
+$routes->get('/limpiarProducto', 'Producto_controller::limpiarFormularioAltaProducto', ['filter' => 'usuarioAuth']);
+$routes->get('/limpiarProductoAct/(:num)', 'Producto_controller::limpiarFormularioActualizarProducto/$1', ['filter' => 'usuarioAuth']);
+$routes->post('/enviar-formProductoQuery', 'Producto_controller::buscarProductosActivos', ['filter' => 'usuarioAuth']);
+$routes->post('/enviar-formProductoDesactivadoQuery', 'Producto_controller::buscarProductosDesactivados', ['filter' => 'usuarioAuth']);
+$routes->post('/enviar-formProductoActQuery', 'Producto_controller::buscarProductosParaActualizarEliminar', ['filter' => 'usuarioAuth']);
+$routes->post('/enviar-formProductoParaActivarQuery', 'Producto_controller::buscarProductosParaActivar', ['filter' => 'usuarioAuth']);
 
-// Vista de Perfiles
-$routes->get('/mostrarListaPerfiles', 'Perfil_controller::index', ['filter' => 'usuarioAuth']);
-$routes->get('/mostrarListaPerfilesDesactivados', 'Perfil_controller::indexDesactivados', ['filter' => 'usuarioAuth']);
-$routes->get('/mostrarListaPerfilesParaActivar', 'Perfil_controller::indexParaActivar', ['filter' => 'usuarioAuth']);
-$routes->get('/mostrarListaPerfilesActualizarEliminar', 'Perfil_controller::indexActualizarEliminar', ['filter' => 'usuarioAuth']);
-$routes->get('/altaDePerfiles', 'Perfil_controller::crearPerfil', ['filter' => 'usuarioAuth']);
-$routes->post('/enviar-formPerfil', 'Perfil_controller::formValidation', ['filter' => 'usuarioAuth']);
-$routes->get('/actualizarPerfiles/(:num)', 'Perfil_controller::actualizarPerfil/$1', ['filter' => 'usuarioAuth']);
-$routes->post('/enviar-formPerfilActualizar', 'Perfil_controller::formValidationUpdate', ['filter' => 'usuarioAuth']);
-$routes->get('/eliminarPerfiles/(:num)', 'Perfil_controller::eliminarPerfil/$1', ['filter' => 'usuarioAuth']);
-$routes->get('/activarPerfiles/(:num)', 'Perfil_controller::activarPerfil/$1', ['filter' => 'usuarioAuth']);
-$routes->get('/limpiarPerfil', 'Perfil_controller::limpiarDatos', ['filter' => 'usuarioAuth']);
-$routes->get('/limpiarPerfilAct/(:num)', 'Perfil_controller::limpiarDatosAct/$1', ['filter' => 'usuarioAuth']);
+// // Vista de Perfiles
+// $routes->get('/mostrarListaPerfiles', 'Perfil_controller::index', ['filter' => 'usuarioAuth']);
+// $routes->get('/mostrarListaPerfilesDesactivados', 'Perfil_controller::indexDesactivados', ['filter' => 'usuarioAuth']);
+// $routes->get('/mostrarListaPerfilesParaActivar', 'Perfil_controller::indexParaActivar', ['filter' => 'usuarioAuth']);
+// $routes->get('/mostrarListaPerfilesActualizarEliminar', 'Perfil_controller::indexActualizarEliminar', ['filter' => 'usuarioAuth']);
+// $routes->get('/altaDePerfiles', 'Perfil_controller::crearPerfil', ['filter' => 'usuarioAuth']);
+// $routes->post('/enviar-formPerfil', 'Perfil_controller::formValidation', ['filter' => 'usuarioAuth']);
+// $routes->get('/actualizarPerfiles/(:num)', 'Perfil_controller::actualizarPerfil/$1', ['filter' => 'usuarioAuth']);
+// $routes->post('/enviar-formPerfilActualizar', 'Perfil_controller::formValidationUpdate', ['filter' => 'usuarioAuth']);
+// $routes->get('/eliminarPerfiles/(:num)', 'Perfil_controller::eliminarPerfil/$1', ['filter' => 'usuarioAuth']);
+// $routes->get('/activarPerfiles/(:num)', 'Perfil_controller::activarPerfil/$1', ['filter' => 'usuarioAuth']);
+// $routes->get('/limpiarPerfil', 'Perfil_controller::limpiarDatos', ['filter' => 'usuarioAuth']);
+// $routes->get('/limpiarPerfilAct/(:num)', 'Perfil_controller::limpiarDatosAct/$1', ['filter' => 'usuarioAuth']);
 
-// Vista de Categorias
-$routes->get('/mostrarListaCategorias', 'Categoria_controller::index', ['filter' => 'usuarioAuth']);
-$routes->get('/mostrarListaCategoriasDesactivados', 'Categoria_controller::indexDesactivados', ['filter' => 'usuarioAuth']);
-$routes->get('/mostrarListaCategoriasParaActivar', 'Categoria_controller::indexParaActivar', ['filter' => 'usuarioAuth']);
-$routes->get('/mostrarListaCategoriasActualizarEliminar', 'Categoria_controller::indexActualizarEliminar', ['filter' => 'usuarioAuth']);
-$routes->get('/altaDeCategorias', 'Categoria_controller::crearCategoria', ['filter' => 'usuarioAuth']);
-$routes->post('/enviar-formCategoria', 'Categoria_controller::formValidation', ['filter' => 'usuarioAuth']);
-$routes->get('/actualizarCategorias/(:num)', 'Categoria_controller::actualizarCategoria/$1', ['filter' => 'usuarioAuth']);
-$routes->post('/enviar-formCategoriaActualizar', 'Categoria_controller::formValidationUpdate', ['filter' => 'usuarioAuth']);
-$routes->get('/eliminarCategorias/(:num)', 'Categoria_controller::eliminarCategoria/$1', ['filter' => 'usuarioAuth']);
-$routes->get('/activarCategorias/(:num)', 'Categoria_controller::activarCategoria/$1', ['filter' => 'usuarioAuth']);
-$routes->get('/limpiarCategoria', 'Categoria_controller::limpiarDatos', ['filter' => 'usuarioAuth']);
-$routes->get('/limpiarCategoriaAct/(:num)', 'Categoria_controller::limpiarDatosAct/$1', ['filter' => 'usuarioAuth']);
+// // Vista de Categorias
+// $routes->get('/mostrarListaCategorias', 'Categoria_controller::index', ['filter' => 'usuarioAuth']);
+// $routes->get('/mostrarListaCategoriasDesactivados', 'Categoria_controller::indexDesactivados', ['filter' => 'usuarioAuth']);
+// $routes->get('/mostrarListaCategoriasParaActivar', 'Categoria_controller::indexParaActivar', ['filter' => 'usuarioAuth']);
+// $routes->get('/mostrarListaCategoriasActualizarEliminar', 'Categoria_controller::indexActualizarEliminar', ['filter' => 'usuarioAuth']);
+// $routes->get('/altaDeCategorias', 'Categoria_controller::crearCategoria', ['filter' => 'usuarioAuth']);
+// $routes->post('/enviar-formCategoria', 'Categoria_controller::formValidation', ['filter' => 'usuarioAuth']);
+// $routes->get('/actualizarCategorias/(:num)', 'Categoria_controller::actualizarCategoria/$1', ['filter' => 'usuarioAuth']);
+// $routes->post('/enviar-formCategoriaActualizar', 'Categoria_controller::formValidationUpdate', ['filter' => 'usuarioAuth']);
+// $routes->get('/eliminarCategorias/(:num)', 'Categoria_controller::eliminarCategoria/$1', ['filter' => 'usuarioAuth']);
+// $routes->get('/activarCategorias/(:num)', 'Categoria_controller::activarCategoria/$1', ['filter' => 'usuarioAuth']);
+// $routes->get('/limpiarCategoria', 'Categoria_controller::limpiarDatos', ['filter' => 'usuarioAuth']);
+// $routes->get('/limpiarCategoriaAct/(:num)', 'Categoria_controller::limpiarDatosAct/$1', ['filter' => 'usuarioAuth']);
 
-// Vista de Marcas
-$routes->get('/mostrarListaMarcas', 'Marca_controller::index', ['filter' => 'usuarioAuth']);
-$routes->get('/mostrarListaMarcasDesactivados', 'Marca_controller::indexDesactivados', ['filter' => 'usuarioAuth']);
-$routes->get('/mostrarListaMarcasParaActivar', 'Marca_controller::indexParaActivar', ['filter' => 'usuarioAuth']);
-$routes->get('/mostrarListaMarcasActualizarEliminar', 'Marca_controller::indexActualizarEliminar', ['filter' => 'usuarioAuth']);
-$routes->get('/altaDeMarcas', 'Marca_controller::crearMarca', ['filter' => 'usuarioAuth']);
-$routes->post('/enviar-formMarca', 'Marca_controller::formValidation', ['filter' => 'usuarioAuth']);
-$routes->get('/actualizarMarcas/(:num)', 'Marca_controller::actualizarMarca/$1', ['filter' => 'usuarioAuth']);
-$routes->post('/enviar-formMarcaActualizar', 'Marca_controller::formValidationUpdate', ['filter' => 'usuarioAuth']);
-$routes->get('/eliminarMarcas/(:num)', 'Marca_controller::eliminarMarca/$1', ['filter' => 'usuarioAuth']);
-$routes->get('/activarMarcas/(:num)', 'Marca_controller::activarMarca/$1', ['filter' => 'usuarioAuth']);
-$routes->get('/limpiarMarca', 'Marca_controller::limpiarDatos', ['filter' => 'usuarioAuth']);
-$routes->get('/limpiarMarcaAct/(:num)', 'Marca_controller::limpiarDatosAct/$1', ['filter' => 'usuarioAuth']);
+// // Vista de Marcas
+// $routes->get('/mostrarListaMarcas', 'Marca_controller::index', ['filter' => 'usuarioAuth']);
+// $routes->get('/mostrarListaMarcasDesactivados', 'Marca_controller::indexDesactivados', ['filter' => 'usuarioAuth']);
+// $routes->get('/mostrarListaMarcasParaActivar', 'Marca_controller::indexParaActivar', ['filter' => 'usuarioAuth']);
+// $routes->get('/mostrarListaMarcasActualizarEliminar', 'Marca_controller::indexActualizarEliminar', ['filter' => 'usuarioAuth']);
+// $routes->get('/altaDeMarcas', 'Marca_controller::crearMarca', ['filter' => 'usuarioAuth']);
+// $routes->post('/enviar-formMarca', 'Marca_controller::formValidation', ['filter' => 'usuarioAuth']);
+// $routes->get('/actualizarMarcas/(:num)', 'Marca_controller::actualizarMarca/$1', ['filter' => 'usuarioAuth']);
+// $routes->post('/enviar-formMarcaActualizar', 'Marca_controller::formValidationUpdate', ['filter' => 'usuarioAuth']);
+// $routes->get('/eliminarMarcas/(:num)', 'Marca_controller::eliminarMarca/$1', ['filter' => 'usuarioAuth']);
+// $routes->get('/activarMarcas/(:num)', 'Marca_controller::activarMarca/$1', ['filter' => 'usuarioAuth']);
+// $routes->get('/limpiarMarca', 'Marca_controller::limpiarDatos', ['filter' => 'usuarioAuth']);
+// $routes->get('/limpiarMarcaAct/(:num)', 'Marca_controller::limpiarDatosAct/$1', ['filter' => 'usuarioAuth']);
 
 // Vista de Ventas
 $routes->get('/mostrarListaVentas', 'Venta_controller::index', ['filter' => 'usuarioAuth']);
@@ -145,8 +147,9 @@ $routes->post('/enviar-formFechaQuery', 'Venta_controller::buscadorVentas', ['fi
 $routes->post('/enviar-formFechaDesactivadoQuery', 'Venta_controller::buscadorVentasDesactivados', ['filter' => 'usuarioAuth']);
 $routes->post('/enviar-formFechaQuery20', 'Venta_controller::buscadorVentasDeUnCliente', ['filter' => ['adminAuth', 'carritoAuth']]);
 
-// Vista de Consultas
-$routes->get('/mostrarListaConsultas', 'Consulta_controller::index', ['filter' => 'usuarioAuth']);
-$routes->get('/mostrarListaConsultasDesactivadas', 'Consulta_controller::indexDesactivadas', ['filter' => 'usuarioAuth']);
-$routes->get('/marcarConsulta/(:num)', 'Consulta_controller::marcarConsulta/$1', ['filter' => 'usuarioAuth']);
-$routes->get('/eliminarConsulta/(:num)', 'Consulta_controller::eliminarConsulta/$1', ['filter' => 'usuarioAuth']);
+
+// // Vista de Consultas
+// $routes->get('/mostrarListaConsultas', 'Consulta_controller::index', ['filter' => 'usuarioAuth']);
+// $routes->get('/mostrarListaConsultasDesactivadas', 'Consulta_controller::indexDesactivadas', ['filter' => 'usuarioAuth']);
+// $routes->get('/marcarConsulta/(:num)', 'Consulta_controller::marcarConsulta/$1', ['filter' => 'usuarioAuth']);
+// $routes->get('/eliminarConsulta/(:num)', 'Consulta_controller::eliminarConsulta/$1', ['filter' => 'usuarioAuth']);

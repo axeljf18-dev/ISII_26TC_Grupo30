@@ -106,7 +106,7 @@ class Marca_controller extends Controller{
         $MarcaDescripcion = $this->request->getVar('marca');
 
         $input = $this->validate([
-            'marca' => 'required|trim|regex_match[/^([\p{L}\s])+$/u]|min_length[2]|max_length[50]|is_unique[marcas.descripcion]'
+            'marca' => 'required|trim|regex_match[/^([\p{L}\s])+$/u]|min_length[2]|max_length[50]|is_unique[marca.descripcion]'
         ]);
 
         $formModel = new Marca_model();
@@ -133,7 +133,7 @@ class Marca_controller extends Controller{
 
         $input = $this->validate([
             'id'        => 'required|numeric',
-            'marca'     => 'required|trim|regex_match[/^([\p{L}\s])+$/u]|min_length[2]|max_length[50]|is_unique[marcas.descripcion,id_marca,' . $id . ']',
+            'marca'     => 'required|trim|regex_match[/^([\p{L}\s])+$/u]|min_length[2]|max_length[50]|is_unique[marca.descripcion,id_marca,' . $id . ']',
         ]);
         if(!$input){
             $marcaModel = new Marca_model();

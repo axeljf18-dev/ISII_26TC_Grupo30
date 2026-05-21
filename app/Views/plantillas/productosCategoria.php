@@ -4,7 +4,7 @@
     $boleano = true;
 
     foreach ($productosTotal as $producto) {
-        if ($categoria['id'] == $producto['categoria_id'] && $producto['eliminado'] == 'NO') {
+        if ($categoria['id_categoria'] == $producto['id_categoria'] && $producto['eliminado'] == 'NO') {
             $boleano = false;
             break;
         }
@@ -20,7 +20,7 @@
                         <h5 class="text-dark"><b>Productos</b></h5>
                         <p class="opacity-75 mt-1 mb-1">
                             <?php foreach($productosTotal as $producto): ?>
-                                <?php if($producto['categoria_id'] == $categoria['id'] && $producto['eliminado'] == 'NO'): ?>
+                                <?php if($producto['id_categoria'] == $categoria['id_categoria'] && $producto['eliminado'] == 'NO' && $producto['activo_marca'] == 1): ?>
                                     <?php ++$acumulador; ?>
                                 <?php endif; ?>
                             <?php endforeach; ?>
@@ -34,7 +34,7 @@
                             <?php if($marca['activo'] == 1): ?>
                                 <a href="<?php echo base_url('marca/' . $marca['id_marca']); ?>" class="text-decoration-none text-dark opacity-75 mt-1 mb-1"><?php echo $marca['descripcion']; ?> 
                                     <?php foreach($productosTotal as $producto): ?>
-                                        <?php if($producto['eliminado'] == 'NO' && $producto['marca_id'] == $marca['id_marca']): ?>
+                                        <?php if($producto['eliminado'] == 'NO' && $producto['id_marca'] == $marca['id_marca']): ?>
                                             <?php ++$acumuladorCategoria; ?>
                                         <?php endif; ?>
                                     <?php endforeach; ?>
@@ -46,7 +46,7 @@
                     </div>
                     <div class="col-12 mb-4">
                         <h5 class="text-dark" ><b>Precio</b></h5>
-                        <form action="<?php echo base_url('enviar-formPrecioCategoria/' . $categoria['id']); ?>" method="GET">
+                        <form action="<?php echo base_url('enviar-formPrecioCategoria/' . $categoria['id_categoria']); ?>" method="GET">
                             <input type="number" name="precioMin" placeholder="Mínimo" title="Ingrese el precio mínimo para el filtro" min="0" required class="w-75 mb-1 ps-2 pe-2 pt-1 pb-1 border-0 rounded-1 shadow">
                             <input type="number" name="precioMax" placeholder="Máximo" title="Ingrese el precio máximo para el filtro" min="0" required class="w-75 mb-1 ps-2 pe-2 pt-1 pb-1 border-0 rounded-1 shadow">
                             <input type="submit" value="Buscar" class="text-white text-decoration-none w-75 mt-2 rounded-2 container__div-form-input-productos">
@@ -61,20 +61,20 @@
                             <b>Ordenar por</b>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="<?php echo base_url('productosMayorPrecioCategoria/' . $categoria['id']); ?>"><b>Mayor Precio</b></a></li>
-                            <li><a class="dropdown-item" href="<?php echo base_url('productosMenorPrecioCategoria/' . $categoria['id']); ?>"><b>Menor Precio</b></a></li>
+                            <li><a class="dropdown-item" href="<?php echo base_url('productosMayorPrecioCategoria/' . $categoria['id_categoria']); ?>"><b>Mayor Precio</b></a></li>
+                            <li><a class="dropdown-item" href="<?php echo base_url('productosMenorPrecioCategoria/' . $categoria['id_categoria']); ?>"><b>Menor Precio</b></a></li>
                         </ul>
                     </div>
                 </div>
                 <?php foreach($productos as $producto): ?>
-                    <?php if($categoria['id'] == $producto['categoria_id'] && $producto['eliminado'] == 'NO'): ?>
+                    <?php if($categoria['id_categoria'] == $producto['id_categoria'] && $producto['eliminado'] == 'NO' && $producto['activo_marca'] == 1): ?>
                         <div class="row g-0 pt-2 pb-2 border-bottom">
                             <div class="col-md-4 d-flex justify-content-center align-items-center">
                                 <img src="<?= base_url('assets/uploads/' . $producto['imagen']); ?>" class="img-fluid rounded-start" width="300px" alt="Producto">
                             </div>
                             <div class="col-md-8">
                                 <div class="card-body">
-                                    <h5 class="card-title text-dark"><b><?php echo $producto['nombre_producto']; ?></b></h5>
+                                    <h5 class="card-title text-dark"><b><?php echo $producto['nombre']; ?></b></h5>
                                     <p class="card-text text-dark opacity-75"><?php echo $producto['descripcion']; ?></p>
                                     <?php if($producto['precio'] > $producto['precio_vta']): ?>
                                         <span class="text-decoration-line-through text-decoration-none text-dark text-opacity-75">$<?php echo number_format($producto['precio'], 2); ?></span>
@@ -95,7 +95,7 @@
                                         <p class="card-text text-dark opacity-75 mb-0">Disponibles: <?php echo $producto['stock']; ?></p>
                                         <p class="card-text text-dark mb-1"><b>¡Últimos disponibles!</b></p>
                                     <?php endif; ?>
-                                    <form action="<?= base_url('enviar-formCarritoAgregar/' . $producto['id']); ?>" method="post">
+                                    <form action="<?= base_url('enviar-formCarritoAgregar/' . $producto['id_producto']); ?>" method="post">
                                         <?= csrf_field() ?>
                                         <input type="submit" value="Añadir al carrito" class="text-white w-100 rounded-2 conteiner__div-boton-carrito" style="font-weight: bold;">
                                     </form>

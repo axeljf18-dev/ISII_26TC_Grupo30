@@ -6,6 +6,11 @@
     $valorUsuarioUsers = $session->getFlashdata('usuarioUsersValor');
     $valorUsuarioContraseña = $session->getFlashdata('usuarioContraseñaValor');
     $valorUsuarioPerfil = $session->getFlashdata('usuarioPerfilValor');
+
+    $valorUsuarioBarrio = $session->getFlashdata('usuarioBarrioValor');
+    $valorUsuarioCalle = $session->getFlashdata('usuarioCalleValor');
+    $valorUsuarioNumero = $session->getFlashdata('usuarioNumeroValor');
+    $valorUsuarioLocalidad = $session->getFlashdata('usuarioLocalidadValor');
 ?>
 
 <main class="conteiner__form-altaDePerfiles">
@@ -22,7 +27,7 @@
             <?= csrf_field() ?> 
             <div class="row mt-3">
                 <div class="col-12 mt-2 d-flex justify-content-center">
-                    <label for="nombre"><b>Nombre</b></label>      
+                    <label for="nombre"><b>Nombre(*)</b></label>      
                 </div>
                 <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
                     <input type="text" id="nombre" name="nombre" placeholder="Ingrese el nombre..." value="<?= esc($valorUsuarioNombre); ?>" class="w-100 ps-2 pe-2 pt-1 pb-1 border shadow">
@@ -34,7 +39,7 @@
                 <?php }?>
 
                 <div class="col-12 mt-2 d-flex justify-content-center">
-                    <label for="apellido"><b>Apellido</b></label>      
+                    <label for="apellido"><b>Apellido(*)</b></label>      
                 </div>
                 <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
                     <input type="text" id="apellido" name="apellido" placeholder="Ingrese el apellido..." value="<?= esc($valorUsuarioApellido); ?>" class="w-100 ps-2 pe-2 pt-1 pb-1 border shadow">
@@ -46,7 +51,7 @@
                 <?php }?>
 
                 <div class="col-12 mt-2 d-flex justify-content-center">
-                    <label for="email"><b>Correo Electrónico</b></label>      
+                    <label for="email"><b>Correo Electrónico(*)</b></label>      
                 </div>
                 <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
                     <input type="email" id="email" name="email" placeholder="Ingrese el correo..." value="<?= esc($valorUsuarioEmail); ?>" title="Debe ser un correo válido de Gmail (por ejemplo, usuario@gmail.com)" class="w-100 ps-2 pe-2 pt-1 pb-1 border shadow">
@@ -58,7 +63,7 @@
                 <?php }?>
 
                 <div class="col-12 mt-2 d-flex justify-content-center">
-                    <label for="usuario"><b>Usuario</b></label>      
+                    <label for="usuario"><b>Usuario(*)</b></label>      
                 </div>
                 <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
                     <input type="text" id="usuario" name="usuario" placeholder="Ingrese el nombre de usuario..." value="<?= esc($valorUsuarioUsers); ?>" class="w-100 ps-2 pe-2 pt-1 pb-1 border shadow">
@@ -70,7 +75,7 @@
                 <?php }?>
 
                 <div class="col-12 mt-2 d-flex justify-content-center">
-                    <label for="contraseña"><b>Contraseña</b></label>      
+                    <label for="contraseña"><b>Contraseña(*)</b></label>      
                 </div>
                 <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
                     <input type="password" id="contraseña" name="contraseña" placeholder="Ingrese la contraseña..." value="<?= esc($valorUsuarioContraseña); ?>" title="Debe contener al menos una letra mayúscula, un número y un carácter especial (@$!%*?&)" class="w-100 ps-2 pe-2 pt-1 pb-1 border shadow">
@@ -82,7 +87,7 @@
                 <?php }?>
 
                 <div class="col-12 mt-2 d-flex justify-content-center">
-                    <label for="perfil"><b>Perfil</b></label>      
+                    <label for="perfil"><b>Perfil(*)</b></label>      
                 </div>
                 <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
                     <select name="perfil" id="perfil" class="opacity-75 w-100 p-2 border shadow" style="cursor: pointer;">
@@ -98,6 +103,62 @@
                 <?php if($validation->getError('perfil')) {?> 
                     <div class="text-center mt-2"> 
                         <p class="fs-6 text-danger"><b><?= $error = $validation->getError('perfil'); ?> </b></p>
+                    </div> 
+                <?php }?>
+
+                <div class="col-12 mt-2 d-flex justify-content-center">
+                    <label for="barrio"><b>Barrio</b></label>      
+                </div>
+                <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
+                    <input type="text" id="barrio" name="barrio" placeholder="Ingrese el barrio..." value="<?= esc($valorUsuarioBarrio); ?>" class="w-100 ps-2 pe-2 pt-1 pb-1 border shadow">
+                </div>
+                <?php if($validation->getError('barrio')) {?> 
+                    <div class="text-center mt-2"> 
+                        <p class="fs-6 text-danger"><b><?= $validation->getError('barrio'); ?></b></p>
+                    </div> 
+                <?php }?>
+
+                <div class="col-12 mt-2 d-flex justify-content-center">
+                    <label for="calle"><b>Calle</b></label>      
+                </div>
+                <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
+                    <input type="text" id="calle" name="calle" placeholder="Ingrese la calle..." value="<?= esc($valorUsuarioCalle); ?>" class="w-100 ps-2 pe-2 pt-1 pb-1 border shadow">
+                </div>
+                <?php if($validation->getError('calle')) {?> 
+                    <div class="text-center mt-2"> 
+                        <p class="fs-6 text-danger"><b><?= $validation->getError('calle'); ?></b></p>
+                    </div> 
+                <?php }?>
+
+                <div class="col-12 mt-2 d-flex justify-content-center">
+                    <label for="numero"><b>Número</b></label>      
+                </div>
+                <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
+                    <input type="number" id="numero" name="numero" placeholder="Ingrese el número..." value="<?= esc($valorUsuarioNumero); ?>" class="w-100 ps-2 pe-2 pt-1 pb-1 border shadow">
+                </div>
+                <?php if($validation->getError('numero')) {?> 
+                    <div class="text-center mt-2"> 
+                        <p class="fs-6 text-danger"><b><?= $validation->getError('numero'); ?></b></p>
+                    </div> 
+                <?php }?>
+
+                <div class="col-12 mt-2 d-flex justify-content-center">
+                    <label for="localidad"><b>Localidad(*)</b></label>      
+                </div>
+                <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
+                    <select id="localidad" name="localidad" class="opacity-75 w-100 p-2 border shadow" style="cursor: pointer;">
+                        <option value="" disabled selected>Seleccione una localidad | provincia</option>
+                        <?php foreach($localidades as $loc): ?>
+                            <option value="<?= $loc['id_localidad'] ?>" 
+                                <?= (isset($valorUsuarioLocalidad) && $valorUsuarioLocalidad == $loc['id_localidad']) ? 'selected' : ''; ?>>
+                                <?= esc($loc['localidad_nombre']) ?> | <?= esc($loc['provincia_nombre']) ?> (<?= esc($loc['codigo_postal']) ?>)
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <?php if($validation->getError('localidad')) {?> 
+                    <div class="text-center mt-2"> 
+                        <p class="fs-6 text-danger"><b><?= $validation->getError('localidad'); ?></b></p>
                     </div> 
                 <?php }?>
             </div>

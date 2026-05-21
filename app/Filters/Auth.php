@@ -8,7 +8,7 @@ class Auth implements FilterInterface{
     public function before(RequestInterface $request, $arguments = null){
         if(session()->get('logged_in')){
             $sesion = session();
-            $perfil = $sesion->get('perfil_id');
+            $perfil = $sesion->get('id_perfil');
             if ($perfil == 1) {
                 return redirect()->to('/mostrarListaProductos');
             } else {

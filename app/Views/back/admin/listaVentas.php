@@ -1,15 +1,6 @@
 <?php 
     $session = session();
-    $boleano = true;
-
-    foreach ($ventas as $venta) {
-        foreach($usuarios as $usuario){
-            if ($usuario['id_usuario'] == $venta['usuario_id'] && $usuario['baja'] == 'NO') {
-                $boleano = false;
-                break;
-            }
-        }
-    }
+    $boleano = empty($ventas);
     $valorFechaInicioQuery = $session->getFlashdata('fechaInicioQueryValor');
     $valorFechaFinQuery = $session->getFlashdata('fechaFinQueryValor');
     $valorFechasIncorrectasDeVentas = $session->getFlashdata('msgFechasIncorrectasDeVentas');
@@ -67,28 +58,29 @@
                 </div>
             <?php else: ?>
                 <?php foreach($ventas as $venta): ?>
-                    <?php foreach($usuarios as $usuario): ?>
-                        <?php if($usuario['id_usuario'] == $venta['usuario_id'] && $usuario['baja'] == 'NO'): ?>
-                        <div class="row w-100 ms-0 border-top">
-                            <div class="col-4 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
-                                <p class="mb-0"><?php echo $usuario['nombre']; ?>, <?php echo $usuario['apellido']; ?></p>
-                            </div>
-                            <div class="col-2 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
-                                <p class="mb-0"><?php echo $venta['fecha']; ?></p>
-                            </div>
-                            <div class="col-3 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
-                                <p class="mb-0">$<?php echo number_format($venta['total_venta'], 2); ?></p>
-                            </div>
-                            <div class="col-3 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
-                                <a href="<?= base_url('mostrarDetalleCompraCliente/' . $venta['id']) ?>" class="text-decoration-none btn btn-primary">
-                                    <b class="text-white bg-opacity-75 p-1 rounded-2">Detalles</b>
-                                </a>
-                            </div>
+                    <div class="row w-100 ms-0 border-top">
+                        <div class="col-4 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
+                            <p class="mb-0"><?= $venta['usuario_nombre']; ?></p>
                         </div>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
+                        <div class="col-2 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
+                            <p class="mb-0"><?= $venta['fecha']; ?></p>
+                        </div>
+                        <div class="col-3 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
+                            <p class="mb-0">$<?= number_format($venta['total_venta'], 2); ?></p>
+                        </div>
+                        <div class="col-3 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
+                            <a href="<?= base_url('mostrarDetalleCompraCliente/' . $venta['id_venta_cabecera']) ?>" class="btn btn-primary text-white">
+                                <b>Detalles</b>
+                            </a>
+                        </div>
+                    </div>
                 <?php endforeach; ?>
             <?php endif; ?>
         </div>
     </div>
+    <?php if(isset($pager)): ?>
+        <div class="d-flex justify-content-end mt-3">
+            <?= $pager->links('default', 'my_template') ?>
+        </div>
+    <?php endif; ?>
 </main>

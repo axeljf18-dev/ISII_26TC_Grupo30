@@ -30,7 +30,7 @@
                             <div class="card h-100 shadow">
                                 <img src="<?= base_url('assets/uploads/' . $producto['imagen']); ?>" class="card-img-top p-2" alt="Producto" height="160px">
                                 <div class="card-body">
-                                    <h5 class="card-title"><b><?php echo $producto['nombre_producto'] ?></b></h5>
+                                    <h5 class="card-title"><b><?php echo $producto['nombre'] ?></b></h5>
                                     <p class="card-text opacity-75 contenedor__div-p-descripcion"><?php echo $producto['descripcion'] ?></p>
                                     <div class="row d-flex align-items-center">
                                         <div class="col d-flex justify-content-end">
@@ -51,7 +51,7 @@
                                             <p class="card-text text-dark opacity-75 mb-0">Disponibles: <?php echo $producto['stock']; ?></p>
                                             <p class="card-text text-dark mb-1"><b>¡Últimos disponibles!</b></p>
                                         <?php endif; ?>
-                                    <form action="<?= base_url('enviar-formCarritoAgregar/' . $producto['id']); ?>" method="post">
+                                    <form action="<?= base_url('enviar-formCarritoAgregar/' . $producto['id_producto']); ?>" method="post">
                                         <?= csrf_field() ?>
                                         <input type="submit" value="Añadir al carrito" class="text-white w-100 rounded-2 conteiner__div-boton-carrito" style="font-weight: bold;">
                                     </form>

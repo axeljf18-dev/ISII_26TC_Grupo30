@@ -2,8 +2,10 @@
 namespace App\Controllers;
 
 use App\Models\Categoria_model;
+use App\Models\Direccion_model;
+use App\Models\Localidad_model;
 use App\Models\Marca_model;
-use App\Models\Perfiles_model;
+use App\Models\Perfil_model;
 use App\Models\Usuarios_model;
 use CodeIgniter\Controller;
 
@@ -14,8 +16,10 @@ class Usuario_controller extends Controller{
 
     public function listaUsuarios(){
         $usuarioModel = new Usuarios_model();
+        $data['usuarios'] = $usuarioModel->orderBy('usuario.id_usuario', 'DESC')->getUsuariosPaginados(7);
+        $data['pager'] = $usuarioModel->pager;
 
-        $data['usuarios'] = $usuarioModel->getUsuarioAll();
+        // $data['usuarios'] = $usuarioModel->getUsuarioAll();
 
         $dato['titulo'] = 'Dashboard | Lista de Usuarios';
         echo view('plantillas/header', $dato);
@@ -30,9 +34,11 @@ class Usuario_controller extends Controller{
         $usuarioModel = new Usuarios_model();
 
         if($queryUsuario){ 
-            $data['usuarios'] = $usuarioModel->like('nombre', $queryUsuario)->where('usuarios.baja', 'NO')->select('usuarios.*, perfiles.descripcion as perfiles_descripcion')->join('perfiles', 'perfiles.id_perfil = usuarios.perfil_id')->findAll();
+            $data['usuarios'] = $usuarioModel->buscarUsuariosActivosPaginados($queryUsuario, 7);
+            $data['pager'] = $usuarioModel->pager;
         } else {
             $data['usuarios'] = [];
+            $data['pager'] = null;
         }
 
         $session->setFlashdata('usuarioQueryValor', $queryUsuario);
@@ -45,8 +51,8 @@ class Usuario_controller extends Controller{
 
     public function indexDesactivados(){
         $usuarioModel = new Usuarios_model();
-
-        $data['usuarios'] = $usuarioModel->getUsuarioAll();
+        $data['usuarios'] = $usuarioModel->orderBy('usuario.id_usuario', 'DESC')->getUsuariosDesactivadosPaginados(7);
+        $data['pager'] = $usuarioModel->pager;
 
         $dato['titulo'] = 'Dashboard | Lista de Usuarios';
         echo view('plantillas/header', $dato);
@@ -61,9 +67,11 @@ class Usuario_controller extends Controller{
         $usuarioModel = new Usuarios_model();
 
         if($queryUsuarioDesactivado){ 
-            $data['usuarios'] = $usuarioModel->like('nombre', $queryUsuarioDesactivado)->where('usuarios.baja', 'SI')->select('usuarios.*, perfiles.descripcion as perfiles_descripcion')->join('perfiles', 'perfiles.id_perfil = usuarios.perfil_id')->findAll();
+            $data['usuarios'] = $usuarioModel->buscarUsuariosDesactivadosPaginados($queryUsuarioDesactivado, 7);
+            $data['pager'] = $usuarioModel->pager;
         } else {
             $data['usuarios'] = [];
+            $data['pager'] = null;
         }
 
         $session->setFlashdata('usuarioDesactivadoQueryValor', $queryUsuarioDesactivado);
@@ -76,8 +84,8 @@ class Usuario_controller extends Controller{
 
     public function indexParaActivar(){
         $usuarioModel = new Usuarios_model();
-
-        $data['usuarios'] = $usuarioModel->getUsuarioAll();
+        $data['usuarios'] = $usuarioModel->orderBy('usuario.id_usuario', 'DESC')->getUsuariosDesactivadosPaginados(7);
+        $data['pager'] = $usuarioModel->pager;
 
         $dato['titulo'] = 'Dashboard | Lista de Usuarios';
         echo view('plantillas/header', $dato);
@@ -92,9 +100,11 @@ class Usuario_controller extends Controller{
         $usuarioModel = new Usuarios_model();
 
         if($queryUsuarioParaActivar){ 
-            $data['usuarios'] = $usuarioModel->like('nombre', $queryUsuarioParaActivar)->where('usuarios.baja', 'SI')->select('usuarios.*, perfiles.descripcion as perfiles_descripcion')->join('perfiles', 'perfiles.id_perfil = usuarios.perfil_id')->findAll();
+            $data['usuarios'] = $usuarioModel->buscarUsuariosDesactivadosPaginados($queryUsuarioParaActivar, 7);
+            $data['pager'] = $usuarioModel->pager;
         } else {
             $data['usuarios'] = [];
+            $data['pager'] = null;
         }
 
         $session->setFlashdata('usuarioParaActivarQueryValor', $queryUsuarioParaActivar);
@@ -108,7 +118,8 @@ class Usuario_controller extends Controller{
     public function indexActualizarEliminar(){
         $usuarioModel = new Usuarios_model();
 
-        $data['usuarios'] = $usuarioModel->getUsuarioAll();
+        $data['usuarios'] = $usuarioModel->orderBy('usuario.id_usuario', 'DESC')->getUsuariosPaginados(7);
+        $data['pager'] = $usuarioModel->pager;
 
         $dato['titulo'] = 'Dashboard | Lista de Usuarios';
         echo view('plantillas/header', $dato);
@@ -123,9 +134,11 @@ class Usuario_controller extends Controller{
         $usuarioModel = new Usuarios_model();
 
         if($queryUsuarioAct){ 
-            $data['usuarios'] = $usuarioModel->like('nombre', $queryUsuarioAct)->where('usuarios.baja', 'NO')->select('usuarios.*, perfiles.descripcion as perfiles_descripcion')->join('perfiles', 'perfiles.id_perfil = usuarios.perfil_id')->findAll();
+            $data['usuarios'] = $usuarioModel->buscarUsuariosActivosPaginados($queryUsuarioAct, 7);
+            $data['pager'] = $usuarioModel->pager;
         } else {
             $data['usuarios'] = [];
+            $data['pager'] = null;
         }
 
         $session->setFlashdata('usuarioActQueryValor', $queryUsuarioAct);
@@ -137,8 +150,10 @@ class Usuario_controller extends Controller{
     }
 
     public function crearUsuario(){
-        $perfilModel = new Perfiles_model();
-        $data['perfiles'] = $perfilModel->findAll();
+        $perfilModel = new Perfil_model();
+        $data['perfiles'] = $perfilModel->getPerfilActivos();
+        $localidadModel = new Localidad_model();
+        $data['localidades'] = $localidadModel->getLocalidadConProvincia();
 
         $dato['titulo'] = 'Dashboard | Agregar Usuario';
         echo view('plantillas/header', $dato);
@@ -148,10 +163,14 @@ class Usuario_controller extends Controller{
     }
 
     public function actualizarUsuario($id){
-        $perfilModel = new Perfiles_model();
-        $data['perfiles'] = $perfilModel->findAll();
+        $perfilModel = new Perfil_model();
+        $data['perfiles'] = $perfilModel->getPerfilActivos();
         $usuarioModel = new Usuarios_model();
         $data['usuario'] = $usuarioModel->find($id);
+        $direccionModel = new Direccion_model();
+        $data['direccion'] = $direccionModel->where('id_usuario', $id)->first();
+        $localidadModel = new Localidad_model();
+        $data['localidades'] = $localidadModel->getLocalidadConProvincia();
 
         $dato['titulo'] = 'Dashboard | Editar Usuario';
         echo view('plantillas/header', $dato);
@@ -187,11 +206,13 @@ class Usuario_controller extends Controller{
         $dato['categorias'] = $categoriaModel->getCategoriaAll();
         $marcaModel = new Marca_model();
         $dato['marcas'] = $marcaModel->getMarcaAll();
+        $localidadModel = new Localidad_model();
+        $dato['localidades'] = $localidadModel->getLocalidadConProvincia();
 
         $data['titulo'] = 'NetShop | Registro';
         echo view('plantillas/header', $data);
         echo view('plantillas/nav', $dato);
-        echo view('back/usuario/registrarse');
+        echo view('back/usuario/registrarse', $dato);
         echo view('plantillas/footer', $dato);
     }
 
@@ -204,15 +225,25 @@ class Usuario_controller extends Controller{
         $email = $this->request->getVar('email');
         $contraseña = $this->request->getVar('contraseña');
 
+        $barrio = $this->request->getVar('barrio');
+        $calle = $this->request->getVar('calle');
+        $numero = $this->request->getVar('numero');
+        $localidad = $this->request->getVar('localidad');
+
         $input = $this->validate([
             'nombre' => 'required|trim|regex_match[/^([\p{L}\s])+$/u]|min_length[2]|max_length[50]',
             'apellido' => 'required|trim|regex_match[/^([\p{L}\s])+$/u]|min_length[2]|max_length[50]',
-            'usuario' => 'required|trim|min_length[4]|max_length[20]|is_unique[usuarios.usuario]',
-            'email' => 'required|trim|valid_email|regex_match[/^[\w\.\-]+@[\w\-]+\.(com)$/]|is_unique[usuarios.email]',
-            'contraseña' => 'required|trim|min_length[8]|max_length[20]|regex_match[/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).+$/]'
+            'usuario' => 'required|trim|min_length[4]|max_length[20]|is_unique[usuario.usuario]',
+            'email' => 'required|trim|valid_email|regex_match[/^[\w\.\-]+@[\w\-]+\.(com)$/]|is_unique[usuario.email]',
+            'contraseña' => 'required|trim|min_length[8]|max_length[20]|regex_match[/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).+$/]',
+            'barrio' => 'permit_empty|trim|max_length[100]',
+            'calle' => 'permit_empty|trim|max_length[100]',
+            'numero' => 'permit_empty|trim|max_length[11]|is_natural',
+            'localidad'=> 'required'
         ]);
 
         $formModel = new Usuarios_model();
+        $direccionModel = new Direccion_model();
 
         if(!$input){
             $categoriaModel = new Categoria_model();
@@ -225,6 +256,11 @@ class Usuario_controller extends Controller{
             $session->setFlashdata('emailValor1', $email);
             $session->setFlashdata('passwordValor1', $contraseña);
 
+            $session->setFlashdata('barrioValor1', $barrio);
+            $session->setFlashdata('calleValor1', $calle);
+            $session->setFlashdata('numeroValor1', $numero);
+            $session->setFlashdata('localidadValor1', $localidad);
+
             return redirect()->to('/registrarse');
         } else{
             $formModel->save([
@@ -234,6 +270,20 @@ class Usuario_controller extends Controller{
                 'email' => $this->request->getVar('email'),
                 'pass' => password_hash($this->request->getVar('contraseña'), PASSWORD_DEFAULT)
             ]);
+
+            // 2. Obtener id del usuario recién creado
+            $idUsuario = $formModel->getInsertID();
+
+            // 3. Si completó dirección, guardarla
+            if ($this->request->getVar('barrio') || $this->request->getVar('calle') || $this->request->getVar('numero') || $this->request->getVar('localidad')) {
+                $direccionModel->save([
+                    'barrio'      => $this->request->getVar('barrio'),
+                    'calle'       => $this->request->getVar('calle'),
+                    'numero'      => $this->request->getVar('numero'),
+                    'id_localidad'   => $this->request->getVar('localidad'),
+                    'id_usuario'  => $idUsuario
+                ]);
+            }
 
             session()->setFlashdata('msgExitoso', 'Usuario registrado exitosamente');
             return redirect()->to('/registrarse');
@@ -250,20 +300,33 @@ class Usuario_controller extends Controller{
         $contraseñaUsuario = $this->request->getVar('contraseña');
         $perfilUsuario = $this->request->getVar('perfil');
 
+        $barrioUsuario = $this->request->getVar('barrio');
+        $calleUsuario = $this->request->getVar('calle');
+        $numeroUsuario = $this->request->getVar('numero');
+        $localidadUsuario = $this->request->getVar('localidad');
+
         $input = $this->validate([
             'nombre' => 'required|trim|regex_match[/^([\p{L}\s])+$/u]|min_length[2]|max_length[50]',
             'apellido' => 'required|trim|regex_match[/^([\p{L}\s])+$/u]|min_length[2]|max_length[50]',
-            'usuario' => 'required|trim|min_length[4]|max_length[20]|is_unique[usuarios.usuario]',
-            'email' => 'required|trim|valid_email|regex_match[/^[\w\.\-]+@[\w\-]+\.(com)$/]|is_unique[usuarios.email]',
+            'usuario' => 'required|trim|min_length[4]|max_length[20]|is_unique[usuario.usuario]',
+            'email' => 'required|trim|valid_email|regex_match[/^[\w\.\-]+@[\w\-]+\.(com)$/]|is_unique[usuario.email]',
             'contraseña' => 'required|trim|min_length[8]|max_length[20]|regex_match[/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).+$/]',
-            'perfil' => 'required'
+            'perfil' => 'required',
+            'barrio' => 'permit_empty|trim|max_length[100]',
+            'calle' => 'permit_empty|trim|max_length[100]',
+            'numero' => 'permit_empty|trim|max_length[11]|is_natural',
+            'localidad' => 'required'
         ]);
 
         $formModel = new Usuarios_model();
+        $direccionModel = new Direccion_model();
 
         if(!$input){
-            $perfilModel = new Perfiles_model();
+            $perfilModel = new Perfil_model();
             $data['perfiles'] = $perfilModel->findAll();
+            $localidadModel = new Localidad_model();
+            $data['localidades'] = $localidadModel->getLocalidadConProvincia();
+            // $data['validation'] = $this->validator;
 
             $session->setFlashdata('usuarioNombreValor', $nombreUsuario);
             $session->setFlashdata('usuarioApellidoValor', $apellidoUsuario);
@@ -272,10 +335,16 @@ class Usuario_controller extends Controller{
             $session->setFlashdata('usuarioContraseñaValor', $contraseñaUsuario);
             $session->setFlashdata('usuarioPerfilValor', $perfilUsuario);
 
+            $session->setFlashdata('usuarioBarrioValor', $barrioUsuario);
+            $session->setFlashdata('usuarioCalleValor', $calleUsuario);
+            $session->setFlashdata('usuarioNumeroValor', $numeroUsuario);
+            $session->setFlashdata('usuarioLocalidadValor', $localidadUsuario);
+
             $dato['titulo'] = 'Dashboard | Agregar Usuario';
             echo view('plantillas/header', $dato);
             echo view('plantillas/nav');
             echo view('back/admin/altaDeUsuarios', $data, ['validation' => $this->validator]);
+            // echo view('back/admin/altaDeUsuarios', $data);
             echo view('plantillas/footer');
 
         } else{
@@ -285,8 +354,22 @@ class Usuario_controller extends Controller{
                 'usuario' => $this->request->getVar('usuario'),
                 'email' => $this->request->getVar('email'),
                 'pass' => password_hash($this->request->getVar('contraseña'), PASSWORD_DEFAULT),
-                'perfil_id' => $this->request->getVar('perfil'),
+                'id_perfil' => $this->request->getVar('perfil'),
             ]);
+
+            // Obtener id del usuario recién creado
+            $idUsuario = $formModel->getInsertID();
+
+            // Guardar dirección vinculada
+            if ($this->request->getVar('barrio') || $this->request->getVar('calle') || $this->request->getVar('numero') || $this->request->getVar('localidad')) {
+                $direccionModel->save([
+                    'barrio'       => $this->request->getVar('barrio'),
+                    'calle'        => $this->request->getVar('calle'),
+                    'numero'       => $this->request->getVar('numero'),
+                    'id_localidad' => $this->request->getVar('localidad'),
+                    'id_usuario'   => $idUsuario
+                ]);
+            }
 
             session()->setFlashdata('msgExitoso', 'Usuario registrado exitosamente');
             return redirect()->to('/altaDeUsuarios');
@@ -300,16 +383,24 @@ class Usuario_controller extends Controller{
             'id' => 'required|numeric',
             'nombre' => 'required|trim|regex_match[/^([\p{L}\s])+$/u]|min_length[2]|max_length[50]',
             'apellido' => 'required|trim|regex_match[/^([\p{L}\s])+$/u]|min_length[2]|max_length[50]',
-            'usuario' => 'required|trim|min_length[4]|max_length[20]|is_unique[usuarios.usuario,id_usuario,' . $id . ']',
-            'email' => 'required|trim|valid_email|regex_match[/^[\w\.\-]+@[\w\-]+\.(com)$/]|is_unique[usuarios.email,id_usuario,' . $id . ']',
+            'usuario' => 'required|trim|min_length[4]|max_length[20]|is_unique[usuario.usuario,id_usuario,' . $id . ']',
+            'email' => 'required|trim|valid_email|regex_match[/^[\w\.\-]+@[\w\-]+\.(com)$/]|is_unique[usuario.email,id_usuario,' . $id . ']',
             'contraseña' => 'trim|permit_empty|min_length[8]|max_length[20]|regex_match[/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).+$/]',
             'perfil' => 'required',
+            'barrio' => 'permit_empty|trim|max_length[100]',
+            'calle' => 'permit_empty|trim|max_length[100]',
+            'numero' => 'permit_empty|trim|max_length[11]|is_natural',
+            'localidad' => 'required'
         ]);
         if(!$input){
             $usuarioModel = new Usuarios_model();
             $data['usuario'] = $usuarioModel->find($this->request->getVar('id'));
-            $perfilModel = new Perfiles_model();
+            $perfilModel = new Perfil_model();
             $data['perfiles'] = $perfilModel->findAll();
+            $direccionModel = new Direccion_model();
+            $data['direccion'] = $direccionModel->where('id_usuario', $id)->first();
+            $localidadModel = new Localidad_model();
+            $data['localidades'] = $localidadModel->getLocalidadConProvincia();
             $data['validation'] = $this->validator;
 
             $dato['titulo'] = 'Dashboard | Editar Usuario';
@@ -323,7 +414,7 @@ class Usuario_controller extends Controller{
                 'apellido' => $this->request->getVar('apellido'),
                 'usuario'  => $this->request->getVar('usuario'),
                 'email'    => $this->request->getVar('email'),
-                'perfil_id'    => $this->request->getVar('perfil'),
+                'id_perfil'    => $this->request->getVar('perfil'),
             ];
 
             $nuevaContraseña = $this->request->getVar('contraseña');
@@ -332,8 +423,28 @@ class Usuario_controller extends Controller{
             }
 
             $usuarioModel = new Usuarios_model();
-            $id = $this->request->getVar('id');
             $usuarioModel->update($id, $data);
+
+            // Actualizar dirección
+            $direccionModel = new Direccion_model();
+            $direccionData = [
+                'barrio'       => $this->request->getVar('barrio'),
+                'calle'        => $this->request->getVar('calle'),
+                'numero'       => $this->request->getVar('numero'),
+                'id_localidad' => $this->request->getVar('localidad'),
+                'id_usuario'   => $id
+            ];
+
+            // Si ya existe dirección, actualizar; si no, crear
+            $direccionExistente = $direccionModel->where('id_usuario', $id)->first();
+            if ($direccionExistente) {
+                $direccionModel->update($direccionExistente['id_direccion'], $direccionData);
+            } else {
+                $direccionModel->save($direccionData);
+            }
+
+            // $id = $this->request->getVar('id');
+            // $usuarioModel->update($id, $data);
 
             session()->setFlashdata('msgExitoso', 'Usuario actualizado exitosamente');
             return redirect()->to('/mostrarListaUsuariosActualizarEliminar');

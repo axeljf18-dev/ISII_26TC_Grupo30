@@ -4,6 +4,7 @@ use CodeIgniter\Controller;
 use App\Models\Producto_model;
 use App\Models\Categoria_model;
 use App\Models\Marca_model;
+use App\Models\Proveedor_model;
 use App\models\Usuarios_model;
 
 class Producto_controller extends Controller{
@@ -12,10 +13,11 @@ class Producto_controller extends Controller{
         $session = session();
     }
 
-    public function index(){
+    public function listarProductos(){
         $productoModel = new Producto_model();
 
-        $data['productos'] = $productoModel->getProductoAll();
+        $data['productos'] = $productoModel->orderBy('producto.id_producto', 'DESC')->getProductosPaginados(7);
+        $data['pager'] = $productoModel->pager;
 
         $dato['titulo'] = 'Dashboard | Lista de Productos';
         echo view('plantillas/header', $dato);
@@ -24,18 +26,15 @@ class Producto_controller extends Controller{
         echo view('plantillas/footer');
     }
 
-    public function buscadorProductos(){
+    public function buscarProductosActivos(){
         $session = session();
-        $queryProducto = $this->request->getVar('productoQuery'); 
+        $query = $this->request->getVar('productoQuery'); 
         $productoModel = new Producto_model();
 
-        if($queryProducto){ 
-            $data['productos'] = $productoModel->like('nombre_producto', $queryProducto)->where('eliminado', 'NO')->select('productos.*, categorias.descripcion as categoria_descripcion')->join('categorias', 'categorias.id = productos.categoria_id')->findAll();
-        } else {
-            $data['productos'] = [];
-        }
+        $data['productos'] = $productoModel->buscarProductosActivos($query, 7);
+        $data['pager'] = $productoModel->pager;
 
-        $session->setFlashdata('productoQueryValor', $queryProducto);
+        $session->setFlashdata('productoQueryValor', $query);
         $dato['titulo'] = 'Dashboard | Lista de Productos';
         echo view('plantillas/header', $dato);
         echo view('plantillas/nav');
@@ -43,10 +42,11 @@ class Producto_controller extends Controller{
         echo view('plantillas/footer');
     }
 
-    public function indexDesactivados(){
+    public function listarProductosDesactivados(){
         $productoModel = new Producto_model();
 
-        $data['productos'] = $productoModel->getProductoAll();
+        $data['productos'] = $productoModel->orderBy('producto.id_producto', 'DESC')->getProductosDesactivadosPaginados(7);
+        $data['pager'] = $productoModel->pager;
 
         $dato['titulo'] = 'Dashboard | Lista de Productos';
         echo view('plantillas/header', $dato);
@@ -55,18 +55,15 @@ class Producto_controller extends Controller{
         echo view('plantillas/footer');
     }
 
-    public function buscadorProductosDesactivados(){
+    public function buscarProductosDesactivados(){
         $session = session();
-        $queryDesactivadoProducto = $this->request->getVar('productoDesactivadoQuery'); 
+        $query = $this->request->getVar('productoDesactivadoQuery'); 
         $productoModel = new Producto_model();
 
-        if($queryDesactivadoProducto){ 
-            $data['productos'] = $productoModel->like('nombre_producto', $queryDesactivadoProducto)->where('eliminado', 'SI')->select('productos.*, categorias.descripcion as categoria_descripcion')->join('categorias', 'categorias.id = productos.categoria_id')->findAll();
-        } else {
-            $data['productos'] = [];
-        }
+        $data['productos'] = $productoModel->buscarProductosDesactivados($query, 7);
+        $data['pager'] = $productoModel->pager;
 
-        $session->setFlashdata('productoDesactivadoQueryValor', $queryDesactivadoProducto);
+        $session->setFlashdata('productoDesactivadoQueryValor', $query);
         $dato['titulo'] = 'Dashboard | Lista de Productos';
         echo view('plantillas/header', $dato);
         echo view('plantillas/nav');
@@ -74,10 +71,11 @@ class Producto_controller extends Controller{
         echo view('plantillas/footer');
     }
 
-    public function indexParaActivar(){
+    public function listarProductosParaActivar(){
         $productoModel = new Producto_model();
 
-        $data['productos'] = $productoModel->getProductoAll();
+        $data['productos'] = $productoModel->orderBy('producto.id_producto', 'DESC')->getProductosDesactivadosPaginados(7);
+        $data['pager'] = $productoModel->pager;
 
         $dato['titulo'] = 'Dashboard | Lista de Productos';
         echo view('plantillas/header', $dato);
@@ -86,18 +84,15 @@ class Producto_controller extends Controller{
         echo view('plantillas/footer');
     }
 
-    public function buscadorProductosParaActivar(){
+    public function buscarProductosParaActivar(){
         $session = session();
-        $queryProductoParaActivar = $this->request->getVar('productoParaActivarQuery');
+        $query = $this->request->getVar('productoParaActivarQuery');
         $productoModel = new Producto_model();
 
-        if($queryProductoParaActivar){ 
-            $data['productos'] = $productoModel->like('nombre_producto', $queryProductoParaActivar)->where('eliminado', 'SI')->select('productos.*, categorias.descripcion as categoria_descripcion')->join('categorias', 'categorias.id = productos.categoria_id')->findAll();
-        } else {
-            $data['productos'] = [];
-        }
+        $data['productos'] = $productoModel->buscarProductosDesactivados($query, 7);
+        $data['pager'] = $productoModel->pager;
 
-        $session->setFlashdata('productoParaActivarQueryValor', $queryProductoParaActivar);
+        $session->setFlashdata('productoParaActivarQueryValor', $query);
         $dato['titulo'] = 'Dashboard | Lista de Productos';
         echo view('plantillas/header', $dato);
         echo view('plantillas/nav');
@@ -105,10 +100,11 @@ class Producto_controller extends Controller{
         echo view('plantillas/footer');
     }
 
-    public function indexActualizarEliminar(){
+    public function listarProductosParaActualizarEliminar(){
         $productoModel = new Producto_model();
 
-        $data['productos'] = $productoModel->getProductoAll();
+        $data['productos'] = $productoModel->orderBy('producto.id_producto', 'DESC')->getProductosPaginados(7);
+        $data['pager'] = $productoModel->pager;
 
         $dato['titulo'] = 'Dashboard | Lista de Productos';
         echo view('plantillas/header', $dato);
@@ -117,18 +113,15 @@ class Producto_controller extends Controller{
         echo view('plantillas/footer');
     }
 
-    public function buscadorProductosAct(){
+    public function buscarProductosParaActualizarEliminar(){
         $session = session();
-        $queryProductoAct = $this->request->getVar('productoActQuery'); 
+        $query = $this->request->getVar('productoActQuery'); 
         $productoModel = new Producto_model();
 
-        if($queryProductoAct){ 
-            $data['productos'] = $productoModel->like('nombre_producto', $queryProductoAct)->where('eliminado', 'NO')->select('productos.*, categorias.descripcion as categoria_descripcion')->join('categorias', 'categorias.id = productos.categoria_id')->findAll();
-        } else {
-            $data['productos'] = [];
-        }
+        $data['productos'] = $productoModel->buscarProductosActivos($query, 7);
+        $data['pager'] = $productoModel->pager;
 
-        $session->setFlashdata('productoActQueryValor', $queryProductoAct);
+        $session->setFlashdata('productoActQueryValor', $query);
         $dato['titulo'] = 'Dashboard | Lista de Productos';
         echo view('plantillas/header', $dato);
         echo view('plantillas/nav');
@@ -136,11 +129,14 @@ class Producto_controller extends Controller{
         echo view('plantillas/footer');
     }
 
-    public function crearProducto(){
+    public function mostrarFormularioCrearProducto(){
         $categoriaModel = new Categoria_model();
-        $data['categorias'] = $categoriaModel->getCategoriaAll();
+        $data['categorias'] = $categoriaModel->getCategoriasActivas();
         $marcaModel = new Marca_model();
-        $data['marcas'] = $marcaModel->getMarcaAll();
+        $data['marcas'] = $marcaModel->getMarcasActivas();
+
+        $proveedorModel = new Proveedor_model();
+        $data['proveedores'] = $proveedorModel->getProveedorAll();
 
         $dato['titulo'] = 'Dashboard | Agregar Producto';
         echo view('plantillas/header', $dato);
@@ -149,13 +145,15 @@ class Producto_controller extends Controller{
         echo view('plantillas/footer');
     }
 
-    public function actualizarProducto($id){
+    public function mostrarFormularioActualizarProducto($id){
         $categoriaModel = new Categoria_model();
-        $data['categorias'] = $categoriaModel->findAll();
+        $data['categorias'] = $categoriaModel->getCategoriasActivas();
         $productoModel = new Producto_model();
         $data['producto'] = $productoModel->find($id);
         $marcaModel = new Marca_model();
-        $data['marcas'] = $marcaModel->getMarcaAll();
+        $data['marcas'] = $marcaModel->getMarcasActivas();
+        $proveedorModel = new Proveedor_model();
+        $data['proveedores'] = $proveedorModel->getProveedorAll();
 
         $dato['titulo'] = 'Dashboard | Editar Producto';
         echo view('plantillas/header', $dato);
@@ -164,7 +162,7 @@ class Producto_controller extends Controller{
         echo view('plantillas/footer');
     }
 
-    public function eliminarProducto($id){
+    public function desactivarProducto($id){
         $productoModel = new Producto_model();
         $data['producto'] = $productoModel->find($id);
 
@@ -175,7 +173,7 @@ class Producto_controller extends Controller{
         return redirect()->to('/mostrarListaProductosActualizarEliminar');
     }
 
-    public function activarProducto($id){
+    public function reactivarProducto($id){
         $productoModel = new Producto_model();
         $data['producto'] = $productoModel->find($id);
 
@@ -186,19 +184,9 @@ class Producto_controller extends Controller{
         return redirect()->to('/mostrarListaProductosParaActivar');
     }
 
-    public function formValidation(){
-        $session = session();
-
-        $productoNombre = $this->request->getVar('nombre');
-        $productoDescripcion = $this->request->getVar('descripcion');
-        $productoCategoria = $this->request->getVar('categoria');
-        $productoMarca = $this->request->getVar('marca');
-        $productoPrecio = $this->request->getVar('precio');
-        $productoPrecioVta = $this->request->getVar('precioVta');
-        $productoStock = $this->request->getVar('stock');
-        $productoStockMin = $this->request->getVar('stockMin');
-
-        $input = $this->validate([
+    // CREAR PRODUCTO
+    private function validarProducto($formulario){
+        return $this->validate([
             'nombre'    => 'required|trim|min_length[2]|max_length[50]',
             'categoria' => 'required',
             'marca'     => 'required',
@@ -207,56 +195,80 @@ class Producto_controller extends Controller{
             'stock'     => 'required|trim|is_natural',
             'stockMin'  => 'required|trim|is_natural',
             'imagen'    => 'uploaded[imagen]|max_size[imagen,8192]|ext_in[imagen,png,jpg,jpeg]',
-            'descripcion' => 'required|trim|min_length[5]|max_length[255]',
+            'descripcion' => 'permit_empty|trim|min_length[5]|max_length[255]',
+            'proveedor' => 'required'
         ]);
+    }
 
-        if(!$input){
-            $categoria_model = new Categoria_model();
-            $data['categorias'] = $categoria_model->getCategoriaAll();
-            $marcaModel = new Marca_model();
-            $data['marcas'] = $marcaModel->getMarcaAll();
-            $data['validation'] = $this->validator;
+    private function procesarImagen($archivoImagen){
+        $nombreAleatorio = $archivoImagen->getRandomName();
+        $archivoImagen->move(ROOTPATH . 'assets/uploads', $nombreAleatorio);
+        return $nombreAleatorio;
+    }
 
-            $session->setFlashdata('productoValor', $productoNombre);
-            $session->setFlashdata('descripcionProductoValor', $productoDescripcion);
-            $session->setFlashdata('categoriaProductoValor', $productoCategoria);
-            $session->setFlashdata('marcaProductoValor', $productoMarca);
-            $session->setFlashdata('precioProductoValor', $productoPrecio);
-            $session->setFlashdata('precioVtaProductoValor', $productoPrecioVta);
-            $session->setFlashdata('stockProductoValor', $productoStock);
-            $session->setFlashdata('stockMinProductoValor', $productoStockMin);
+    private function guardarProducto($datosProducto){
+        $productoModel = new Producto_model();
+        return $productoModel->insert($datosProducto);
+    }
 
-            $dato['titulo'] = 'Dashboard | Agregar Producto';
-            echo view('plantillas/header', $dato);
-            echo view('plantillas/nav');
-            echo view('back/admin/altaDeProductos', $data);
-            echo view('plantillas/footer');
+    public function registrarProducto(){
+        $session = session();
+
+        if(!$this->validarProducto($this->request)){
+            $session->setFlashdata('productoValor', $this->request->getVar('nombre'));
+            $session->setFlashdata('descripcionProductoValor', $this->request->getVar('descripcion'));
+            $session->setFlashdata('categoriaProductoValor', $this->request->getVar('categoria'));
+            $session->setFlashdata('marcaProductoValor', $this->request->getVar('marca'));
+            $session->setFlashdata('precioProductoValor', $this->request->getVar('precio'));
+            $session->setFlashdata('precioVtaProductoValor', $this->request->getVar('precioVta'));
+            $session->setFlashdata('stockProductoValor', $this->request->getVar('stock'));
+            $session->setFlashdata('stockMinProductoValor', $this->request->getVar('stockMin'));
+            $session->setFlashdata('proveedorProductoValor', $this->request->getVar('proveedor'));
+
+            return $this->mostrarFormularioCrearProductoConErrores();
         } else {
             $img = $this->request->getFile('imagen');
-            $nombre_aleatorio = $img->getRandomName();
-            $img->move(ROOTPATH . 'assets/uploads', $nombre_aleatorio);
+            $nombreImagen = $this->procesarImagen($img);
 
-            $data = [
-                'nombre_producto' => $this->request->getVar('nombre'),
-                'imagen'          => $nombre_aleatorio,
-                'categoria_id'    => $this->request->getVar('categoria'),
-                'precio'          => $this->request->getVar('precio'),
-                'precio_vta'      => $this->request->getVar('precioVta'),
-                'stock'           => $this->request->getVar('stock'),
-                'stock_min'       => $this->request->getVar('stockMin'),
-                'descripcion'     => $this->request->getVar('descripcion'),
-                'marca_id'    => $this->request->getVar('marca'),
+            $datos = [
+                'nombre'       => $this->request->getVar('nombre'),
+                'imagen'       => $nombreImagen,
+                'id_categoria' => $this->request->getVar('categoria'),
+                'precio'       => $this->request->getVar('precio'),
+                'precio_vta'   => $this->request->getVar('precioVta'),
+                'stock'        => $this->request->getVar('stock'),
+                'stock_min'    => $this->request->getVar('stockMin'),
+                'descripcion'  => $this->request->getVar('descripcion'),
+                'id_marca'     => $this->request->getVar('marca'),
+                'id_proveedor' => $this->request->getVar('proveedor')
             ];
 
-            $producto = new Producto_model();
-            $producto->insert($data);
-            session()->setFlashdata('msgExitoso', 'Producto registrado exitosamente');
+            $this->guardarProducto($datos);
+            $session->setFlashdata('msgExitoso', 'Producto registrado exitosamente');
             return $this->response->redirect(site_url('altaDeProductos'));
         }
     }
 
-    public function formValidationUpdate(){
-        $input = $this->validate([
+    private function mostrarFormularioCrearProductoConErrores(){
+        $categoriaModel = new Categoria_model();
+        $marcaModel = new Marca_model();
+        $proveedorModel = new Proveedor_model();
+
+        $data['categorias'] = $categoriaModel->getCategoriaAll();
+        $data['marcas'] = $marcaModel->getMarcaAll();
+        $data['proveedores'] = $proveedorModel->getProveedorAll();
+        $data['validation'] = $this->validator;
+
+        $dato['titulo'] = 'Dashboard | Agregar Producto';
+        echo view('plantillas/header', $dato);
+        echo view('plantillas/nav');
+        echo view('back/admin/altaDeProductos', $data);
+        echo view('plantillas/footer');
+    }
+
+    // ACTUALIZAR PRODUCTO
+    private function validarProductoUpdate($formulario){
+        return $this->validate([
             'id'        => 'required|numeric',
             'nombre'    => 'required|trim|min_length[2]|max_length[50]',
             'categoria' => 'required',
@@ -265,59 +277,85 @@ class Producto_controller extends Controller{
             'stock'     => 'required|trim|is_natural',
             'stockMin'  => 'required|trim|is_natural',
             'imagen'    => 'max_size[imagen,8192]|ext_in[imagen,png,jpg,jpeg]',
-            'descripcion' => 'required|trim|min_length[5]|max_length[255]',
-            'marca'     => 'required'
+            'descripcion' => 'permit_empty|trim|min_length[5]|max_length[255]',
+            'marca'     => 'required',
+            'proveedor' => 'required'
         ]);
-        if(!$input){
-            $productoModel = new Producto_model();
-            $categoria_model = new Categoria_model();
-            $data['categorias'] = $categoria_model->getCategoriaAll();
-            $marcaModel = new Marca_model();
-            $data['marcas'] = $marcaModel->getMarcaAll();
-            $data['producto'] = $productoModel->find($this->request->getVar('id'));
-            $data['validation'] = $this->validator;
-
-            $dato['titulo'] = 'Dashboard | Editar Producto';
-            echo view('plantillas/header', $dato);
-            echo view('plantillas/nav');
-            echo view('back/admin/actualizarProductos', $data);
-            echo view('plantillas/footer');
-        } else {
-            $data = [
-                'id'              => $this->request->getVar('id'),
-                'nombre_producto' => $this->request->getVar('nombre'),
-                'categoria_id'    => $this->request->getVar('categoria'),
-                'precio'          => $this->request->getVar('precio'),
-                'precio_vta'      => $this->request->getVar('precioVta'),
-                'stock'           => $this->request->getVar('stock'),
-                'stock_min'       => $this->request->getVar('stockMin'),
-                'descripcion'     => $this->request->getVar('descripcion'),
-                'marca_id'    => $this->request->getVar('marca'),
-            ];
-
-            $img = $this->request->getFile('imagen');
-            if ($img->isValid() && !$img->hasMoved()) {
-                $nombre_aleatorio = $img->getRandomName();
-                $img->move(ROOTPATH . 'assets/uploads', $nombre_aleatorio);
-                $data['imagen'] = $nombre_aleatorio;
-            }
-
-            $productoModel = new Producto_model();
-            $id = $this->request->getVar('id');
-            $productoModel->update($id, $data);
-
-            session()->setFlashdata('msgExitoso', 'Producto actualizado exitosamente');
-            return $this->response->redirect(site_url('mostrarListaProductosActualizarEliminar'));
-        }
     }
 
-    public function limpiarDatos() {
+    private function procesarImagenUpdate($archivoImagen){
+        if ($archivoImagen->isValid() && !$archivoImagen->hasMoved()) {
+            $nombreAleatorio = $archivoImagen->getRandomName();
+            $archivoImagen->move(ROOTPATH . 'assets/uploads', $nombreAleatorio);
+            return $nombreAleatorio;
+        }
+        return null;
+    }
+
+    private function guardarProductoActualizado($id, $datosProducto){
+        $productoModel = new Producto_model();
+        return $productoModel->update($id, $datosProducto);
+    }
+
+    public function actualizarProducto(){
+        $session = session();
+        $id = $this->request->getVar('id');
+
+        if(!$this->validarProductoUpdate($this->request)){
+            return $this->mostrarFormularioActualizarProductoConErrores($id);
+        }
+
+        $nombreImagen = $this->procesarImagenUpdate($this->request->getFile('imagen'));
+
+        $datosProducto = [
+            'id_producto'   => $id,
+            'nombre'        => $this->request->getVar('nombre'),
+            'id_categoria'  => $this->request->getVar('categoria'),
+            'precio'        => $this->request->getVar('precio'),
+            'precio_vta'    => $this->request->getVar('precioVta'),
+            'stock'         => $this->request->getVar('stock'),
+            'stock_min'     => $this->request->getVar('stockMin'),
+            'descripcion'   => $this->request->getVar('descripcion'),
+            'id_marca'      => $this->request->getVar('marca'),
+            'id_proveedor'  => $this->request->getVar('proveedor')
+        ];
+
+        if($nombreImagen){
+            $datosProducto['imagen'] = $nombreImagen;
+        }
+
+        $this->guardarProductoActualizado($id, $datosProducto);
+        $session->setFlashdata('msgExitoso', 'Producto actualizado exitosamente');
+        return $this->response->redirect(site_url('mostrarListaProductosActualizarEliminar'));
+    }
+
+    private function mostrarFormularioActualizarProductoConErrores($id){
+        $productoModel = new Producto_model();
+        $categoriaModel = new Categoria_model();
+        $marcaModel = new Marca_model();
+        $proveedorModel = new Proveedor_model();
+
+        $data['categorias'] = $categoriaModel->getCategoriaAll();
+        $data['marcas'] = $marcaModel->getMarcaAll();
+        $data['producto'] = $productoModel->find($id);
+        $data['proveedores'] = $proveedorModel->getProveedorAll();
+        $data['validation'] = $this->validator;
+
+        $dato['titulo'] = 'Dashboard | Editar Producto';
+        echo view('plantillas/header', $dato);
+        echo view('plantillas/nav');
+        echo view('back/admin/actualizarProductos', $data);
+        echo view('plantillas/footer');
+    }
+
+    public function limpiarFormularioAltaProducto() {
         session()->remove(['productoValor', 'descripcionProductoValor', 'categoriaProductoValor', 'marcaProductoValor', 'precioProductoValor', 'precioVtaProductoValor', 'stockProductoValor', 'stockMinProductoValor']);
         return redirect()->to('/altaDeProductos');
     }
 
-    public function limpiarDatosAct($id) {
+    public function limpiarFormularioActualizarProducto($id) {
         session()->setFlashdata('limpiarProductoValor', true);
+        session()->setFlashdata('limpiarImagenValor', true);
         return redirect()->to('/actualizarProductos/' . $id);
     }
 }

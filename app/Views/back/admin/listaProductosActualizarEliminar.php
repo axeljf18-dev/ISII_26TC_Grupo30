@@ -68,10 +68,10 @@
                     <?php if($producto['eliminado'] == 'NO'): ?>
                         <div class="row w-100 ms-0 border-top">
                             <div class="col-xl-1 col-lg-1 col-md-1 col-sm-1 col-1 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
-                                <p class="mb-0"><?php echo $producto['id']; ?></p>
+                                <p class="mb-0"><?php echo $producto['id_producto']; ?></p>
                             </div>
                             <div class="col-xl-3 col-lg-3 col-md-2 col-sm-2 col-2 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
-                                <p class="mb-0"><?php echo $producto['nombre_producto']; ?></p>
+                                <p class="mb-0"><?php echo $producto['nombre']; ?></p>
                             </div>
                             <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
                                 <p class="mb-0"><?php echo $producto['categoria_descripcion']; ?></p>
@@ -80,10 +80,10 @@
                                 <img src="<?= base_url('assets/uploads/' . $producto['imagen']); ?>" alt="Imagen del producto" width="100px" height="100px">
                             </div>
                             <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
-                                <a href= "<?php echo base_url('actualizarProductos/' . $producto['id']); ?>" class="btn btn-primary text-white rounded-2"><b>Editar</b></a>
+                                <a href= "<?php echo base_url('actualizarProductos/' . $producto['id_producto']); ?>" class="btn btn-primary text-white rounded-2"><b>Editar</b></a>
                             </div>
                             <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
-                                <a href= "<?php echo base_url('eliminarProductos/' . $producto['id']); ?>" class="btn btn-danger text-white rounded-2"><b>Eliminar</b></a>
+                                <a href="<?= base_url('eliminarProductos/' . $producto['id_producto']); ?>" class="btn btn-danger text-white rounded-2" onclick="return confirm('¿Estás seguro de que deseas eliminar este producto?');"><b>Eliminar</b></a>
                             </div>
                         </div>
                     <?php endif; ?>
@@ -91,4 +91,9 @@
             <?php endif; ?>
         </div>
     </div>
+    <?php if(isset($pager)): ?>
+        <div class="d-flex justify-content-end mt-3">
+            <?= $pager->links('default', 'my_template') ?>
+        </div>
+    <?php endif; ?>
 </main>

@@ -61,17 +61,35 @@
                 </div>
                 <?php endforeach; ?>
             </div>
+            <?php echo form_close(); ?>
+            
             <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5 col-6 mt-4 mb-4 pt-2 border-top border-bottom">
                 <p class="opacity-75">Subtotal: $<?= number_format($gran_total, 2) ?></p>
                 <h4 class="text-dark"><b>Total: $<?= number_format($gran_total, 2) ?></b></h4>
-                <a href="<?= base_url('comprar-carrito') ?>" class="text-white text-center text-decoration-none rounded-2 me-2 mt-4 mb-4 conteiner__div-boton-carrito">
-                    <b>Comprar</b>
-                </a>
+
+                <form action="<?= base_url('comprar-carrito') ?>" method="post" class="me-2">
+                    <?= csrf_field() ?>
+
+                    <label for="id_metodo_pago"><b>Método de Pago</b></label>
+                    <select name="id_metodo_pago" id="id_metodo_pago" class="form-select" required>
+                        <?php foreach($metodosPago as $metodo): ?>
+                            <option value="<?= $metodo['id_metodo_pago'] ?>">
+                                <?= esc($metodo['nombre']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+
+                    <!-- Botón de compra como submit -->
+                    <button type="submit" class="text-white text-center text-decoration-none border-0 rounded-2 me-2 mt-4 mb-4 conteiner__div-boton-carrito w-100">
+                        <b>Comprar</b>
+                    </button>
+                </form>
+
                 <a href="<?= base_url('borrar-carrito') ?>" class="text-white text-center text-decoration-none btn btn-danger rounded-2 me-2 mt-4 mb-4 d-block">
                     <b>Borrar Todo</b>
                 </a>
             </div>
         </div>
-        <?php echo form_close(); ?>
+        
     <?php endif; ?>
 </main>

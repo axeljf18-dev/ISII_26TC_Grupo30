@@ -47,16 +47,16 @@
                     <?php if($categoria['activo'] == 1): ?>
                         <div class="row w-100 ms-0 border-top">
                             <div class="col-1 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
-                                <p class="mb-0"><?php echo $categoria['id']; ?></p>
+                                <p class="mb-0"><?php echo $categoria['id_categoria']; ?></p>
                             </div>
                             <div class="col-5 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
                                 <p class="mb-0"><?php echo $categoria['descripcion']; ?></p>
                             </div>
                             <div class="col-3 pb-3 pt-3 border-end d-flex justify-content-center align-items-center"> 
-                                <a href= "<?php echo base_url('actualizarCategorias/' . $categoria['id']); ?>" class="btn btn-primary text-white rounded-2"><b>Editar</b></a>
+                                <a href= "<?php echo base_url('actualizarCategorias/' . $categoria['id_categoria']); ?>" class="btn btn-primary text-white rounded-2"><b>Editar</b></a>
                             </div>
                             <div class="col-3 pb-3 pt-3 border-end d-flex justify-content-center align-items-center"> 
-                                <a href= "<?php echo base_url('eliminarCategorias/' . $categoria['id']); ?>" class="btn btn-danger text-white rounded-2"><b>Eliminar</b></a>
+                                <a href= "<?php echo base_url('eliminarCategorias/' . $categoria['id_categoria']); ?>" class="btn btn-danger text-white rounded-2"><b>Eliminar</b></a>
                             </div>
                         </div>
                     <?php endif; ?>

@@ -1,7 +1,7 @@
 <?php 
     $sesion = session();
     $nombre = $sesion->get('nombre');
-    $perfil = $sesion->get('perfil_id');
+    $perfil = $sesion->get('id_perfil');
 ?>
 
 <footer class="border">

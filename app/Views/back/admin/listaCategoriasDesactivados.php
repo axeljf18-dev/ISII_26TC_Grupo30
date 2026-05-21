@@ -36,7 +36,7 @@
                     <?php if($categoria['activo'] == 2): ?>
                         <div class="row w-100 ms-0 border-top">
                             <div class="col-4 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
-                                <p class="mb-0"><?php echo $categoria['id']; ?></p>
+                                <p class="mb-0"><?php echo $categoria['id_categoria']; ?></p>
                             </div>
                             <div class="col-8 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
                                 <p class="mb-0"><?php echo $categoria['descripcion']; ?></p>

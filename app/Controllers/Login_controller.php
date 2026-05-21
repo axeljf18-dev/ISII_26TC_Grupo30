@@ -52,13 +52,13 @@ class Login_controller extends Controller{
                     'apellido'    => $data['apellido'],
                     'email'       => $data['email'],
                     'usuario'     => $data['usuario'],
-                    'perfil_id'   => $data['perfil_id'],
+                    'id_perfil'   => $data['id_perfil'],
                     'logged_in'   => TRUE
                 ];
                 $session->set($ses_data); 
-                if ($data['perfil_id'] == 1) { 
+                if ($data['id_perfil'] == 1) { 
                     return redirect()->to('/mostrarListaProductos');
-                } elseif ($data['perfil_id'] == 2) {
+                } elseif ($data['id_perfil'] == 2) {
                     return redirect()->to('/');
                 } else {
                     return redirect()->to('/inicioSesion');

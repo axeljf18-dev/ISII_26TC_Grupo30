@@ -4,7 +4,7 @@
 
     foreach ($ventas as $venta) {
         foreach($usuarios as $usuario){
-            if ($usuario['id_usuario'] == $venta['usuario_id'] && $usuario['baja'] == 'SI') {
+            if ($usuario['id_usuario'] == $venta['id_usuario'] && $usuario['baja'] == 'SI') {
                 $boleano = true;
                 break;
             }
@@ -68,7 +68,7 @@
             <?php else: ?>
                 <?php foreach($ventas as $venta): ?>
                     <?php foreach($usuarios as $usuario): ?>
-                        <?php if($usuario['id_usuario'] == $venta['usuario_id'] && $usuario['baja'] == 'SI'): ?>
+                        <?php if($usuario['id_usuario'] == $venta['id_usuario'] && $usuario['baja'] == 'SI'): ?>
                         <div class="row w-100 ms-0 border-top">
                             <div class="col-4 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
                                 <p class="mb-0"><?php echo $usuario['nombre']; ?></p>
@@ -80,7 +80,7 @@
                                 <p class="mb-0">$<?php echo number_format($venta['total_venta'], 2); ?></p>
                             </div>
                             <div class="col-3 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
-                                <a href="<?= base_url('mostrarDetalleCompraCliente/' . $venta['id']) ?>" class="text-decoration-none btn btn-primary">
+                                <a href="<?= base_url('mostrarDetalleCompraCliente/' . $venta['id_venta_cabecera']) ?>" class="text-decoration-none btn btn-primary">
                                     <b class="text-white bg-opacity-75 p-1 rounded-2">Detalles</b>
                                 </a>
                             </div>
@@ -91,4 +91,9 @@
             <?php endif; ?>
         </div>
     </div>
+    <?php if(isset($pager)): ?>
+        <div class="d-flex justify-content-end mt-3">
+            <?= $pager->links('default', 'my_template') ?>
+        </div>
+    <?php endif; ?>
 </main>

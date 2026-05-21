@@ -105,7 +105,7 @@ class Categoria_controller extends Controller{
         $categoriaDescripcion = $this->request->getVar('categoria');
 
         $input = $this->validate([
-            'categoria' => 'required|trim|regex_match[/^([\p{L}\s])+$/u]|min_length[2]|max_length[50]|is_unique[categorias.descripcion]'
+            'categoria' => 'required|trim|regex_match[/^([\p{L}\s])+$/u]|min_length[2]|max_length[50]|is_unique[categoria.descripcion]'
         ]);
 
         $formModel = new Categoria_model();
@@ -132,7 +132,7 @@ class Categoria_controller extends Controller{
 
         $input = $this->validate([
             'id'        => 'required|numeric',
-            'categoria' => 'required|trim|regex_match[/^([\p{L}\s])+$/u]|min_length[2]|max_length[50]|is_unique[categorias.descripcion,id,' . $id . ']',
+            'categoria' => 'required|trim|regex_match[/^([\p{L}\s])+$/u]|min_length[2]|max_length[50]|is_unique[categoria.descripcion,id_categoria,' . $id . ']',
         ]);
         if(!$input){
             $categoriaModel = new Categoria_model();

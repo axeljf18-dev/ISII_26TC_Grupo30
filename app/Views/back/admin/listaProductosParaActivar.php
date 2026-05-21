@@ -68,10 +68,10 @@
                     <?php if($producto['eliminado'] == 'SI'): ?>
                         <div class="row w-100 ms-0 border-top">
                             <div class="col-xl-1 col-lg-1 col-md-1 col-sm-1 col-1 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
-                                <p class="mb-0"><?php echo $producto['id']; ?></p>
+                                <p class="mb-0"><?php echo $producto['id_producto']; ?></p>
                             </div>
                             <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
-                                <p class="mb-0"><?php echo $producto['nombre_producto']; ?></p>
+                                <p class="mb-0"><?php echo $producto['nombre']; ?></p>
                             </div>
                             <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-3 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
                                 <p class="mb-0"><?php echo $producto['descripcion']; ?></p>
@@ -83,7 +83,7 @@
                                 <img src="<?= base_url('assets/uploads/' . $producto['imagen']); ?>" alt="Imagen del producto" width="100px" height="100px">
                             </div>
                             <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
-                                <a href= "<?php echo base_url('activarProductos/' . $producto['id']); ?>" class="btn btn-primary text-white rounded-2"><b>Activar</b></a>
+                                <a href="<?= base_url('activarProductos/' . $producto['id_producto']); ?>" class="btn btn-primary text-white rounded-2" onclick="return confirm('¿Estás seguro de que deseas activar este producto?');"><b>Activar</b></a>
                             </div>
                         </div>
                     <?php endif; ?>
@@ -91,4 +91,9 @@
             <?php endif; ?>
         </div>
     </div>
+    <?php if(isset($pager)): ?>
+        <div class="d-flex justify-content-end mt-3">
+            <?= $pager->links('default', 'my_template') ?>
+        </div>
+    <?php endif; ?>
 </main>

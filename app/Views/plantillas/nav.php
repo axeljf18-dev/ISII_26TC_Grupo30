@@ -2,7 +2,7 @@
     $sesion = session();
     $id = $sesion->get('id_usuario');
     $usuario = $sesion->get('usuario');
-    $perfil = $sesion->get('perfil_id');
+    $perfil = $sesion->get('id_perfil');
 ?>
 
 <div class="bg-white">
@@ -62,6 +62,7 @@
                             </a> 
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item item__li-a-3" href="<?php echo base_url('altaDeProductos'); ?>"><b>Producto</b></a></li>
+                                <!-- display:none; -->
                                 <li style="display:none;"><a class="dropdown-item item__li-a-3" href="<?php echo base_url('altaDeCategorias'); ?>"><b>Categoria</b></a></li>
                                 <li><a class="dropdown-item item__li-a-3" href="<?php echo base_url('altaDeUsuarios'); ?>"><b>Usuario</b></a></li>
                                 <li style="display:none;"><a class="dropdown-item item__li-a-3" href="<?php echo base_url('altaDePerfiles'); ?>"><b>Perfil</b></a></li>
@@ -77,6 +78,7 @@
                             </a> 
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item item__li-a-3" href="<?php echo base_url('mostrarListaProductos'); ?>"><b>Lista de Productos</b></a></li>
+                                <!-- display:none; -->
                                 <li style="display:none;"><a class="dropdown-item item__li-a-3" href="<?php echo base_url('mostrarListaCategorias'); ?>"><b>Lista de Categorias</b></a></li>
                                 <li ><a class="dropdown-item item__li-a-3" href="<?php echo base_url('mostrarListaUsuarios'); ?>"><b>Lista de Usuarios</b></a></li>
                                 <li style="display:none;"><a class="dropdown-item item__li-a-3" href="<?php echo base_url('mostrarListaPerfiles'); ?>"><b>Lista de Perfiles</b></a></li>
@@ -92,6 +94,7 @@
                             </a> 
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item item__li-a-3" href="<?php echo base_url('mostrarListaProductosActualizarEliminar'); ?>"><b>Producto</b></a></li>
+                                <!-- display:none; -->
                                 <li style="display:none;"><a class="dropdown-item item__li-a-3" href="<?php echo base_url('mostrarListaCategoriasActualizarEliminar'); ?>"><b>Categoria</b></a></li>
                                 <li ><a class="dropdown-item item__li-a-3" href="<?php echo base_url('mostrarListaUsuariosActualizarEliminar'); ?>"><b>Usuario</b></a></li>
                                 <li style="display:none;"><a class="dropdown-item item__li-a-3" href="<?php echo base_url('mostrarListaPerfilesActualizarEliminar'); ?>"><b>Perfil</b></a></li>
@@ -135,7 +138,7 @@
                             <ul class="dropdown-menu">
                                 <?php foreach($categorias as $categoria): ?>
                                     <?php if($categoria['activo'] == 1): ?>
-                                        <li><a class="dropdown-item item__li-a-3" href="<?php echo base_url('categoria/' . $categoria['id']); ?>"><b><?php echo $categoria['descripcion']; ?></b></a></li>
+                                        <li><a class="dropdown-item item__li-a-3" href="<?php echo base_url('categoria/' . $categoria['id_categoria']); ?>"><b><?php echo $categoria['descripcion']; ?></b></a></li>
                                     <?php endif; ?>
                                 <?php endforeach; ?>
                             </ul>

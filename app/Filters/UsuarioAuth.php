@@ -11,7 +11,7 @@ class UsuarioAuth implements FilterInterface{
         } else{
             // El usuario(cliente) está logueado, ahora verificamos el rol.
             $sesion = session();
-            $perfil = $sesion->get('perfil_id');
+            $perfil = $sesion->get('id_perfil');
 
             if ($perfil == 2) {
                 return redirect()->to('/');

@@ -29,8 +29,8 @@
                         foreach($productos as $producto): 
                     ?>
                     <tr>
-                        <?php if($venta['producto_id'] == $producto['id']): ?>
-                            <td class="text-center"><?= esc($producto['nombre_producto']) ?></td>
+                        <?php if($venta['id_producto'] == $producto['id_producto']): ?>
+                            <td class="text-center"><?= esc($producto['nombre']) ?></td>
                             <td class="text-center"><?= esc($producto['descripcion']) ?></td>
                             <td class="text-center"><?= esc($venta['cantidad']) ?></td>
                             <td class="text-center">$<?= number_format($venta['precio'], 2) ?></td>

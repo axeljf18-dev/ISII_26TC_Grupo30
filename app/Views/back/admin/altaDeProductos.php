@@ -5,9 +5,10 @@
     $valorCategoriaProducto = $session->getFlashdata('categoriaProductoValor');
     $valorMarcaProducto = $session->getFlashdata('marcaProductoValor');
     $valorPrecioProducto = $session->getFlashdata('precioProductoValor');
-    $valorPrecioVtaProducto = $session->getFlashdata('precioProductoVtaValor');
+    $valorPrecioVtaProducto = $session->getFlashdata('precioVtaProductoValor');
     $valorStockProducto = $session->getFlashdata('stockProductoValor');
     $valorStockMinProducto = $session->getFlashdata('stockMinProductoValor');
+    $valorProveedorProducto = $session->getFlashdata('proveedorProductoValor');
 ?>
 
 <main class="conteiner__form-altaDeProductos">
@@ -59,8 +60,8 @@
                     <select name="categoria" id="categoria" class="opacity-75 w-100 p-2 border shadow" style="cursor: pointer;">
                         <option value="">Seleccionar Categoria</option>
                         <?php foreach($categorias as $categoria): ?>
-                        <option value="<?= $categoria['id']; ?>" 
-                            <?= (isset($valorCategoriaProducto) && $valorCategoriaProducto == $categoria['id']) ? 'selected' : ''; ?>>
+                        <option value="<?= $categoria['id_categoria']; ?>" 
+                            <?= (isset($valorCategoriaProducto) && $valorCategoriaProducto == $categoria['id_categoria']) ? 'selected' : ''; ?>>
                             <?= $categoria['descripcion']; ?>
                         </option>
                         <?php endforeach; ?>
@@ -163,8 +164,30 @@
                 </div>
                 <?php if($validation->getError('imagen')) {?> 
                     <div class="text-center mt-2"> 
-                        <p class="fs-6 text-danger"><b><?= $error = $validation->getError('imagen'); ?> </b></p>
+                        <p class="fs-6 text-danger"><b>La <?= $error = $validation->getError('imagen'); ?> </b></p>
                     </div>
+                <?php }?>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-12 mt-2 d-flex justify-content-center">
+                    <label for="proveedor"><b>Proveedor</b></label>      
+                </div>
+                <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
+                    <select name="proveedor" id="proveedor" class="opacity-75 w-100 p-2 border shadow" style="cursor: pointer;">
+                        <option value="">Seleccionar Proveedor</option>
+                        <?php foreach($proveedores as $prov): ?>
+                            <option value="<?= $prov['id_proveedor']; ?>" 
+                                <?= (isset($valorProveedorProducto) && $valorProveedorProducto == $prov['id_proveedor']) ? 'selected' : ''; ?>>
+                                <?= $prov['nombre']; ?> <?= $prov['apellido']; ?> (<?= $prov['email']; ?>)
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <?php if($validation->getError('proveedor')) {?> 
+                    <div class="text-center mt-2"> 
+                        <p class="fs-6 text-danger"><b><?= $validation->getError('proveedor'); ?></b></p>
+                    </div> 
                 <?php }?>
             </div>
 

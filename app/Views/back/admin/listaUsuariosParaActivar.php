@@ -68,10 +68,10 @@
                                 <p class="mb-0"><?php echo $usuario['nombre']; ?>, <?php echo $usuario['apellido']; ?></p>
                             </div>
                             <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-3 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
-                                <p class="mb-0"><?php echo $usuario['perfiles_descripcion']; ?></p>
+                                <p class="mb-0"><?php echo $usuario['perfil_descripcion']; ?></p>
                             </div>
                             <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-3 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
-                                <a href= "<?php echo base_url('activarUsuarios/' . $usuario['id_usuario']); ?>" class="btn btn-primary text-white rounded-2"><b>Habilitar</b></a>
+                                <a href="<?= base_url('activarUsuarios/' . $usuario['id_usuario']); ?>" class="btn btn-primary text-white rounded-2" onclick="return confirm('¿Estás seguro de que deseas habilitar este usuario?');"><b>Habilitar</b></a>
                             </div>
                         </div>
                     <?php endif; ?>
@@ -79,4 +79,9 @@
             <?php endif; ?>
         </div>
     </div>
+    <?php if(isset($pager)): ?>
+        <div class="d-flex justify-content-end mt-3">
+            <?= $pager->links('default', 'my_template') ?>
+        </div>
+    <?php endif; ?>
 </main>

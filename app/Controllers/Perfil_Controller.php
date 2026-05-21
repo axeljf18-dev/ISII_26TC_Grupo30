@@ -3,7 +3,7 @@ namespace App\Controllers;
 use CodeIgniter\Controller; 
 use App\Models\Producto_model;
 use App\Models\Categoria_model;
-use App\Models\Perfiles_model;
+use App\Models\Perfil_model;
 use App\models\Usuarios_model;
 
 class Perfil_Controller extends Controller{
@@ -13,7 +13,7 @@ class Perfil_Controller extends Controller{
     }
 
     public function index(){
-        $perfilModel = new Perfiles_model();
+        $perfilModel = new Perfil_model();
 
         $data['perfiles'] = $perfilModel->getPerfilAll();
 
@@ -25,7 +25,7 @@ class Perfil_Controller extends Controller{
     }
 
     public function indexDesactivados(){
-        $perfilModel = new Perfiles_model();
+        $perfilModel = new Perfil_model();
 
         $data['perfiles'] = $perfilModel->getPerfilAll();
 
@@ -37,7 +37,7 @@ class Perfil_Controller extends Controller{
     }
 
     public function indexParaActivar(){
-        $perfilModel = new Perfiles_model();
+        $perfilModel = new Perfil_model();
 
         $data['perfiles'] = $perfilModel->getPerfilAll();
 
@@ -49,7 +49,7 @@ class Perfil_Controller extends Controller{
     }
 
     public function indexActualizarEliminar(){
-        $perfilModel = new Perfiles_model();
+        $perfilModel = new Perfil_model();
 
         $data['perfiles'] = $perfilModel->getPerfilAll();
 
@@ -69,7 +69,7 @@ class Perfil_Controller extends Controller{
     }
 
     public function actualizarPerfil($id){
-        $perfilModel = new Perfiles_model();
+        $perfilModel = new Perfil_model();
         $data['perfil'] = $perfilModel->find($id);
 
         $dato['titulo'] = 'Dashboard | Editar Perfil';
@@ -80,7 +80,7 @@ class Perfil_Controller extends Controller{
     }
 
     public function eliminarPerfil($id){
-        $perfilModel = new Perfiles_model();
+        $perfilModel = new Perfil_model();
         $data['perfil'] = $perfilModel->find($id);
 
         $data = ['baja' => 'SI'];
@@ -91,7 +91,7 @@ class Perfil_Controller extends Controller{
     }
 
     public function activarPerfil($id){
-        $perfilModel = new Perfiles_model();
+        $perfilModel = new Perfil_model();
         $data['perfil'] = $perfilModel->find($id);
 
         $data = ['baja' => 'NO'];
@@ -106,10 +106,10 @@ class Perfil_Controller extends Controller{
         $perfilDescripcion = $this->request->getVar('perfil');
 
         $input = $this->validate([
-            'perfil' => 'required|trim|regex_match[/^([\p{L}\s])+$/u]|min_length[2]|max_length[50]|is_unique[perfiles.descripcion]'
+            'perfil' => 'required|trim|regex_match[/^([\p{L}\s])+$/u]|min_length[2]|max_length[50]|is_unique[perfil.descripcion]'
         ]);
 
-        $formModel = new Perfiles_model();
+        $formModel = new Perfil_model();
 
         if(!$input){
             $session->setFlashdata('perfilDescripcionValor', $perfilDescripcion);
@@ -135,10 +135,10 @@ class Perfil_Controller extends Controller{
 
         $input = $this->validate([
             'id' => 'required|numeric',
-            'perfil' => 'required|trim|regex_match[/^([\p{L}\s])+$/u]|min_length[2]|max_length[50]|is_unique[perfiles.descripcion,id_perfil,' . $id . ']',
+            'perfil' => 'required|trim|regex_match[/^([\p{L}\s])+$/u]|min_length[2]|max_length[50]|is_unique[perfil.descripcion,id_perfil,' . $id . ']',
         ]);
         if(!$input){
-            $perfilModel = new Perfiles_model();
+            $perfilModel = new Perfil_model();
             $data['perfil'] = $perfilModel->find($this->request->getVar('id'));
             $data['validation'] = $this->validator;
 
@@ -152,7 +152,7 @@ class Perfil_Controller extends Controller{
                 'descripcion' => $this->request->getVar('perfil'),
             ];
 
-            $perfilModel = new Perfiles_model();
+            $perfilModel = new Perfil_model();
             $id = $this->request->getVar('id');
             $perfilModel->update($id, $data);
 

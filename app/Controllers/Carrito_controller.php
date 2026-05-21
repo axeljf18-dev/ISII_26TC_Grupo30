@@ -3,7 +3,8 @@ namespace App\Controllers;
 use CodeIgniter\Controller; 
 use App\Models\Producto_model;
 use App\Models\Categoria_model;
-use App\models\Usuarios_model;
+use App\Models\Usuarios_model;
+use App\Models\MetodoPago_model;
 
 class Carrito_controller extends Controller{
     public function __construct(){
@@ -18,12 +19,12 @@ class Carrito_controller extends Controller{
         $request = \Config\Services::request();
 
         $producto = new Producto_model();
-        $producto = $producto->where('id', $id)->first();
+        $producto = $producto->where('id_producto', $id)->first();
 
         $cart->insert([
-            'id'        => $producto['id'],
+            'id'        => $producto['id_producto'],
             'qty'       => 1,
-            'name'      => $producto['nombre_producto'],
+            'name'      => $producto['nombre'],
             'price'     => $producto['precio_vta'],
             'imagen'    => $producto['imagen'],
             'options' => [
@@ -41,7 +42,7 @@ class Carrito_controller extends Controller{
         $cart->update([
             'id'        => $request->getPost('id'),
             'qty'       => 1,
-            'name'      => $request->getPost('nombre_producto'),
+            'name'      => $request->getPost('nombre'),
             'price'     => $request->getPost('precio_vta'),
             'imagen'    => $request->getPost('imagen'),
         ]);
