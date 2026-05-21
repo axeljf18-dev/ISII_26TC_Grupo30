@@ -35,7 +35,7 @@
                             <?php if($marca2['activo'] == 1): ?>
                                 <a href="<?php echo base_url('marca/' . $marca2['id_marca']); ?>" class="text-decoration-none text-dark opacity-75 mt-1 mb-1"><?php echo $marca2['descripcion']; ?>
                                     <?php foreach($productosTotal as $producto): ?>
-                                        <?php if($producto['eliminado'] == 'NO' && $producto['id_marca'] == $marca2['id_marca']): ?>
+                                        <?php if($producto['eliminado'] == 'NO' && $producto['id_marca'] == $marca2['id_marca'] && $producto['activo_marca'] == 1 && $producto['activo_categoria'] == 1): ?>
                                             <?php ++$acumuladorMarca; ?>
                                         <?php endif; ?>
                                     <?php endforeach; ?>

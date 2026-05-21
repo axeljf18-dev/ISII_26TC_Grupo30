@@ -6,10 +6,10 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 // VISTA DEL CLIENTE o USUARIO
-$routes->get('/', 'Home::index', ['filter' => 'adminAuth']);
-$routes->get('/productos', 'Home::productos', ['filter' => 'adminAuth']);
-$routes->get('/categoria/(:num)', 'Home::categorias/$1', ['filter' => 'adminAuth']);
-$routes->get('/marca/(:num)', 'Home::marcas/$1', ['filter' => 'adminAuth']);
+$routes->get('/', 'Home::inicio', ['filter' => 'adminAuth']);
+$routes->get('/productos', 'Home::listarProductos', ['filter' => 'adminAuth']);
+$routes->get('/categoria/(:num)', 'Home::listarProductosPorCategoria/$1', ['filter' => 'adminAuth']);
+$routes->get('/marca/(:num)', 'Home::listarProductosPorMarca/$1', ['filter' => 'adminAuth']);
 $routes->get('/ayuda', 'Home::ayuda', ['filter' => 'adminAuth']);
 $routes->get('/contacto', 'Home::contacto', ['filter' => 'adminAuth']);
 $routes->get('/quienesSomos', 'Home::quienesSomos', ['filter' => 'adminAuth']);
@@ -18,18 +18,18 @@ $routes->get('/terminosUsos', 'Home::terminosUsos', ['filter' => 'adminAuth']);
 
 // Filtros de Productos
 $routes->get('/enviar-formQuery', 'Home::buscador', ['filter' => 'adminAuth']);
-$routes->get('/enviar-formPrecio', 'Home::buscadorPrecioProducto', ['filter' => 'adminAuth']);
-$routes->get('/enviar-formPrecioMarca/(:num)', 'Home::buscadorPrecioMarcaProducto/$1', ['filter' => 'adminAuth']);
-$routes->get('/enviar-formPrecioCategoria/(:num)', 'Home::buscadorPrecioCategoriaProducto/$1', ['filter' => 'adminAuth']);
-$routes->get('/enviar-formPrecioBuscador/(:any)', 'Home::buscadorPrecioBuscadorProducto/$1', ['filter' => 'adminAuth']);
-$routes->get('/productosMayor', 'Home::productosMayorPrecio', ['filter' => 'adminAuth']);
-$routes->get('/productosMenor', 'Home::productosMenorPrecio', ['filter' => 'adminAuth']);
-$routes->get('/productosMayorPrecioMarca/(:num)', 'Home::productosMayorPrecioMarca/$1', ['filter' => 'adminAuth']);
-$routes->get('/productosMenorPrecioMarca/(:num)', 'Home::productosMenorPrecioMarca/$1', ['filter' => 'adminAuth']);
-$routes->get('/productosMayorPrecioCategoria/(:num)', 'Home::productosMayorPrecioCategoria/$1', ['filter' => 'adminAuth']);
-$routes->get('/productosMenorPrecioCategoria/(:num)', 'Home::productosMenorPrecioCategoria/$1', ['filter' => 'adminAuth']);
-$routes->get('/productosMayorPrecioBuscador/(:any)', 'Home::productosMayorPrecioBuscador/$1', ['filter' => 'adminAuth']);
-$routes->get('/productosMenorPrecioBuscador/(:any)', 'Home::productosMenorPrecioBuscador/$1', ['filter' => 'adminAuth']);
+$routes->get('/enviar-formPrecio', 'Home::buscarPorRangoPrecioProductos', ['filter' => 'adminAuth']);
+$routes->get('/enviar-formPrecioMarca/(:num)', 'Home::buscarPorRangoPrecioMarca/$1', ['filter' => 'adminAuth']);
+$routes->get('/enviar-formPrecioCategoria/(:num)', 'Home::buscarPorRangoPrecioCategoria/$1', ['filter' => 'adminAuth']);
+$routes->get('/enviar-formPrecioBuscador/(:any)', 'Home::buscarPorRangoPrecioBuscador/$1', ['filter' => 'adminAuth']);
+$routes->get('/productosMayor', 'Home::ordenarProductosPorMayorPrecioProductos', ['filter' => 'adminAuth']);
+$routes->get('/productosMenor', 'Home::ordenarProductosPorMenorPrecioProductos', ['filter' => 'adminAuth']);
+$routes->get('/productosMayorPrecioMarca/(:num)', 'Home::ordenarProductosPorMayorPrecioMarca/$1', ['filter' => 'adminAuth']);
+$routes->get('/productosMenorPrecioMarca/(:num)', 'Home::ordenarProductosPorMenorPrecioMarca/$1', ['filter' => 'adminAuth']);
+$routes->get('/productosMayorPrecioCategoria/(:num)', 'Home::ordenarProductosPorMayorPrecioCategoria/$1', ['filter' => 'adminAuth']);
+$routes->get('/productosMenorPrecioCategoria/(:num)', 'Home::ordenarProductosPorMenorPrecioCategoria/$1', ['filter' => 'adminAuth']);
+$routes->get('/productosMayorPrecioBuscador/(:any)', 'Home::ordenarProductosPorMayorPrecioBuscador/$1', ['filter' => 'adminAuth']);
+$routes->get('/productosMenorPrecioBuscador/(:any)', 'Home::ordenarProductosPorMenorPrecioBuscador/$1', ['filter' => 'adminAuth']);
 
 // // Consulta
 // $routes->get('/consultas', 'Home::consultas', ['filter' => 'adminAuth']);

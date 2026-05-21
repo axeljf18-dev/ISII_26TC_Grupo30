@@ -10,7 +10,7 @@ use CodeIgniter\CLI\Console;
 
 class Home extends BaseController
 {
-    public function index(){
+    public function inicio(){
         $productoModel = new Producto_model();
         $data['productos'] = $productoModel->getProductosConMarcaYCategoria();
         $categoriaModel = new Categoria_model();
@@ -37,18 +37,7 @@ class Home extends BaseController
         $data['productosTotal'] = $productoModel->getProductosConMarcaYCategoria();
         $productoModel = new Producto_model();
 
-        if($query){ 
-            $data['productos'] = $productoModel->select('producto.*, marca.activo as activo_marca, categoria.activo as activo_categoria, categoria.descripcion as categoria_descripcion')
-                                                ->join('marca', 'marca.id_marca = producto.id_marca')
-                                                ->join('categoria', 'categoria.id_categoria = producto.id_categoria')
-                                                ->like('producto.nombre', $query)
-                                                ->where('producto.eliminado', 'NO')
-                                                ->where('marca.activo', 1)
-                                                ->where('categoria.activo', 1)
-                                                ->findAll();
-        } else {
-            $data['productos'] = [];
-        }
+        $data['productos'] = $query ? $this->buscarProductos($query) : [];
 
         $session->set('queryValor', $query);
         $dato['titulo'] = 'NetShop | Productos';
@@ -58,7 +47,30 @@ class Home extends BaseController
         echo view('plantillas/footer', $data);
     }
 
-    public function buscadorPrecioBuscadorProducto($valor){
+    private function buscarProductos($query){
+        $productoModel = new Producto_model();
+
+        return $productoModel
+            ->select('producto.*, marca.activo as activo_marca, categoria.activo as activo_categoria, categoria.descripcion as categoria_descripcion')
+            ->join('marca', 'marca.id_marca = producto.id_marca')
+            ->join('categoria', 'categoria.id_categoria = producto.id_categoria')
+            ->like('producto.nombre', $query)
+            ->where('producto.eliminado', 'NO')
+            ->where('marca.activo', 1)
+            ->where('categoria.activo', 1)
+            ->findAll();
+    }
+
+    private function mostrarProductosBuscados($data){
+        $data['titulo'] = 'NetShop | Productos';
+
+        echo view('plantillas/header', $data);
+        echo view('plantillas/nav', $data);
+        echo view('plantillas/productosBuscados', $data);
+        echo view('plantillas/footer', $data);
+    }
+
+    public function buscarPorRangoPrecioBuscador($valor){
         $precioMin = $this->request->getVar('precioMin');
         $precioMax = $this->request->getVar('precioMax');  
         $productosModel = new Producto_model();
@@ -70,28 +82,25 @@ class Home extends BaseController
         $productoModel = new Producto_model();
 
         if (is_numeric($precioMin) && is_numeric($precioMax)) {
-            $data['productos'] = $productoModel->select('producto.*, marca.activo as activo_marca, categoria.activo as activo_categoria, categoria.descripcion as categoria_descripcion')
-                                                ->join('marca', 'marca.id_marca = producto.id_marca')
-                                                ->join('categoria', 'categoria.id_categoria = producto.id_categoria')
-                                                ->like('producto.nombre', $valor)
-                                                ->where('producto.precio >=', $precioMin)
-                                                ->where('producto.precio <=', $precioMax)
-                                                ->where('producto.eliminado', 'NO')
-                                                ->where('marca.activo', 1)
-                                                ->where('categoria.activo', 1)
-                                                ->findAll();
+            $data['productos'] = $productoModel
+                ->select('producto.*, marca.activo as activo_marca, categoria.activo as activo_categoria, categoria.descripcion as categoria_descripcion')
+                ->join('marca', 'marca.id_marca = producto.id_marca')
+                ->join('categoria', 'categoria.id_categoria = producto.id_categoria')
+                ->like('producto.nombre', $valor)
+                ->where('producto.precio >=', $precioMin)
+                ->where('producto.precio <=', $precioMax)
+                ->where('producto.eliminado', 'NO')
+                ->where('marca.activo', 1)
+                ->where('categoria.activo', 1)
+                ->findAll();
         } else {
             $data['productos'] = [];
         }
 
-        $dato['titulo'] = 'NetShop | Productos';
-        echo view('plantillas/header', $dato);
-        echo view('plantillas/nav', $data);
-        echo view('plantillas/productosBuscados', $data);
-        echo view('plantillas/footer', $data);
+        $this->mostrarProductosBuscados($data);
     }
 
-    public function productosMayorPrecioBuscador($valor){
+    public function ordenarProductosPorMayorPrecioBuscador($valor){
         $productosModel = new Producto_model();
         $data['productosTotal'] = $productosModel->getProductosConMarcaYCategoria();
         $categoriaModel = new Categoria_model();
@@ -100,24 +109,21 @@ class Home extends BaseController
         $data['marcas'] = $marcaModel->getMarcaAll();
 
         $productoModel = new Producto_model();
-        $data['productos'] = $productoModel->select('producto.*, marca.activo as activo_marca, categoria.activo as activo_categoria, categoria.descripcion as categoria_descripcion')
-                                            ->join('marca', 'marca.id_marca = producto.id_marca')
-                                            ->join('categoria', 'categoria.id_categoria = producto.id_categoria')
-                                            ->like('producto.nombre', $valor)
-                                            ->where('producto.eliminado', 'NO')
-                                            ->where('marca.activo', 1)
-                                            ->where('categoria.activo', 1)
-                                            ->orderBy('producto.precio', 'DESC')
-                                            ->findAll();
+        $data['productos'] = $productoModel
+            ->select('producto.*, marca.activo as activo_marca, categoria.activo as activo_categoria, categoria.descripcion as categoria_descripcion')
+            ->join('marca', 'marca.id_marca = producto.id_marca')
+            ->join('categoria', 'categoria.id_categoria = producto.id_categoria')
+            ->like('producto.nombre', $valor)
+            ->where('producto.eliminado', 'NO')
+            ->where('marca.activo', 1)
+            ->where('categoria.activo', 1)
+            ->orderBy('producto.precio', 'DESC')
+            ->findAll();
 
-        $dato['titulo'] = 'NetShop | Productos';
-        echo view('plantillas/header', $dato);
-        echo view('plantillas/nav', $data);
-        echo view('plantillas/productosBuscados', $data);
-        echo view('plantillas/footer', $data);
+        $this->mostrarProductosBuscados($data);
     }
 
-    public function productosMenorPrecioBuscador($valor){
+    public function ordenarProductosPorMenorPrecioBuscador($valor){
         $productosModel = new Producto_model();
         $data['productosTotal'] = $productosModel->getProductosConMarcaYCategoria();
         $categoriaModel = new Categoria_model();
@@ -126,39 +132,41 @@ class Home extends BaseController
         $data['marcas'] = $marcaModel->getMarcaAll();
 
         $productoModel = new Producto_model();
-        $data['productos'] = $productoModel->select('producto.*, marca.activo as activo_marca, categoria.activo as activo_categoria, categoria.descripcion as categoria_descripcion')
-                                            ->join('marca', 'marca.id_marca = producto.id_marca')
-                                            ->join('categoria', 'categoria.id_categoria = producto.id_categoria')
-                                            ->like('producto.nombre', $valor)
-                                            ->where('producto.eliminado', 'NO')
-                                            ->where('marca.activo', 1)
-                                            ->where('categoria.activo', 1)
-                                            ->orderBy('producto.precio', 'ASC')
-                                            ->findAll();
+        $data['productos'] = $productoModel
+            ->select('producto.*, marca.activo as activo_marca, categoria.activo as activo_categoria, categoria.descripcion as categoria_descripcion')
+            ->join('marca', 'marca.id_marca = producto.id_marca')
+            ->join('categoria', 'categoria.id_categoria = producto.id_categoria')
+            ->like('producto.nombre', $valor)
+            ->where('producto.eliminado', 'NO')
+            ->where('marca.activo', 1)
+            ->where('categoria.activo', 1)
+            ->orderBy('producto.precio', 'ASC')
+            ->findAll();
 
-        $dato['titulo'] = 'NetShop | Productos';
-        echo view('plantillas/header', $dato);
+        $this->mostrarProductosBuscados($data);
+    }
+
+    public function listarProductos(){
+        $productoModel = new Producto_model();
+        $data['productos'] = $productoModel->getProductosConMarcaYCategoria();
+        $categoriaModel = new Categoria_model();
+        $data['categorias'] = $categoriaModel->getCategoriaAll();
+        $marcaModel = new Marca_model();
+        $data['marcas'] = $marcaModel->getMarcaAll();
+
+        $this->mostrarVistaProductos($data, 'plantillas/productos');
+    }
+
+    private function mostrarVistaProductos($data, $vista){
+        $data['titulo'] = 'NetShop | Productos';
+
+        echo view('plantillas/header', $data);
         echo view('plantillas/nav', $data);
-        echo view('plantillas/productosBuscados', $data);
+        echo view($vista, $data);
         echo view('plantillas/footer', $data);
     }
 
-    public function productos(){
-        $productoModel = new Producto_model();
-        $dato['productos'] = $productoModel->getProductosConMarcaYCategoria();
-        $categoriaModel = new Categoria_model();
-        $dato['categorias'] = $categoriaModel->getCategoriaAll();
-        $marcaModel = new Marca_model();
-        $dato['marcas'] = $marcaModel->getMarcaAll();
-
-        $data['titulo'] = 'NetShop | Productos';
-        echo view('plantillas/header', $data);
-        echo view('plantillas/nav', $dato);
-        echo view('plantillas/productos', $dato);
-        echo view('plantillas/footer', $dato);
-    }
-
-    public function buscadorPrecioProducto(){
+    public function buscarPorRangoPrecioProductos(){
         $precioMin = $this->request->getVar('precioMin');
         $precioMax = $this->request->getVar('precioMax');  
         $productosModel = new Producto_model();
@@ -170,59 +178,54 @@ class Home extends BaseController
         $productoModel = new Producto_model();
 
         if (is_numeric($precioMin) && is_numeric($precioMax)) {
-            $data['productos'] = $productoModel->select('producto.*, marca.activo as activo_marca, categoria.activo as activo_categoria, categoria.descripcion as categoria_descripcion')
-                                                ->join('marca', 'marca.id_marca = producto.id_marca')
-                                                ->join('categoria', 'categoria.id_categoria = producto.id_categoria')
-                                                ->where('producto.precio >=', $precioMin)
-                                                ->where('producto.precio <=', $precioMax)
-                                                ->where('producto.eliminado', 'NO')
-                                                ->where('marca.activo', 1)
-                                                ->where('categoria.activo', 1)
-                                                ->findAll();
+            $data['productos'] = $productoModel
+                ->select('producto.*, marca.activo as activo_marca, categoria.activo as activo_categoria, categoria.descripcion as categoria_descripcion')
+                ->join('marca', 'marca.id_marca = producto.id_marca')
+                ->join('categoria', 'categoria.id_categoria = producto.id_categoria')
+                ->where('producto.precio >=', $precioMin)
+                ->where('producto.precio <=', $precioMax)
+                ->where('producto.eliminado', 'NO')
+                ->where('marca.activo', 1)
+                ->where('categoria.activo', 1)
+                ->findAll();
         } else {
             $data['productos'] = [];
         }
 
-        $dato['titulo'] = 'NetShop | Productos';
-        echo view('plantillas/header', $dato);
-        echo view('plantillas/nav', $data);
-        echo view('plantillas/productosPrecio', $data);
-        echo view('plantillas/footer', $data);
+        $this->mostrarVistaProductos($data, 'plantillas/productosPrecio');
     }
 
-    public function productosMayorPrecio(){
+    public function ordenarProductosPorMayorPrecioProductos(){
         $categoriaModel = new Categoria_model();
         $data['categorias'] = $categoriaModel->getCategoriaAll();
         $marcaModel = new Marca_model();
         $data['marcas'] = $marcaModel->getMarcaAll();
         $productoModel = new Producto_model();
 
-        $data['productos'] = $productoModel->getProductosConMarcaYCategoriaQuery()->orderBy('producto.precio', 'DESC')->findAll();
+        $data['productos'] = $productoModel
+            ->getProductosConMarcaYCategoriaQuery()
+            ->orderBy('producto.precio', 'DESC')
+            ->findAll();
 
-        $dato['titulo'] = 'NetShop | Productos';
-        echo view('plantillas/header', $dato);
-        echo view('plantillas/nav', $data);
-        echo view('plantillas/productosOrdenados', $data);
-        echo view('plantillas/footer', $data);
+        $this->mostrarVistaProductos($data, 'plantillas/productosOrdenados');
     }
 
-    public function productosMenorPrecio(){
+    public function ordenarProductosPorMenorPrecioProductos(){
         $categoriaModel = new Categoria_model();
         $data['categorias'] = $categoriaModel->getCategoriaAll();
         $marcaModel = new Marca_model();
         $data['marcas'] = $marcaModel->getMarcaAll();
         $productoModel = new Producto_model();
 
-        $data['productos'] = $productoModel->getProductosConMarcaYCategoriaQuery()->orderBy('producto.precio', 'ASC')->findAll();
+        $data['productos'] = $productoModel
+            ->getProductosConMarcaYCategoriaQuery()
+            ->orderBy('producto.precio', 'ASC')
+            ->findAll();
 
-        $dato['titulo'] = 'NetShop | Productos';
-        echo view('plantillas/header', $dato);
-        echo view('plantillas/nav', $data);
-        echo view('plantillas/productosOrdenados', $data);
-        echo view('plantillas/footer', $data);
+        $this->mostrarVistaProductos($data, 'plantillas/productosOrdenados');
     }
 
-    public function marcas($id){
+    public function listarProductosPorMarca($id){
         $productosModel = new Producto_model();
         $data['productosTotal'] = $productosModel->getProductosConMarcaYCategoria();
         $categoriaModel = new Categoria_model();
@@ -234,14 +237,10 @@ class Home extends BaseController
         $productosModel = new Producto_model();
         $data['productos'] = $productosModel->getProductosConMarcaYCategoria();
 
-        $dato['titulo'] = 'NetShop | Productos';
-        echo view('plantillas/header', $dato);
-        echo view('plantillas/nav', $data);
-        echo view('plantillas/productosMarca', $data);
-        echo view('plantillas/footer', $data);
+        $this->mostrarVistaProductos($data, 'plantillas/productosMarca');
     }
 
-    public function buscadorPrecioMarcaProducto($idMarca){
+    public function buscarPorRangoPrecioMarca($idMarca){
         $precioMin = $this->request->getVar('precioMin');
         $precioMax = $this->request->getVar('precioMax');  
         $productosModel = new Producto_model();
@@ -269,14 +268,10 @@ class Home extends BaseController
             $data['productos'] = [];
         }
 
-        $dato['titulo'] = 'NetShop | Productos';
-        echo view('plantillas/header', $dato);
-        echo view('plantillas/nav', $data);
-        echo view('plantillas/productosMarca', $data);
-        echo view('plantillas/footer', $data);
+        $this->mostrarVistaProductos($data, 'plantillas/productosMarca');
     }
 
-    public function productosMayorPrecioMarca($idMarca){
+    public function ordenarProductosPorMayorPrecioMarca($idMarca){
         $productosModel = new Producto_model();
         $data['productosTotal'] = $productosModel->getProductosConMarcaYCategoria();
         $categoriaModel = new Categoria_model();
@@ -297,14 +292,10 @@ class Home extends BaseController
                                             ->orderBy('producto.precio', 'DESC')
                                             ->findAll();
 
-        $dato['titulo'] = 'NetShop | Productos';
-        echo view('plantillas/header', $dato);
-        echo view('plantillas/nav', $data);
-        echo view('plantillas/productosMarca', $data);
-        echo view('plantillas/footer', $data);
+        $this->mostrarVistaProductos($data, 'plantillas/productosMarca');
     }
 
-    public function productosMenorPrecioMarca($idMarca){
+    public function ordenarProductosPorMenorPrecioMarca($idMarca){
         $productosModel = new Producto_model();
         $data['productosTotal'] = $productosModel->getProductosConMarcaYCategoria();
         $categoriaModel = new Categoria_model();
@@ -325,14 +316,10 @@ class Home extends BaseController
                                             ->orderBy('producto.precio', 'ASC')
                                             ->findAll();
 
-        $dato['titulo'] = 'NetShop | Productos';
-        echo view('plantillas/header', $dato);
-        echo view('plantillas/nav', $data);
-        echo view('plantillas/productosMarca', $data);
-        echo view('plantillas/footer', $data);
+        $this->mostrarVistaProductos($data, 'plantillas/productosMarca');
     }
 
-    public function categorias($id){
+    public function listarProductosPorCategoria($id){
         $productoModel = new Producto_model();
         $dato['productosTotal'] = $productoModel->getProductosConMarcaYCategoria();
         $categoriaModel = new Categoria_model();
@@ -351,7 +338,7 @@ class Home extends BaseController
         echo view('plantillas/footer', $dato);
     }
 
-    public function buscadorPrecioCategoriaProducto($idCategoria){
+    public function buscarPorRangoPrecioCategoria($idCategoria){
         $precioMin = $this->request->getVar('precioMin');
         $precioMax = $this->request->getVar('precioMax');
         $productosModel = new Producto_model();
@@ -379,14 +366,10 @@ class Home extends BaseController
             $data['productos'] = [];
         }
 
-        $dato['titulo'] = 'NetShop | Productos';
-        echo view('plantillas/header', $dato);
-        echo view('plantillas/nav', $data);
-        echo view('plantillas/productosCategoria', $data);
-        echo view('plantillas/footer', $data);
+        $this->mostrarVistaProductos($data, 'plantillas/productosCategoria');
     }
 
-    public function productosMayorPrecioCategoria($idCategoria){
+    public function ordenarProductosPorMayorPrecioCategoria($idCategoria){
         $productosModel = new Producto_model();
         $data['productosTotal'] = $productosModel->getProductosConMarcaYCategoria();
         $categoriaModel = new Categoria_model();
@@ -407,14 +390,10 @@ class Home extends BaseController
                                             ->orderBy('producto.precio', 'DESC')
                                             ->findAll();
 
-        $dato['titulo'] = 'NetShop | Productos';
-        echo view('plantillas/header', $dato);
-        echo view('plantillas/nav', $data);
-        echo view('plantillas/productosCategoria', $data);
-        echo view('plantillas/footer', $data);
+        $this->mostrarVistaProductos($data, 'plantillas/productosCategoria');
     }
 
-    public function productosMenorPrecioCategoria($idCategoria){
+    public function ordenarProductosPorMenorPrecioCategoria($idCategoria){
         $productosModel = new Producto_model();
         $data['productosTotal'] = $productosModel->getProductosConMarcaYCategoria();
         $categoriaModel = new Categoria_model();
@@ -435,11 +414,7 @@ class Home extends BaseController
                                             ->orderBy('producto.precio', 'ASC')
                                             ->findAll();
 
-        $dato['titulo'] = 'NetShop | Productos';
-        echo view('plantillas/header', $dato);
-        echo view('plantillas/nav', $data);
-        echo view('plantillas/productosCategoria', $data);
-        echo view('plantillas/footer', $data);
+        $this->mostrarVistaProductos($data, 'plantillas/productosCategoria');
     }
 
     public function ayuda(){

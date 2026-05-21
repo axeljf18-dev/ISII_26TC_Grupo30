@@ -25,7 +25,7 @@
             </div>
             <div class="row row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-sm-2 row-cols-1 g-4 p-2 d-flex justify-content-center">
                 <?php foreach($productos as $producto): ?>
-                    <?php if($producto['eliminado'] == 'NO' && $producto['precio'] > $producto['precio_vta']): ?>
+                    <?php if($producto['eliminado'] == 'NO' && $producto['precio'] > $producto['precio_vta'] && $producto['activo_marca'] == 1 && $producto['activo_categoria'] == 1): ?>
                         <div class="col">
                             <div class="card h-100 shadow">
                                 <img src="<?= base_url('assets/uploads/' . $producto['imagen']); ?>" class="card-img-top p-2" alt="Producto" height="160px">
