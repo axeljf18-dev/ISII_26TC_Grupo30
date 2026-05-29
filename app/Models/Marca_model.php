@@ -14,4 +14,9 @@ class Marca_model extends Model{
     public function getMarcasActivas() {
         return $this->where('activo', '1')->findAll();
     }
+
+    public function validarMarca($id_marca){
+        $marca = $this->where('id_marca', $id_marca)->where('activo', 1)->first();
+        return $marca !== null;
+    }
 }

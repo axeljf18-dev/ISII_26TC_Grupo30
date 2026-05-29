@@ -134,9 +134,10 @@ class Producto_controller extends Controller{
         $data['categorias'] = $categoriaModel->getCategoriasActivas();
         $marcaModel = new Marca_model();
         $data['marcas'] = $marcaModel->getMarcasActivas();
-
         $proveedorModel = new Proveedor_model();
-        $data['proveedores'] = $proveedorModel->getProveedorAll();
+        $data['proveedores'] = $proveedorModel->getProveedoresActivos();
+
+        $data['validation'] = $this->validator;
 
         $dato['titulo'] = 'Dashboard | Agregar Producto';
         echo view('plantillas/header', $dato);
@@ -145,15 +146,17 @@ class Producto_controller extends Controller{
         echo view('plantillas/footer');
     }
 
-    public function mostrarFormularioActualizarProducto($id){
+    public function mostrarFormularioActualizarProducto($id_producto){
         $categoriaModel = new Categoria_model();
         $data['categorias'] = $categoriaModel->getCategoriasActivas();
         $productoModel = new Producto_model();
-        $data['producto'] = $productoModel->find($id);
+        $data['producto'] = $productoModel->find($id_producto);
         $marcaModel = new Marca_model();
         $data['marcas'] = $marcaModel->getMarcasActivas();
         $proveedorModel = new Proveedor_model();
-        $data['proveedores'] = $proveedorModel->getProveedorAll();
+        $data['proveedores'] = $proveedorModel->getProveedoresActivos();
+
+        $data['validation'] = $this->validator;
 
         $dato['titulo'] = 'Dashboard | Editar Producto';
         echo view('plantillas/header', $dato);
@@ -162,192 +165,189 @@ class Producto_controller extends Controller{
         echo view('plantillas/footer');
     }
 
-    public function desactivarProducto($id){
+    public function desactivarProducto($id_producto){
         $productoModel = new Producto_model();
-        $data['producto'] = $productoModel->find($id);
+        $data['producto'] = $productoModel->find($id_producto);
 
         $data = ['eliminado' => 'SI'];
-        $productoModel->update($id, $data);
+        $productoModel->update($id_producto, $data);
 
         session()->setFlashdata('msgExitoso', 'Producto desactivado exitosamente');
         return redirect()->to('/mostrarListaProductosActualizarEliminar');
     }
 
-    public function reactivarProducto($id){
+    public function reactivarProducto($id_producto){
         $productoModel = new Producto_model();
-        $data['producto'] = $productoModel->find($id);
+        $data['producto'] = $productoModel->find($id_producto);
 
         $data = ['eliminado' => 'NO'];
-        $productoModel->update($id, $data);
+        $productoModel->update($id_producto, $data);
 
         session()->setFlashdata('msgExitoso', 'Producto activado exitosamente');
         return redirect()->to('/mostrarListaProductosParaActivar');
     }
 
     // CREAR PRODUCTO
-    private function validarProducto($formulario){
-        return $this->validate([
+    public function validarDatosProducto($datos = null){
+        $session = session();
+
+        if ($datos === null) {
+            $datos = $this->request;
+        }
+
+        $valido = $this->validate([
             'nombre'    => 'required|trim|min_length[2]|max_length[50]',
-            'categoria' => 'required',
-            'marca'     => 'required',
             'precio'    => 'required|trim|numeric|greater_than[0]',
             'precioVta' => 'required|trim|numeric|greater_than[0]',
             'stock'     => 'required|trim|is_natural',
             'stockMin'  => 'required|trim|is_natural',
             'imagen'    => 'uploaded[imagen]|max_size[imagen,8192]|ext_in[imagen,png,jpg,jpeg]',
             'descripcion' => 'permit_empty|trim|min_length[5]|max_length[255]',
-            'proveedor' => 'required'
         ]);
-    }
 
-    private function procesarImagen($archivoImagen){
-        $nombreAleatorio = $archivoImagen->getRandomName();
-        $archivoImagen->move(ROOTPATH . 'assets/uploads', $nombreAleatorio);
-        return $nombreAleatorio;
-    }
+        $marcaModel = new Marca_model();
+        $categoriaModel = new Categoria_model();
+        $proveedorModel = new Proveedor_model();
 
-    private function guardarProducto($datosProducto){
-        $productoModel = new Producto_model();
-        return $productoModel->insert($datosProducto);
-    }
+        if(!$marcaModel->validarMarca($datos->getVar('marca'))){
+            $this->validator->setError('marca', 'La marca seleccionada no es válida o está inactiva.');
+            $valido = false;
+        }
 
-    public function registrarProducto(){
-        $session = session();
+        if(!$categoriaModel->validarCategoria($datos->getVar('categoria'))){
+            $this->validator->setError('categoria', 'La categoría seleccionada no es válida o está inactiva.');
+            $valido = false;
+        }
 
-        if(!$this->validarProducto($this->request)){
-            $session->setFlashdata('productoValor', $this->request->getVar('nombre'));
-            $session->setFlashdata('descripcionProductoValor', $this->request->getVar('descripcion'));
-            $session->setFlashdata('categoriaProductoValor', $this->request->getVar('categoria'));
-            $session->setFlashdata('marcaProductoValor', $this->request->getVar('marca'));
-            $session->setFlashdata('precioProductoValor', $this->request->getVar('precio'));
-            $session->setFlashdata('precioVtaProductoValor', $this->request->getVar('precioVta'));
-            $session->setFlashdata('stockProductoValor', $this->request->getVar('stock'));
-            $session->setFlashdata('stockMinProductoValor', $this->request->getVar('stockMin'));
-            $session->setFlashdata('proveedorProductoValor', $this->request->getVar('proveedor'));
+        if(!$proveedorModel->validarProveedor($datos->getVar('proveedor'))){
+            $this->validator->setError('proveedor', 'El proveedor seleccionado no existe.');
+            $valido = false;
+        }
 
-            return $this->mostrarFormularioCrearProductoConErrores();
-        } else {
-            $img = $this->request->getFile('imagen');
-            $nombreImagen = $this->procesarImagen($img);
+        if(!$valido){
+            $session->setFlashdata('productoValor', $datos->getVar('nombre'));
+            $session->setFlashdata('descripcionProductoValor', $datos->getVar('descripcion'));
+            $session->setFlashdata('categoriaProductoValor', $datos->getVar('categoria'));
+            $session->setFlashdata('marcaProductoValor', $datos->getVar('marca'));
+            $session->setFlashdata('precioProductoValor', $datos->getVar('precio'));
+            $session->setFlashdata('precioVtaProductoValor', $datos->getVar('precioVta'));
+            $session->setFlashdata('stockProductoValor', $datos->getVar('stock'));
+            $session->setFlashdata('stockMinProductoValor', $datos->getVar('stockMin'));
+            $session->setFlashdata('proveedorProductoValor', $datos->getVar('proveedor'));
 
-            $datos = [
-                'nombre'       => $this->request->getVar('nombre'),
-                'imagen'       => $nombreImagen,
-                'id_categoria' => $this->request->getVar('categoria'),
-                'precio'       => $this->request->getVar('precio'),
-                'precio_vta'   => $this->request->getVar('precioVta'),
-                'stock'        => $this->request->getVar('stock'),
-                'stock_min'    => $this->request->getVar('stockMin'),
-                'descripcion'  => $this->request->getVar('descripcion'),
-                'id_marca'     => $this->request->getVar('marca'),
-                'id_proveedor' => $this->request->getVar('proveedor')
-            ];
-
-            $this->guardarProducto($datos);
-            $session->setFlashdata('msgExitoso', 'Producto registrado exitosamente');
-            return $this->response->redirect(site_url('altaDeProductos'));
+            return $this->mostrarFormularioCrearProducto();
+        }else{
+            return $this->guardarProducto($datos);
         }
     }
 
-    private function mostrarFormularioCrearProductoConErrores(){
-        $categoriaModel = new Categoria_model();
-        $marcaModel = new Marca_model();
-        $proveedorModel = new Proveedor_model();
+    private function guardarProducto($datosProducto){
+        $session = session();
 
-        $data['categorias'] = $categoriaModel->getCategoriaAll();
-        $data['marcas'] = $marcaModel->getMarcaAll();
-        $data['proveedores'] = $proveedorModel->getProveedorAll();
-        $data['validation'] = $this->validator;
+        $img = $datosProducto->getFile('imagen');
+        $nombreImagen = $img->getRandomName();
+        $img->move(ROOTPATH . 'assets/uploads', $nombreImagen);
 
-        $dato['titulo'] = 'Dashboard | Agregar Producto';
-        echo view('plantillas/header', $dato);
-        echo view('plantillas/nav');
-        echo view('back/admin/altaDeProductos', $data);
-        echo view('plantillas/footer');
+        $datos = [
+            'nombre'       => $datosProducto->getVar('nombre'),
+            'imagen'       => $nombreImagen,
+            'id_categoria' => $datosProducto->getVar('categoria'),
+            'precio'       => $datosProducto->getVar('precio'),
+            'precio_vta'   => $datosProducto->getVar('precioVta'),
+            'stock'        => $datosProducto->getVar('stock'),
+            'stock_min'    => $datosProducto->getVar('stockMin'),
+            'descripcion'  => $datosProducto->getVar('descripcion'),
+            'id_marca'     => $datosProducto->getVar('marca'),
+            'id_proveedor' => $datosProducto->getVar('proveedor')
+        ];
+
+        $productoModel = new Producto_model();
+        $productoModel->insert($datos);
+
+        $session->setFlashdata('msgExitoso', 'Producto registrado exitosamente');
+        return $this->response->redirect(site_url('altaDeProductos'));
     }
 
     // ACTUALIZAR PRODUCTO
-    private function validarProductoUpdate($formulario){
-        return $this->validate([
+    public function validarDatosProductoUpdate($datos = null){
+        $session = session();
+
+        if ($datos === null) {
+            $datos = $this->request;
+        }
+
+        $valido = $this->validate([
             'id'        => 'required|numeric',
             'nombre'    => 'required|trim|min_length[2]|max_length[50]',
-            'categoria' => 'required',
             'precio'    => 'required|trim|numeric|greater_than[0]',
             'precioVta' => 'required|trim|numeric|greater_than[0]',
             'stock'     => 'required|trim|is_natural',
             'stockMin'  => 'required|trim|is_natural',
             'imagen'    => 'max_size[imagen,8192]|ext_in[imagen,png,jpg,jpeg]',
             'descripcion' => 'permit_empty|trim|min_length[5]|max_length[255]',
-            'marca'     => 'required',
-            'proveedor' => 'required'
         ]);
-    }
 
-    private function procesarImagenUpdate($archivoImagen){
-        if ($archivoImagen->isValid() && !$archivoImagen->hasMoved()) {
-            $nombreAleatorio = $archivoImagen->getRandomName();
-            $archivoImagen->move(ROOTPATH . 'assets/uploads', $nombreAleatorio);
-            return $nombreAleatorio;
+        $marcaModel = new Marca_model();
+        $categoriaModel = new Categoria_model();
+        $proveedorModel = new Proveedor_model();
+
+        if(!$marcaModel->validarMarca($datos->getVar('marca'))){
+            $this->validator->setError('marca', 'La marca seleccionada no es válida o está inactiva.');
+            $valido = false;
         }
-        return null;
+
+        if(!$categoriaModel->validarCategoria($datos->getVar('categoria'))){
+            $this->validator->setError('categoria', 'La categoría seleccionada no es válida o está inactiva.');
+            $valido = false;
+        }
+
+        if(!$proveedorModel->validarProveedor($datos->getVar('proveedor'))){
+            $this->validator->setError('proveedor', 'El proveedor seleccionado no existe.');
+            $valido = false;
+        }
+
+        if(!$valido){
+            return $this->mostrarFormularioActualizarProducto($datos->getVar('id'));
+        }else{
+            return $this->guardarProductoActualizado($datos->getVar('id'), $datos);
+        }
     }
 
-    private function guardarProductoActualizado($id, $datosProducto){
-        $productoModel = new Producto_model();
-        return $productoModel->update($id, $datosProducto);
-    }
-
-    public function actualizarProducto(){
+    private function guardarProductoActualizado($id_producto, $datosProducto){
         $session = session();
-        $id = $this->request->getVar('id');
 
-        if(!$this->validarProductoUpdate($this->request)){
-            return $this->mostrarFormularioActualizarProductoConErrores($id);
+        $img = $datosProducto->getFile('imagen');
+        $nombreImagen = null;
+        if ($img && $img->isValid() && !$img->hasMoved()) {
+            $nombreImagen = $img->getRandomName();
+            $img->move(ROOTPATH . 'assets/uploads', $nombreImagen);
         }
 
-        $nombreImagen = $this->procesarImagenUpdate($this->request->getFile('imagen'));
-
-        $datosProducto = [
-            'id_producto'   => $id,
-            'nombre'        => $this->request->getVar('nombre'),
-            'id_categoria'  => $this->request->getVar('categoria'),
-            'precio'        => $this->request->getVar('precio'),
-            'precio_vta'    => $this->request->getVar('precioVta'),
-            'stock'         => $this->request->getVar('stock'),
-            'stock_min'     => $this->request->getVar('stockMin'),
-            'descripcion'   => $this->request->getVar('descripcion'),
-            'id_marca'      => $this->request->getVar('marca'),
-            'id_proveedor'  => $this->request->getVar('proveedor')
+        $datos = [
+            'id_producto'   => $id_producto,
+            'nombre'        => $datosProducto->getVar('nombre'),
+            'id_categoria'  => $datosProducto->getVar('categoria'),
+            'precio'        => $datosProducto->getVar('precio'),
+            'precio_vta'    => $datosProducto->getVar('precioVta'),
+            'stock'         => $datosProducto->getVar('stock'),
+            'stock_min'     => $datosProducto->getVar('stockMin'),
+            'descripcion'   => $datosProducto->getVar('descripcion'),
+            'id_marca'      => $datosProducto->getVar('marca'),
+            'id_proveedor'  => $datosProducto->getVar('proveedor')
         ];
 
         if($nombreImagen){
-            $datosProducto['imagen'] = $nombreImagen;
+            $datos['imagen'] = $nombreImagen;
         }
 
-        $this->guardarProductoActualizado($id, $datosProducto);
+        $productoModel = new Producto_model();
+        $productoModel->update($id_producto, $datos);
+
         $session->setFlashdata('msgExitoso', 'Producto actualizado exitosamente');
         return $this->response->redirect(site_url('mostrarListaProductosActualizarEliminar'));
     }
 
-    private function mostrarFormularioActualizarProductoConErrores($id){
-        $productoModel = new Producto_model();
-        $categoriaModel = new Categoria_model();
-        $marcaModel = new Marca_model();
-        $proveedorModel = new Proveedor_model();
-
-        $data['categorias'] = $categoriaModel->getCategoriaAll();
-        $data['marcas'] = $marcaModel->getMarcaAll();
-        $data['producto'] = $productoModel->find($id);
-        $data['proveedores'] = $proveedorModel->getProveedorAll();
-        $data['validation'] = $this->validator;
-
-        $dato['titulo'] = 'Dashboard | Editar Producto';
-        echo view('plantillas/header', $dato);
-        echo view('plantillas/nav');
-        echo view('back/admin/actualizarProductos', $data);
-        echo view('plantillas/footer');
-    }
-
+    // INTENTAR UNIR LOS DOS METODOS limpiarFormularioAltaProducto y limpiarFormularioActualizarProducto
     public function limpiarFormularioAltaProducto() {
         session()->remove(['productoValor', 'descripcionProductoValor', 'categoriaProductoValor', 'marcaProductoValor', 'precioProductoValor', 'precioVtaProductoValor', 'stockProductoValor', 'stockMinProductoValor']);
         return redirect()->to('/altaDeProductos');

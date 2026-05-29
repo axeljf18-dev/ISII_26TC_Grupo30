@@ -85,9 +85,9 @@ $routes->get('/mostrarListaProductosDesactivados', 'Producto_controller::listarP
 $routes->get('/mostrarListaProductosParaActivar', 'Producto_controller::listarProductosParaActivar', ['filter' => 'usuarioAuth']);
 $routes->get('/mostrarListaProductosActualizarEliminar', 'Producto_controller::listarProductosParaActualizarEliminar', ['filter' => 'usuarioAuth']);
 $routes->get('/altaDeProductos', 'Producto_controller::mostrarFormularioCrearProducto', ['filter' => 'usuarioAuth']);
-$routes->post('/enviar-formProducto', 'Producto_controller::registrarProducto', ['filter' => 'usuarioAuth']);
+$routes->post('/enviar-formProducto', 'Producto_controller::validarDatosProducto', ['filter' => 'usuarioAuth']);
 $routes->get('/actualizarProductos/(:num)', 'Producto_controller::mostrarFormularioActualizarProducto/$1', ['filter' => 'usuarioAuth']);
-$routes->post('/enviar-formProductoActualizar', 'Producto_controller::actualizarProducto', ['filter' => 'usuarioAuth']);
+$routes->post('/enviar-formProductoActualizar', 'Producto_controller::validarDatosProductoUpdate', ['filter' => 'usuarioAuth']);
 $routes->get('/eliminarProductos/(:num)', 'Producto_controller::desactivarProducto/$1', ['filter' => 'usuarioAuth']);
 $routes->get('/activarProductos/(:num)', 'Producto_controller::reactivarProducto/$1', ['filter' => 'usuarioAuth']);
 $routes->get('/limpiarProducto', 'Producto_controller::limpiarFormularioAltaProducto', ['filter' => 'usuarioAuth']);

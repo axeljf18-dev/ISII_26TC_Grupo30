@@ -11,7 +11,7 @@
                 </div>
 
                 <div class="col-12 mt-2 d-flex justify-content-center">
-                    <label for="nombre"><b>Nombre</b></label>      
+                    <label for="nombre"><b>Nombre(*)</b></label>      
                 </div>
                 <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
                     <input type="text" id="nombre" name="nombre" placeholder="Ingrese el nombre..." value="<?= session()->getFlashdata('limpiarUsuarioValor') ? '' : $usuario['nombre'] ?>" class="w-100 ps-2 pe-2 pt-1 pb-1 border shadow">
@@ -23,7 +23,7 @@
                 <?php }?>
 
                 <div class="col-12 mt-2 d-flex justify-content-center">
-                    <label for="apellido"><b>Apellido</b></label>      
+                    <label for="apellido"><b>Apellido(*)</b></label>      
                 </div>
                 <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
                     <input type="text" id="apellido" name="apellido" placeholder="Ingrese el apellido..." value="<?= session()->getFlashdata('limpiarUsuarioValor') ? '' : $usuario['apellido'] ?>" class="w-100 ps-2 pe-2 pt-1 pb-1 border shadow">
@@ -35,7 +35,7 @@
                 <?php }?>
 
                 <div class="col-12 mt-2 d-flex justify-content-center">
-                    <label for="email"><b>Correo Electrónico</b></label>      
+                    <label for="email"><b>Correo Electrónico(*)</b></label>      
                 </div>
                 <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
                     <input type="email" id="email" name="email" placeholder="Ingrese el correo..." value="<?= session()->getFlashdata('limpiarUsuarioValor') ? '' : $usuario['email'] ?>" title="Debe ser un correo válido de Gmail (por ejemplo, usuario123@gmail.com)" class="w-100 ps-2 pe-2 pt-1 pb-1 border shadow">
@@ -47,7 +47,7 @@
                 <?php }?>
 
                 <div class="col-12 mt-2 d-flex justify-content-center">
-                    <label for="usuario"><b>Usuario</b></label>      
+                    <label for="usuario"><b>Usuario(*)</b></label>      
                 </div>
                 <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
                     <input type="text" id="usuario" name="usuario" placeholder="Ingrese el nombre de usuario..." value="<?= session()->getFlashdata('limpiarUsuarioValor') ? '' : $usuario['usuario'] ?>" class="w-100 ps-2 pe-2 pt-1 pb-1 border shadow">
@@ -59,7 +59,7 @@
                 <?php }?>
 
                 <div class="col-12 mt-2 d-flex justify-content-center">
-                    <label for="contraseña"><b>Contraseña</b></label>      
+                    <label for="contraseña"><b>Contraseña(*)</b></label>      
                 </div>
                 <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
                     <input type="password" id="contraseña" name="contraseña" placeholder="Ingrese la contraseña..." title="Debe contener al menos una letra mayúscula, un número y un carácter especial (@$!%*?&)" class="w-100 ps-2 pe-2 pt-1 pb-1 border shadow">
@@ -71,7 +71,7 @@
                 <?php }?>
 
                 <div class="col-12 mt-2 d-flex justify-content-center">
-                    <label for="perfil"><b>Perfil</b></label>      
+                    <label for="perfil"><b>Perfil(*)</b></label>      
                 </div>
                 <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
                     <select name="perfil" id="perfil" class="opacity-75 w-100 p-2 border shadow" style="cursor: pointer;">
@@ -127,7 +127,7 @@
                 <?php }?>
 
                 <div class="col-12 mt-2 d-flex justify-content-center">
-                    <label for="localidad"><b>Localidad</b></label>      
+                    <label for="localidad"><b>Localidad(*)</b></label>      
                 </div>
                 <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
                     <select id="localidad" name="localidad" class="opacity-75 w-100 p-2 border shadow" style="cursor: pointer;">

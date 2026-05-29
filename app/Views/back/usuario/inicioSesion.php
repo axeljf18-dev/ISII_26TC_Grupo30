@@ -18,7 +18,7 @@
             <?= csrf_field() ?> 
             <div class="row mt-3">
                 <div class="col-12 mt-2 d-flex justify-content-center">
-                    <label for="email"><b>Correo Electrónico</b></label>      
+                    <label for="email"><b>Correo Electrónico(*)</b></label>      
                 </div>
                 <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
                     <input type="email" id="email" name="email" placeholder="Ingrese su correo..." value="<?= esc($valorEmail2); ?>" class="w-100 ps-2 pe-2 pt-1 pb-1 border shadow">
@@ -32,7 +32,7 @@
 
             <div class="row mt-3">
                 <div class="col-12 mt-2 d-flex justify-content-center">
-                    <label for="contraseña"><b>Contraseña</b></label>      
+                    <label for="contraseña"><b>Contraseña(*)</b></label>      
                 </div>
                 <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
                     <input type="password" id="contraseña" name="contraseña" placeholder="Ingrese su contraseña..." value="<?= esc($valorContraseña2); ?>" class="w-100 ps-2 pe-2 pt-1 pb-1 border shadow">

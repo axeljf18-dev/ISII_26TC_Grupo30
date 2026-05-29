@@ -26,7 +26,7 @@
             <?= csrf_field() ?> 
             <div class="row mt-3">
                 <div class="col-12 mt-2 d-flex justify-content-center">
-                    <label for="nombre"><b>Producto</b></label>      
+                    <label for="nombre"><b>Nombre(*)</b></label>      
                 </div>
                 <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
                     <input type="text" id="nombre" name="nombre" placeholder="Ingrese el nombre del producto..." value="<?= esc($valorProducto); ?>" class="w-100 ps-2 pe-2 pt-1 pb-1 border shadow">
@@ -54,7 +54,7 @@
 
             <div class="row mt-3">
                 <div class="col-12 mt-2 d-flex justify-content-center">
-                    <label for="categoria"><b>Categoria</b></label>      
+                    <label for="categoria"><b>Categoria(*)</b></label>      
                 </div>
                 <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
                     <select name="categoria" id="categoria" class="opacity-75 w-100 p-2 border shadow" style="cursor: pointer;">
@@ -76,7 +76,7 @@
 
             <div class="row mt-3">
                 <div class="col-12 mt-2 d-flex justify-content-center">
-                    <label for="marca"><b>Marca</b></label>      
+                    <label for="marca"><b>Marca(*)</b></label>      
                 </div>
                 <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
                     <select name="marca" id="marca" class="opacity-75 w-100 p-2 border shadow" style="cursor: pointer;"> 
@@ -98,7 +98,7 @@
 
             <div class="row mt-3">
                 <div class="col-12 mt-2 d-flex justify-content-center">
-                    <label for="precio"><b>Precio</b></label>      
+                    <label for="precio"><b>Precio(*)</b></label>      
                 </div>
                 <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
                     <input type="number" id="precio" name="precio" placeholder="Ingrese el precio del producto..." value="<?= esc($valorPrecioProducto); ?>" class="w-100 ps-2 pe-2 pt-1 pb-1 border shadow">
@@ -112,7 +112,7 @@
 
             <div class="row mt-3">
                 <div class="col-12 mt-2 d-flex justify-content-center">
-                    <label for="precioVta"><b>Precio Venta</b></label>      
+                    <label for="precioVta"><b>Precio Venta(*)</b></label>      
                 </div>
                 <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
                     <input type="number" id="precioVta" name="precioVta" placeholder="Ingrese el precio de venta del producto..." value="<?= esc($valorPrecioVtaProducto); ?>" class="w-100 ps-2 pe-2 pt-1 pb-1 border shadow">
@@ -126,7 +126,7 @@
 
             <div class="row mt-3">
                 <div class="col-12 mt-2 d-flex justify-content-center">
-                    <label for="stock"><b>Stock</b></label>      
+                    <label for="stock"><b>Stock(*)</b></label>      
                 </div>
                 <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
                     <input type="number" id="stock" name="stock" placeholder="Ingrese el stock del producto..." value="<?= esc($valorStockProducto); ?>" class="w-100 ps-2 pe-2 pt-1 pb-1 border shadow">
@@ -140,7 +140,7 @@
 
             <div class="row mt-3">
                 <div class="col-12 mt-2 d-flex justify-content-center">
-                    <label for="stockMin"><b>Stock Mínimo</b></label>      
+                    <label for="stockMin"><b>Stock Mínimo(*)</b></label>      
                 </div>
                 <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
                     <input type="number" id="stockMin" name="stockMin" placeholder="Ingrese el stock mínimo del producto..." value="<?= esc($valorStockMinProducto); ?>" class="w-100 ps-2 pe-2 pt-1 pb-1 border shadow">
@@ -154,7 +154,7 @@
 
             <div class="row mt-3">
                 <div class="col-12 mt-2 d-flex justify-content-center">
-                    <label for="imagen"><b>Imagen</b></label>      
+                    <label for="imagen"><b>Imagen(*)</b></label>      
                 </div>
                 <div class="col-12 mt-2">
                     <p class="ps-5 pe-5">El tamaño del archivo no debe superar los 8 MB</p>
@@ -171,7 +171,7 @@
 
             <div class="row mt-3">
                 <div class="col-12 mt-2 d-flex justify-content-center">
-                    <label for="proveedor"><b>Proveedor</b></label>      
+                    <label for="proveedor"><b>Proveedor(*)</b></label>      
                 </div>
                 <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
                     <select name="proveedor" id="proveedor" class="opacity-75 w-100 p-2 border shadow" style="cursor: pointer;">
