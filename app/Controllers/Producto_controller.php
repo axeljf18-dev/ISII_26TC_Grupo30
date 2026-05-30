@@ -13,119 +13,74 @@ class Producto_controller extends Controller{
         $session = session();
     }
 
-    public function listarProductos(){
+    public function listarProductos($estadoProductos){
         $productoModel = new Producto_model();
 
-        $data['productos'] = $productoModel->orderBy('producto.id_producto', 'DESC')->getProductosPaginados(7);
-        $data['pager'] = $productoModel->pager;
+        switch($estadoProductos){
+            case 'desactivados':
+                $data['productos'] = $productoModel->orderBy('producto.id_producto', 'DESC')->getProductosDesactivadosPaginados(7);
+                $vista = 'back/admin/listaProductosDesactivados';
+                break;
+            case 'paraActivar':
+                $data['productos'] = $productoModel->orderBy('producto.id_producto', 'DESC')->getProductosDesactivadosPaginados(7);
+                $vista = 'back/admin/listaProductosParaActivar';
+                break;
+            case 'actualizarEliminar':
+                $data['productos'] = $productoModel->orderBy('producto.id_producto', 'DESC')->getProductosPaginados(7);
+                $vista = 'back/admin/listaProductosActualizarEliminar';
+                break;
+            default: // activos
+                $data['productos'] = $productoModel->orderBy('producto.id_producto', 'DESC')->getProductosPaginados(7);
+                $vista = 'back/admin/listaProductos';
+                break;
+        }
 
+        $data['pager'] = $productoModel->pager;
         $dato['titulo'] = 'Dashboard | Lista de Productos';
+
         echo view('plantillas/header', $dato);
         echo view('plantillas/nav');
-        echo view('back/admin/listaProductos', $data);
+        echo view($vista, $data);
         echo view('plantillas/footer');
     }
 
-    public function buscarProductosActivos(){
+    public function buscarProductos($estadoProductos){
         $session = session();
-        $query = $this->request->getVar('productoQuery'); 
         $productoModel = new Producto_model();
 
-        $data['productos'] = $productoModel->buscarProductosActivos($query, 7);
-        $data['pager'] = $productoModel->pager;
+        switch($estadoProductos){
+            case 'desactivados':
+                $query = $this->request->getVar('productoDesactivadoQuery');
+                $data['productos'] = $productoModel->buscarProductosDesactivados($query, 7);
+                $session->setFlashdata('productoDesactivadoQueryValor', $query);
+                $vista = 'back/admin/listaProductosDesactivados';
+                break;
+            case 'paraActivar':
+                $query = $this->request->getVar('productoParaActivarQuery');
+                $data['productos'] = $productoModel->buscarProductosDesactivados($query, 7);
+                $session->setFlashdata('productoParaActivarQueryValor', $query);
+                $vista = 'back/admin/listaProductosParaActivar';
+                break;
+            case 'actualizarEliminar':
+                $query = $this->request->getVar('productoActQuery');
+                $data['productos'] = $productoModel->buscarProductosActivos($query, 7);
+                $session->setFlashdata('productoActQueryValor', $query);
+                $vista = 'back/admin/listaProductosActualizarEliminar';
+                break;
+            default: // activos
+                $query = $this->request->getVar('productoQuery');
+                $data['productos'] = $productoModel->buscarProductosActivos($query, 7);
+                $session->setFlashdata('productoQueryValor', $query);
+                $vista = 'back/admin/listaProductos';
+                break;
+        }
 
-        $session->setFlashdata('productoQueryValor', $query);
+        $data['pager'] = $productoModel->pager;
         $dato['titulo'] = 'Dashboard | Lista de Productos';
+
         echo view('plantillas/header', $dato);
         echo view('plantillas/nav');
-        echo view('back/admin/listaProductos', $data);
-        echo view('plantillas/footer');
-    }
-
-    public function listarProductosDesactivados(){
-        $productoModel = new Producto_model();
-
-        $data['productos'] = $productoModel->orderBy('producto.id_producto', 'DESC')->getProductosDesactivadosPaginados(7);
-        $data['pager'] = $productoModel->pager;
-
-        $dato['titulo'] = 'Dashboard | Lista de Productos';
-        echo view('plantillas/header', $dato);
-        echo view('plantillas/nav');
-        echo view('back/admin/listaProductosDesactivados', $data);
-        echo view('plantillas/footer');
-    }
-
-    public function buscarProductosDesactivados(){
-        $session = session();
-        $query = $this->request->getVar('productoDesactivadoQuery'); 
-        $productoModel = new Producto_model();
-
-        $data['productos'] = $productoModel->buscarProductosDesactivados($query, 7);
-        $data['pager'] = $productoModel->pager;
-
-        $session->setFlashdata('productoDesactivadoQueryValor', $query);
-        $dato['titulo'] = 'Dashboard | Lista de Productos';
-        echo view('plantillas/header', $dato);
-        echo view('plantillas/nav');
-        echo view('back/admin/listaProductosDesactivados', $data);
-        echo view('plantillas/footer');
-    }
-
-    public function listarProductosParaActivar(){
-        $productoModel = new Producto_model();
-
-        $data['productos'] = $productoModel->orderBy('producto.id_producto', 'DESC')->getProductosDesactivadosPaginados(7);
-        $data['pager'] = $productoModel->pager;
-
-        $dato['titulo'] = 'Dashboard | Lista de Productos';
-        echo view('plantillas/header', $dato);
-        echo view('plantillas/nav');
-        echo view('back/admin/listaProductosParaActivar', $data);
-        echo view('plantillas/footer');
-    }
-
-    public function buscarProductosParaActivar(){
-        $session = session();
-        $query = $this->request->getVar('productoParaActivarQuery');
-        $productoModel = new Producto_model();
-
-        $data['productos'] = $productoModel->buscarProductosDesactivados($query, 7);
-        $data['pager'] = $productoModel->pager;
-
-        $session->setFlashdata('productoParaActivarQueryValor', $query);
-        $dato['titulo'] = 'Dashboard | Lista de Productos';
-        echo view('plantillas/header', $dato);
-        echo view('plantillas/nav');
-        echo view('back/admin/listaProductosParaActivar', $data);
-        echo view('plantillas/footer');
-    }
-
-    public function listarProductosParaActualizarEliminar(){
-        $productoModel = new Producto_model();
-
-        $data['productos'] = $productoModel->orderBy('producto.id_producto', 'DESC')->getProductosPaginados(7);
-        $data['pager'] = $productoModel->pager;
-
-        $dato['titulo'] = 'Dashboard | Lista de Productos';
-        echo view('plantillas/header', $dato);
-        echo view('plantillas/nav');
-        echo view('back/admin/listaProductosActualizarEliminar', $data);
-        echo view('plantillas/footer');
-    }
-
-    public function buscarProductosParaActualizarEliminar(){
-        $session = session();
-        $query = $this->request->getVar('productoActQuery'); 
-        $productoModel = new Producto_model();
-
-        $data['productos'] = $productoModel->buscarProductosActivos($query, 7);
-        $data['pager'] = $productoModel->pager;
-
-        $session->setFlashdata('productoActQueryValor', $query);
-        $dato['titulo'] = 'Dashboard | Lista de Productos';
-        echo view('plantillas/header', $dato);
-        echo view('plantillas/nav');
-        echo view('back/admin/listaProductosActualizarEliminar', $data);
+        echo view($vista, $data);
         echo view('plantillas/footer');
     }
 
@@ -269,7 +224,7 @@ class Producto_controller extends Controller{
     }
 
     // ACTUALIZAR PRODUCTO
-    public function validarDatosProductoUpdate($datos = null){
+    public function validarDatosProductoActualizar($datos = null){
         $session = session();
 
         if ($datos === null) {
@@ -347,15 +302,16 @@ class Producto_controller extends Controller{
         return $this->response->redirect(site_url('mostrarListaProductosActualizarEliminar'));
     }
 
-    // INTENTAR UNIR LOS DOS METODOS limpiarFormularioAltaProducto y limpiarFormularioActualizarProducto
-    public function limpiarFormularioAltaProducto() {
-        session()->remove(['productoValor', 'descripcionProductoValor', 'categoriaProductoValor', 'marcaProductoValor', 'precioProductoValor', 'precioVtaProductoValor', 'stockProductoValor', 'stockMinProductoValor']);
-        return redirect()->to('/altaDeProductos');
-    }
+    public function limpiarDatosFormularioProducto($id = null) {
+        $session = session();
 
-    public function limpiarFormularioActualizarProducto($id) {
-        session()->setFlashdata('limpiarProductoValor', true);
-        session()->setFlashdata('limpiarImagenValor', true);
-        return redirect()->to('/actualizarProductos/' . $id);
+        if ($id === null) { // Del formulario alta de producto
+            $session->remove(['productoValor', 'descripcionProductoValor', 'categoriaProductoValor', 'marcaProductoValor', 'precioProductoValor', 'precioVtaProductoValor', 'stockProductoValor', 'stockMinProductoValor']);
+            return redirect()->to('/altaDeProductos');
+        } else { // Del formulario actualizar un producto
+            $session->setFlashdata('limpiarProductoValor', true);
+            $session->setFlashdata('limpiarImagenValor', true);
+            return redirect()->to('/actualizarProductos/' . $id);
+        }
     }
 }

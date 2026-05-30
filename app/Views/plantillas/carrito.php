@@ -71,7 +71,8 @@
                     <?= csrf_field() ?>
 
                     <label for="id_metodo_pago"><b>Método de Pago(*)</b></label>
-                    <select name="id_metodo_pago" id="id_metodo_pago" class="form-select" required>
+                    <select name="id_metodo_pago" id="id_metodo_pago" class="form-select" style="cursor: pointer;">
+                        <option value="" selected>Seleccione un método de pago</option>
                         <?php foreach($metodosPago as $metodo): ?>
                             <option value="<?= $metodo['id_metodo_pago'] ?>">
                                 <?= esc($metodo['nombre']) ?>

@@ -95,6 +95,6 @@ class Carrito_controller extends Controller{
         $cart = \Config\Services::cart();
         $cart->destroy();
 
-        return redirect()->to('/productos');
+        return redirect()->to('/carrito');
     }
 }

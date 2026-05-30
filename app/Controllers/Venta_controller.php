@@ -16,6 +16,11 @@ class Venta_controller extends Controller{
         $request = \Config\Services::request();
         $idMetodoPago = $request->getPost('id_metodo_pago');
 
+        if (empty($idMetodoPago)) {
+            $session->setFlashdata('mensaje', 'Debe seleccionar un método de pago válido');
+            return redirect()->to('/carrito');
+        }
+
         require(APPPATH . 'Controllers/Carrito_controller.php');
         $cartController = new Carrito_controller();
         $carritoContents = $cartController->devolverCarrito();

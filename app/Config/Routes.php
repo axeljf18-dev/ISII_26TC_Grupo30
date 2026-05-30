@@ -80,22 +80,22 @@ $routes->post('/enviar-formUsuarioActQuery', 'Usuario_controller::buscadorUsuari
 $routes->post('/enviar-formUsuarioParaActivarQuery', 'Usuario_controller::buscadorUsuariosParaActivar', ['filter' => 'usuarioAuth']);
 
 // Vista de Productos
-$routes->get('/mostrarListaProductos', 'Producto_controller::listarProductos', ['filter' => 'usuarioAuth']);
-$routes->get('/mostrarListaProductosDesactivados', 'Producto_controller::listarProductosDesactivados', ['filter' => 'usuarioAuth']);
-$routes->get('/mostrarListaProductosParaActivar', 'Producto_controller::listarProductosParaActivar', ['filter' => 'usuarioAuth']);
-$routes->get('/mostrarListaProductosActualizarEliminar', 'Producto_controller::listarProductosParaActualizarEliminar', ['filter' => 'usuarioAuth']);
+$routes->get('/mostrarListaProductos', 'Producto_controller::listarProductos/activos', ['filter' => 'usuarioAuth']);
+$routes->get('/mostrarListaProductosDesactivados', 'Producto_controller::listarProductos/desactivados', ['filter' => 'usuarioAuth']);
+$routes->get('/mostrarListaProductosParaActivar', 'Producto_controller::listarProductos/paraActivar', ['filter' => 'usuarioAuth']);
+$routes->get('/mostrarListaProductosActualizarEliminar', 'Producto_controller::listarProductos/actualizarEliminar', ['filter' => 'usuarioAuth']);
 $routes->get('/altaDeProductos', 'Producto_controller::mostrarFormularioCrearProducto', ['filter' => 'usuarioAuth']);
 $routes->post('/enviar-formProducto', 'Producto_controller::validarDatosProducto', ['filter' => 'usuarioAuth']);
 $routes->get('/actualizarProductos/(:num)', 'Producto_controller::mostrarFormularioActualizarProducto/$1', ['filter' => 'usuarioAuth']);
-$routes->post('/enviar-formProductoActualizar', 'Producto_controller::validarDatosProductoUpdate', ['filter' => 'usuarioAuth']);
+$routes->post('/enviar-formProductoActualizar', 'Producto_controller::validarDatosProductoActualizar', ['filter' => 'usuarioAuth']);
 $routes->get('/eliminarProductos/(:num)', 'Producto_controller::desactivarProducto/$1', ['filter' => 'usuarioAuth']);
 $routes->get('/activarProductos/(:num)', 'Producto_controller::reactivarProducto/$1', ['filter' => 'usuarioAuth']);
-$routes->get('/limpiarProducto', 'Producto_controller::limpiarFormularioAltaProducto', ['filter' => 'usuarioAuth']);
-$routes->get('/limpiarProductoAct/(:num)', 'Producto_controller::limpiarFormularioActualizarProducto/$1', ['filter' => 'usuarioAuth']);
-$routes->post('/enviar-formProductoQuery', 'Producto_controller::buscarProductosActivos', ['filter' => 'usuarioAuth']);
-$routes->post('/enviar-formProductoDesactivadoQuery', 'Producto_controller::buscarProductosDesactivados', ['filter' => 'usuarioAuth']);
-$routes->post('/enviar-formProductoActQuery', 'Producto_controller::buscarProductosParaActualizarEliminar', ['filter' => 'usuarioAuth']);
-$routes->post('/enviar-formProductoParaActivarQuery', 'Producto_controller::buscarProductosParaActivar', ['filter' => 'usuarioAuth']);
+$routes->get('/limpiarProducto', 'Producto_controller::limpiarDatosFormularioProducto', ['filter' => 'usuarioAuth']);
+$routes->get('/limpiarProductoAct/(:num)', 'Producto_controller::limpiarDatosFormularioProducto/$1', ['filter' => 'usuarioAuth']);
+$routes->post('/enviar-formProductoQuery', 'Producto_controller::buscarProductos/activos', ['filter' => 'usuarioAuth']);
+$routes->post('/enviar-formProductoDesactivadoQuery', 'Producto_controller::buscarProductos/desactivados', ['filter' => 'usuarioAuth']);
+$routes->post('/enviar-formProductoActQuery', 'Producto_controller::buscarProductos/actualizarEliminar', ['filter' => 'usuarioAuth']);
+$routes->post('/enviar-formProductoParaActivarQuery', 'Producto_controller::buscarProductos/paraActivar', ['filter' => 'usuarioAuth']);
 
 // // Vista de Perfiles
 // $routes->get('/mostrarListaPerfiles', 'Perfil_controller::index', ['filter' => 'usuarioAuth']);
