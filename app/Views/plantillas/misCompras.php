@@ -26,14 +26,16 @@
         </div>
     <?php else: ?>
         <div class="mb-1 d-flex justify-content-end">
-            <form class="w-100" action="<?php echo base_url('enviar-formFechaQuery20'); ?>" method="POST">
-                <div class="mb-2">
-                    <p class="mb-0"><b>Buscar desde: </b></p>
-                    <input type="search" name="fechaInicioQuery20" placeholder="Escribe la fecha de inicio de la venta que quieres buscar..." value="<?= $valorFechaInicioQuery20; ?>" title="(por ejemplo: 2025-06-01)" class="w-100 p-2 border shadow">
-                </div>
-                <div class="mb-2">
-                    <p class="mb-0"><b>Buscar hasta: </b></p>
-                    <input type="search" name="fechaFinQuery20" placeholder="Escribe la fecha de fin de la venta que quieres buscar..." value="<?= $valorFechaFinQuery20; ?>" title="(por ejemplo: 2025-06-06)" class="w-100 p-2 border shadow">
+            <form class="w-100" action="<?php echo base_url('enviar-formFechaQuery20'); ?>" method="GET">
+                <div class="row">
+                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-2">
+                        <p class="mb-0 w-75 mx-auto"><b>Buscar desde: </b></p>
+                        <input type="date" name="fechaInicioQuery20" value="<?= $valorFechaInicioQuery20; ?>" class="w-75 p-2 border shadow mx-auto d-block" onkeydown="return false">
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-2">
+                        <p class="mb-0 w-75 mx-auto"><b>Buscar hasta: </b></p>
+                        <input type="date" name="fechaFinQuery20" value="<?= $valorFechaFinQuery20; ?>" class="w-75 p-2 border shadow mx-auto d-block" onkeydown="return false">
+                    </div>
                 </div>
                 <div class="w-100 d-flex justify-content-center align-items-center">
                     <button class="text-white w-25 mt-2 mb-3 p-2 border btn"><b>Buscar</b></button>
@@ -47,7 +49,7 @@
                     <thead>
                         <tr>
                             <th class="text-center">Titular</th>
-                            <th class="text-center">Fecha</th>
+                            <th class="text-center">Fecha (Tiempo)</th>
                             <th class="text-center">Total ($)</th>
                             <th class="text-center">Acciones</th>
                         </tr>
@@ -58,8 +60,15 @@
                             <?php foreach($usuarios as $usuario): ?>
                                 <?php if($usuario['id_usuario'] == $venta['id_usuario']): ?>
                                 <tr>
-                                    <td class="text-center"><?= $usuario['nombre'] ?>, <?= $usuario['apellido'] ?></td>
-                                    <td class="text-center"><?= $venta['fecha'] ?></td>
+                                    <td class="text-center"><?= $usuario['apellido'] ?>, <?= $usuario['nombre'] ?></td>
+                                    <td class="text-center">
+                                        <?php 
+                                            $fechaObj = new DateTime($venta['fecha']);
+                                            $soloFecha = $fechaObj->format('Y-m-d');
+                                            $soloHora = $fechaObj->format('H:i:s');
+                                        ?>
+                                        <?= $soloFecha ?> (<?= $soloHora ?>)
+                                    </td>
                                     <td class="text-center">$<?= number_format($venta['total_venta'], 2) ?></td>
                                     <td class="text-center">
                                         <div class="text-center">
@@ -75,6 +84,11 @@
                     </tbody>
                 </table>
             </div>
+        </div>
+    <?php endif; ?>
+    <?php if(isset($pager)): ?>
+        <div class="d-flex justify-content-end mt-3">
+            <?= $pager->links('default', 'my_template') ?>
         </div>
     <?php endif; ?>
 </main>

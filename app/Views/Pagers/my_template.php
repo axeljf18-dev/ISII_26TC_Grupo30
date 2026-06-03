@@ -14,7 +14,8 @@
                 <!-- Números -->
                 <?php foreach ($pager->links() as $link): ?>
                     <li class="page-item <?= $link['active'] ? 'active' : '' ?>">
-                        <a class="page-link fw-bold" style="background-color:#FFFFFF; color:#871ED9; border:1px solid #871ED9;" href="<?= $link['uri'] ?>">
+                        <a class="page-link fw-bold" style="<?= $link['active'] ? 'background-color:#871ED9; color:#FFFFFF; border:1px solid #871ED9;' 
+                                                                                : 'background-color:#FFFFFF; color:#871ED9; border:1px solid #871ED9;' ?>" href="<?= $link['uri'] ?>">
                             <?= $link['title'] ?>
                         </a>
                     </li>

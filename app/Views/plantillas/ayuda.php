@@ -17,7 +17,7 @@
                             <li>Inicia sesión en NetShop.</li>
                             <li>Una vez que hayas ingresado, utiliza el buscador para encontrar el producto que deseas o navega por el menú principal para seleccionarlo.</li>
                             <li>Haz clic en el botón "Añadir al carrito" para agregar el producto deseado.</li>
-                            <li>Accede a "Mi Carrito" y, si estás conforme con tu selección, haz clic en el botón "Comprar" para finalizar tu transacción.</li>
+                            <li>Accede a "Mi Carrito" y, si estás conforme con tu selección, elige un <b>método de pago</b> en el menú desplegable. Luego haz clic en el botón "Comprar" para finalizar tu transacción.</li>
                             <li>Al completar el proceso, se mostrarán los detalles de tu compra confirmando que la transacción se realizó con éxito.</li>
                         </ol>
                     </div>

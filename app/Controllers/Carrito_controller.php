@@ -1,10 +1,13 @@
 <?php
 namespace App\Controllers;
+// namespace App\Services;
 use CodeIgniter\Controller; 
 use App\Models\Producto_model;
 use App\Models\Categoria_model;
+use App\Models\Marca_model;
 use App\Models\Usuarios_model;
 use App\Models\MetodoPago_model;
+// use Config\Services;
 
 class Carrito_controller extends Controller{
     public function __construct(){
@@ -55,7 +58,6 @@ class Carrito_controller extends Controller{
         return $cart->contents();
     }
 
-
     public function suma($rowid){
         $cart = \Config\Services::cart();
         $item = $cart->getItem($rowid);
@@ -96,5 +98,24 @@ class Carrito_controller extends Controller{
         $cart->destroy();
 
         return redirect()->to('/carrito');
+    }
+
+    public function mostrarCarrito(){
+        $categoriaModel = new Categoria_model();
+        $dato['categorias'] = $categoriaModel->getCategoriaAll();
+        $marcaModel = new Marca_model();
+        $dato['marcas'] = $marcaModel->getMarcaAll();
+
+        $cart = \Config\Services::cart();
+        $dato['cart'] = $cart;
+
+        $metodoModel = new MetodoPago_model();
+        $dato['metodosPago'] = $metodoModel->getMetodosPagoActivos();
+
+        $data['titulo'] = 'NetShop | Carrito';
+        echo view('plantillas/header', $data);
+        echo view('plantillas/nav', $dato);
+        echo view('plantillas/carrito', $dato);
+        echo view('plantillas/footer', $dato);
     }
 }

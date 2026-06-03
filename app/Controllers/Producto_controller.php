@@ -21,12 +21,8 @@ class Producto_controller extends Controller{
                 $data['productos'] = $productoModel->orderBy('producto.id_producto', 'DESC')->getProductosDesactivadosPaginados(7);
                 $vista = 'back/admin/listaProductosDesactivados';
                 break;
-            case 'paraActivar':
-                $data['productos'] = $productoModel->orderBy('producto.id_producto', 'DESC')->getProductosDesactivadosPaginados(7);
-                $vista = 'back/admin/listaProductosParaActivar';
-                break;
             case 'actualizarEliminar':
-                $data['productos'] = $productoModel->orderBy('producto.id_producto', 'DESC')->getProductosPaginados(7);
+                $data['productos'] = $productoModel->orderBy('producto.id_producto', 'DESC')->getProductoAll(7);
                 $vista = 'back/admin/listaProductosActualizarEliminar';
                 break;
             default: // activos
@@ -55,15 +51,9 @@ class Producto_controller extends Controller{
                 $session->setFlashdata('productoDesactivadoQueryValor', $query);
                 $vista = 'back/admin/listaProductosDesactivados';
                 break;
-            case 'paraActivar':
-                $query = $this->request->getVar('productoParaActivarQuery');
-                $data['productos'] = $productoModel->buscarProductosDesactivados($query, 7);
-                $session->setFlashdata('productoParaActivarQueryValor', $query);
-                $vista = 'back/admin/listaProductosParaActivar';
-                break;
             case 'actualizarEliminar':
                 $query = $this->request->getVar('productoActQuery');
-                $data['productos'] = $productoModel->buscarProductosActivos($query, 7);
+                $data['productos'] = $productoModel->buscarProductosAll($query, 7);
                 $session->setFlashdata('productoActQueryValor', $query);
                 $vista = 'back/admin/listaProductosActualizarEliminar';
                 break;
@@ -139,16 +129,23 @@ class Producto_controller extends Controller{
         $productoModel->update($id_producto, $data);
 
         session()->setFlashdata('msgExitoso', 'Producto activado exitosamente');
-        return redirect()->to('/mostrarListaProductosParaActivar');
+        return redirect()->to('/mostrarListaProductosActualizarEliminar');
+    }
+
+    public function recibirDatosFormularioProducto(){
+        $datos = $this->request;
+
+        // Si el formulario trae un id, significa que es actualización
+        if ($datos->getPost('id')) {
+            return $this->validarDatosProductoActualizar($datos);
+        } else {
+            return $this->validarDatosProducto($datos);
+        }
     }
 
     // CREAR PRODUCTO
-    public function validarDatosProducto($datos = null){
+    public function validarDatosProducto($datos){
         $session = session();
-
-        if ($datos === null) {
-            $datos = $this->request;
-        }
 
         $valido = $this->validate([
             'nombre'    => 'required|trim|min_length[2]|max_length[50]',
@@ -158,7 +155,7 @@ class Producto_controller extends Controller{
             'stockMin'  => 'required|trim|is_natural',
             'imagen'    => 'uploaded[imagen]|max_size[imagen,8192]|ext_in[imagen,png,jpg,jpeg]',
             'descripcion' => 'permit_empty|trim|min_length[5]|max_length[255]',
-        ]);
+        ], $datos->getPost());
 
         $marcaModel = new Marca_model();
         $categoriaModel = new Categoria_model();
@@ -224,12 +221,8 @@ class Producto_controller extends Controller{
     }
 
     // ACTUALIZAR PRODUCTO
-    public function validarDatosProductoActualizar($datos = null){
+    public function validarDatosProductoActualizar($datos){
         $session = session();
-
-        if ($datos === null) {
-            $datos = $this->request;
-        }
 
         $valido = $this->validate([
             'id'        => 'required|numeric',
@@ -240,7 +233,7 @@ class Producto_controller extends Controller{
             'stockMin'  => 'required|trim|is_natural',
             'imagen'    => 'max_size[imagen,8192]|ext_in[imagen,png,jpg,jpeg]',
             'descripcion' => 'permit_empty|trim|min_length[5]|max_length[255]',
-        ]);
+        ], $datos->getPost());
 
         $marcaModel = new Marca_model();
         $categoriaModel = new Categoria_model();

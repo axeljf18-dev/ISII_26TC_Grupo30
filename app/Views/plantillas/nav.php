@@ -90,7 +90,7 @@
                         <div class="dropdown contenedor__a-categorias">
                             <a class="btn item__li-a-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <img src="<?= base_url('assets/img/hamburger.png'); ?>" alt="Hamburguesa" width="12px" height="12px" class="me-0 mb-1 contenedor__nav-li-a-img-2">
-                                <b>Actualizar o Eliminar</b>
+                                <b>Gestionar</b>
                             </a> 
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item item__li-a-3" href="<?php echo base_url('mostrarListaProductosActualizarEliminar'); ?>"><b>Producto</b></a></li>

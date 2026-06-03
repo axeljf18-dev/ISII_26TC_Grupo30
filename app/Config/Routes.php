@@ -46,18 +46,19 @@ $routes->get('/limpiarSesion', 'Login_controller::limpiarDatos', ['filter' => 'a
 $routes->get('/cerrarSesion', 'Login_controller::logeout');
 
 // Vista del Carrito
-$routes->get('/carrito', 'Home::carrito', ['filter' => ['adminAuth', 'carritoAuth']]);
+$routes->get('/carrito', 'Carrito_controller::mostrarCarrito', ['filter' => ['adminAuth', 'carritoAuth']]);
 $routes->post('/enviar-formCarritoAgregar/(:num)', 'Carrito_controller::add/$1', ['filter' => ['adminAuth', 'carritoAuth']]);
 $routes->get('/borrar-producto/(:any)', 'Carrito_controller::eliminarProducto/$1', ['filter' => ['adminAuth', 'carritoAuth']]);
 $routes->get('/borrar-carrito', 'Carrito_controller::eliminarCarrito', ['filter' => ['adminAuth', 'carritoAuth']]);
 $routes->get('/suma-carrito/(:any)', 'Carrito_controller::suma/$1', ['filter' => ['adminAuth', 'carritoAuth']]);
 $routes->get('/resta-carrito/(:any)', 'Carrito_controller::resta/$1', ['filter' => ['adminAuth', 'carritoAuth']]);
-$routes->post('/comprar-carrito', 'Venta_controller::registrarVenta', ['filter' => ['adminAuth', 'carritoAuth']]);
-$routes->get('/vistaDetalleCompra/(:num)', 'Venta_controller::verFactura/$1', ['filter' => ['adminAuth', 'carritoAuth']]);
-$routes->get('/misCompras', 'Venta_controller::misCompras', ['filter' => ['adminAuth', 'carritoAuth']]);
-
+// $routes->post('/comprar-carrito', 'VentaCabecera_controller::registrarVenta', ['filter' => ['adminAuth', 'carritoAuth']]);
+$routes->post('/comprar-carrito', 'VentaCabecera_controller::validarVenta', ['filter' => ['adminAuth', 'carritoAuth']]);
 $routes->post('/enviar-formActualizaCarrito', 'Carrito_controller::update', ['filter' => ['adminAuth', 'carritoAuth']]);
+$routes->get('/misCompras', 'VentaCabecera_controller::mostrarMisComprasCliente', ['filter' => ['adminAuth', 'carritoAuth']]);
 
+// $routes->get('/vistaDetalleCompra/(:num)', 'VentaDetalle_controller::verFactura/$1', ['filter' => ['adminAuth', 'carritoAuth']]);
+$routes->get('/vistaDetalleCompra/(:num)', 'VentaDetalle_controller::mostrarDetalleVenta/$1', ['filter' => ['adminAuth', 'carritoAuth']]);
 
 
 // VISTA DEL ADMINISTRADOR
@@ -82,20 +83,18 @@ $routes->post('/enviar-formUsuarioParaActivarQuery', 'Usuario_controller::buscad
 // Vista de Productos
 $routes->get('/mostrarListaProductos', 'Producto_controller::listarProductos/activos', ['filter' => 'usuarioAuth']);
 $routes->get('/mostrarListaProductosDesactivados', 'Producto_controller::listarProductos/desactivados', ['filter' => 'usuarioAuth']);
-$routes->get('/mostrarListaProductosParaActivar', 'Producto_controller::listarProductos/paraActivar', ['filter' => 'usuarioAuth']);
 $routes->get('/mostrarListaProductosActualizarEliminar', 'Producto_controller::listarProductos/actualizarEliminar', ['filter' => 'usuarioAuth']);
 $routes->get('/altaDeProductos', 'Producto_controller::mostrarFormularioCrearProducto', ['filter' => 'usuarioAuth']);
-$routes->post('/enviar-formProducto', 'Producto_controller::validarDatosProducto', ['filter' => 'usuarioAuth']);
+$routes->post('/enviar-formProducto', 'Producto_controller::recibirDatosFormularioProducto', ['filter' => 'usuarioAuth']);
 $routes->get('/actualizarProductos/(:num)', 'Producto_controller::mostrarFormularioActualizarProducto/$1', ['filter' => 'usuarioAuth']);
-$routes->post('/enviar-formProductoActualizar', 'Producto_controller::validarDatosProductoActualizar', ['filter' => 'usuarioAuth']);
+$routes->post('/enviar-formProductoActualizar', 'Producto_controller::recibirDatosFormularioProducto', ['filter' => 'usuarioAuth']);
 $routes->get('/eliminarProductos/(:num)', 'Producto_controller::desactivarProducto/$1', ['filter' => 'usuarioAuth']);
 $routes->get('/activarProductos/(:num)', 'Producto_controller::reactivarProducto/$1', ['filter' => 'usuarioAuth']);
 $routes->get('/limpiarProducto', 'Producto_controller::limpiarDatosFormularioProducto', ['filter' => 'usuarioAuth']);
 $routes->get('/limpiarProductoAct/(:num)', 'Producto_controller::limpiarDatosFormularioProducto/$1', ['filter' => 'usuarioAuth']);
-$routes->post('/enviar-formProductoQuery', 'Producto_controller::buscarProductos/activos', ['filter' => 'usuarioAuth']);
-$routes->post('/enviar-formProductoDesactivadoQuery', 'Producto_controller::buscarProductos/desactivados', ['filter' => 'usuarioAuth']);
-$routes->post('/enviar-formProductoActQuery', 'Producto_controller::buscarProductos/actualizarEliminar', ['filter' => 'usuarioAuth']);
-$routes->post('/enviar-formProductoParaActivarQuery', 'Producto_controller::buscarProductos/paraActivar', ['filter' => 'usuarioAuth']);
+$routes->get('/enviar-formProductoQuery', 'Producto_controller::buscarProductos/activos', ['filter' => 'usuarioAuth']);
+$routes->get('/enviar-formProductoDesactivadoQuery', 'Producto_controller::buscarProductos/desactivados', ['filter' => 'usuarioAuth']);
+$routes->get('/enviar-formProductoActQuery', 'Producto_controller::buscarProductos/actualizarEliminar', ['filter' => 'usuarioAuth']);
 
 // // Vista de Perfiles
 // $routes->get('/mostrarListaPerfiles', 'Perfil_controller::index', ['filter' => 'usuarioAuth']);
@@ -140,12 +139,13 @@ $routes->post('/enviar-formProductoParaActivarQuery', 'Producto_controller::busc
 // $routes->get('/limpiarMarcaAct/(:num)', 'Marca_controller::limpiarDatosAct/$1', ['filter' => 'usuarioAuth']);
 
 // Vista de Ventas
-$routes->get('/mostrarListaVentas', 'Venta_controller::index', ['filter' => 'usuarioAuth']);
-$routes->get('/mostrarListaVentasDesactivadas', 'Venta_controller::indexDesactivadas', ['filter' => 'usuarioAuth']);
-$routes->get('/mostrarDetalleCompraCliente/(:num)', 'Venta_controller::indexDetalleCompra/$1', ['filter' => 'usuarioAuth']);
-$routes->post('/enviar-formFechaQuery', 'Venta_controller::buscadorVentas', ['filter' => 'usuarioAuth']);
-$routes->post('/enviar-formFechaDesactivadoQuery', 'Venta_controller::buscadorVentasDesactivados', ['filter' => 'usuarioAuth']);
-$routes->post('/enviar-formFechaQuery20', 'Venta_controller::buscadorVentasDeUnCliente', ['filter' => ['adminAuth', 'carritoAuth']]);
+$routes->get('/mostrarListaVentas', 'VentaCabecera_controller::mostrarVentasAdmin', ['filter' => 'usuarioAuth']);
+
+// $routes->get('/mostrarDetalleCompraCliente/(:num)', 'VentaDetalle_controller::indexDetalleCompra/$1', ['filter' => 'usuarioAuth']);
+$routes->get('/mostrarDetalleCompraCliente/(:num)', 'VentaDetalle_controller::mostrarDetalleVenta/$1', ['filter' => 'usuarioAuth']);
+
+$routes->get('/enviar-formFechaQuery', 'VentaCabecera_controller::mostrarVentasPorFechasAdmin', ['filter' => 'usuarioAuth']);
+$routes->get('/enviar-formFechaQuery20', 'VentaCabecera_controller::mostrarComprasPorFechasCliente', ['filter' => ['adminAuth', 'carritoAuth']]);
 
 
 // // Vista de Consultas

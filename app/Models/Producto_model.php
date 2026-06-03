@@ -7,10 +7,20 @@ class Producto_model extends Model{
     protected $primaryKey = 'id_producto';
     protected $allowedFields = ['nombre', 'imagen', 'id_categoria', 'precio', 'precio_vta', 'stock', 'stock_min', 'eliminado', 'descripcion', 'id_marca', 'id_proveedor'];
 
-    public function getProductoAll(){
+    public function getProductoAll($perPage = 7){
     return $this->select('producto.*, categoria.descripcion as categoria_descripcion')
                 ->join('categoria', 'categoria.id_categoria = producto.id_categoria')
-                ->findAll();
+                ->paginate($perPage);
+    }
+
+    public function buscarProductosAll($query, $perPage = 7){
+        if($query){
+            return $this->select('producto.*, categoria.descripcion as categoria_descripcion')
+                        ->join('categoria', 'categoria.id_categoria = producto.id_categoria')
+                        ->like('producto.nombre', $query)
+                        ->paginate($perPage);
+        }
+        return [];
     }
 
     public function buscarProductosActivos($query, $perPage = 7){

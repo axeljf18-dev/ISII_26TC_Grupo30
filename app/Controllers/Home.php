@@ -430,25 +430,6 @@ class Home extends BaseController
         echo view('plantillas/footer', $dato);
     }
 
-    public function carrito(){
-        $categoriaModel = new Categoria_model();
-        $dato['categorias'] = $categoriaModel->getCategoriaAll();
-        $marcaModel = new Marca_model();
-        $dato['marcas'] = $marcaModel->getMarcaAll();
-
-        $cart = \Config\Services::cart();
-        $dato['cart'] = $cart;
-
-        $metodoModel = new MetodoPago_model();
-        $dato['metodosPago'] = $metodoModel->getMetodosPagoActivos();
-
-        $data['titulo'] = 'NetShop | Carrito';
-        echo view('plantillas/header', $data);
-        echo view('plantillas/nav', $dato);
-        echo view('plantillas/carrito', $dato);
-        echo view('plantillas/footer', $dato);
-    }
-
     public function contacto(){
         $categoriaModel = new Categoria_model();
         $dato['categorias'] = $categoriaModel->getCategoriaAll();

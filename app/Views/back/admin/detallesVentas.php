@@ -27,28 +27,21 @@
             ?>        
             <?php foreach($detalles as $detalle): ?>
                 <?php 
-                    $productoEncontrado = null;
-                    foreach($productos as $producto){
-                        if($producto['id_producto'] == $detalle['id_producto']){
-                            $productoEncontrado = $producto;
-                            break;
-                        }
-                    }
-                    $subtotal = $detalle['cantidad'] * $productoEncontrado['precio_vta'];
+                    $subtotal = $detalle['cantidad'] * $detalle['precio'];
                     $acumulado += $subtotal;
                 ?>
                 <div class="row w-100 ms-0 border-top">
                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-3 pb-3 pt-3 border-end border-start d-flex justify-content-center">
-                        <p class="mb-0"><?= isset($productoEncontrado) ? esc($productoEncontrado['nombre']) : 'Producto no encontrado' ?></p>
+                        <p class="mb-0"><?= esc($detalle['nombre']) ?></p>
                     </div>
                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-3 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
-                        <p class="mb-0"><?= isset($productoEncontrado) ? esc($productoEncontrado['descripcion']) : '' ?></p>
+                        <p class="mb-0"><?= esc($detalle['descripcion']) ?></p>
                     </div>
                     <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2 pb-3 pt-3 border-end d-flex justify-content-center">
                         <p class="mb-0"><?= esc($detalle['cantidad']) ?></p>
                     </div>
                     <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2 pb-3 pt-3 border-end d-flex justify-content-center">
-                        <p class="mb-0">$<?= number_format($productoEncontrado['precio_vta'], 2) ?></p>
+                        <p class="mb-0">$<?= number_format($detalle['precio'], 2) ?></p>
                     </div>
                     <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2 pb-3 pt-3 text-center border-end">
                         <p class="mb-0">$<?= number_format($subtotal, 2) ?></p>

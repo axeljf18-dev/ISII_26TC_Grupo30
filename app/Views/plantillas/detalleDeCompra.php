@@ -26,18 +26,15 @@
                     foreach($ventas as $venta): 
                         $subtotal = $venta['cantidad'] * $venta['precio'];
                         $acumulado += $subtotal;
-                        foreach($productos as $producto): 
+                        // foreach($productos as $producto): 
                     ?>
                     <tr>
-                        <?php if($venta['id_producto'] == $producto['id_producto']): ?>
-                            <td class="text-center"><?= esc($producto['nombre']) ?></td>
-                            <td class="text-center"><?= esc($producto['descripcion']) ?></td>
-                            <td class="text-center"><?= esc($venta['cantidad']) ?></td>
-                            <td class="text-center">$<?= number_format($venta['precio'], 2) ?></td>
-                            <td class="text-center">$<?= number_format($subtotal, 2) ?></td>
-                        <?php endif; ?>
+                        <td class="text-center"><?= esc($venta['nombre']) ?></td>
+                        <td class="text-center"><?= esc($venta['descripcion']) ?></td>
+                        <td class="text-center"><?= esc($venta['cantidad']) ?></td>
+                        <td class="text-center">$<?= number_format($venta['precio'], 2) ?></td>
+                        <td class="text-center">$<?= number_format($subtotal, 2) ?></td>
                     </tr>
-                        <?php endforeach; ?>
                     <?php endforeach; ?>
                     <tr>
                         <td colspan="4" class="text-end"><strong>Total</strong></td>

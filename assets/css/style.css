@@ -39,6 +39,12 @@ input, textarea{
     border: none;
     outline: none;
 }
+input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+}
+#ventasLineChart, #ventasBarChart, #ventasPieChart {
+    cursor: pointer;
+}
 
 
 

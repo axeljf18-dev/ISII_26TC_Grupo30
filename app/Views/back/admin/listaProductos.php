@@ -14,7 +14,7 @@
 
 <main class="conteiner__listaDeProductos">
     <div class="mb-1 d-flex justify-content-end">
-        <form class="w-100 d-flex justify-content-end" action="<?php echo base_url('enviar-formProductoQuery'); ?>" method="POST">
+        <form class="w-100 d-flex justify-content-end" action="<?php echo base_url('enviar-formProductoQuery'); ?>" method="GET">
             <div class="w-100 d-flex align-items-center">
                 <input type="search" name="productoQuery" placeholder="Escribe el nombre del producto que quieres buscar..." value="<?= $valorProductoQuery; ?>" class="w-100 p-2 border rounded-start-2">
             </div>
