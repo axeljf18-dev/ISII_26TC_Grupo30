@@ -9,10 +9,9 @@
         <h1 class="text-center mb-3">¿Tenés una Cuenta?</h1>
         <?php if(session()->getFlashdata('msgUser')): ?>
             <div class="text-center mt-2"> 
-                <p class="fs-6 text-danger"><b><?= session()->getFlashdata('msgUser'); ?></b></p>
+                <p class="fs-5 text-white"><b class="p-1 bg-danger bg-opacity-75 rounded-2"><?= session()->getFlashdata('msgUser'); ?></b></p>
             </div> 
         <?php endif; ?>
-
         <?php $validation = \Config\Services::validation() ?>
         <form action="<?php echo base_url('/enviar-login'); ?>" method="POST">
             <?= csrf_field() ?> 
@@ -42,12 +41,22 @@
                 <div class="text-center mt-2">
                     <p class="fs-6 text-danger m-0"><b><?= session()->getFlashdata('msgPassword'); ?></b></p>
                 </div>
-                <?php endif; ?>
+            <?php endif; ?>
+
             <div class="row mt-3">
                 <div class="col-12 d-flex justify-content-center">
                     <a href="<?php echo base_url('registrarse'); ?>" class="text-decoration-none text-dark opacity-75">¿Aún no tenés tu cuenta?</a> 
                 </div>
             </div>
+
+            <!-- Errores de validación -->
+            <?php if($session->getFlashdata('validationErrors')): ?>
+                <div class="mt-2 ms-4">
+                    <p class="fs-6 text-danger ps-3">
+                        <b>• <?= implode('<br>• ', $session->getFlashdata('validationErrors')); ?></b>
+                    </p>
+                </div>
+            <?php endif; ?>
 
             <div class="mt-3 d-flex justify-content-center"> 
                 <input type="submit" value="Ingresar" class="text-white w-25 rounded-2 conteiner__form-div-input-ingresarCancelar">

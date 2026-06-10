@@ -7,132 +7,191 @@
 ?>
 
 <main class="conteiner__listaDeVentas">
-    <div class="mb-1 d-flex justify-content-end">
-        <form class="w-100" action="<?= base_url('enviar-formFechaQuery'); ?>" method="GET">
-            <div class="row">
-                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2 text-center">
-                    <p class="mb-0"><b>Buscar desde: </b></p>
-                    <input type="date" name="fechaInicioQuery" value="<?= $valorFechaInicioQuery; ?>" class="w-75 p-2 border shadow mx-auto d-block" onkeydown="return false">
-                </div>
-                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2 text-center">
-                    <p class="mb-0"><b>Buscar hasta: </b></p>
-                    <input type="date" name="fechaFinQuery" value="<?= $valorFechaFinQuery; ?>" class="w-75 p-2 border shadow mx-auto d-block" onkeydown="return false">
-                </div>
+    <?php if (empty($ventas) && !$boleano): ?>
+        <div class="bg-white mt-5 pt-5 pb-5 border-top">
+            <div class="text-center">
+                <img src="<?= base_url('assets/img/VentasNoRegistradas.png'); ?>" alt="Ventas no registradas" width="140px">
             </div>
-            <div class="w-100 d-flex justify-content-center align-items-center">
-                <button class="w-25 mt-2 mb-3 p-2 border btn btn-primary"><b>Buscar</b></button>
-            </div>
-        </form>
-    </div>
-    <div class="bg-white rounded-2">
-        <h1 class="text-center pt-2">Lista de Ventas</h1>
-        <div class="d-flex justify-content-end pb-2 pe-2">
-            <!-- <a href="#" id="btnImprimirVentas" class="btn btn-secondary text-white rounded-2"><b>Generar PDF</b></a> -->
-            <?php if (!empty($ventasPdf)) : ?>
-                <a href="#" id="btnImprimirVentas" class="btn btn-secondary text-white rounded-2">
-                    <b>Generar PDF</b>
-                </a>
-            <?php endif; ?>
+            <h4 class="text-center ps-4 pe-4"><b>No hay ventas registradas aún</b></h4>
         </div>
-        <div class="listaDeVentas-scroll">
-            <div class="row w-100 ms-0 border-top">
-                <div class="col-4 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
-                    <p class="mb-0"><b>Titular</b></p>
+    <?php elseif (empty($ventas) && $boleano): ?>
+        <div class="mb-1 d-flex justify-content-end">
+            <form class="w-100" action="<?= base_url('enviar-formFechaQuery'); ?>" method="GET">
+                <div class="row">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2 text-center">
+                        <p class="mb-0"><b>Buscar desde: </b></p>
+                        <input type="date" name="fechaInicioQuery" value="<?= $valorFechaInicioQuery; ?>" class="w-75 p-2 border shadow mx-auto d-block" onkeydown="return false">
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2 text-center">
+                        <p class="mb-0"><b>Buscar hasta: </b></p>
+                        <input type="date" name="fechaFinQuery" value="<?= $valorFechaFinQuery; ?>" class="w-75 p-2 border shadow mx-auto d-block" onkeydown="return false">
+                    </div>
                 </div>
-                <div class="col-2 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
-                    <p class="mb-0"><b>Fecha (Tiempo)</b></p>
+                <div class="w-100 d-flex justify-content-center align-items-center">
+                    <button class="w-25 mt-2 mb-3 p-2 border btn btn-primary"><b>Buscar</b></button>
                 </div>
-                <div class="col-3 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
-                    <p class="mb-0"><b>Total ($)</b></p>
-                </div>
-                <div class="col-3 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
-                    <p class="mb-0"><b>Acciones</b></p>
-                </div>
+            </form>
+        </div>
+        <div class="bg-white rounded-2">
+            <h1 class="text-center pt-2">Lista de Ventas</h1>
+            <div class="d-flex justify-content-end pb-2 pe-2">
+                <?php if (!empty($ventasPdf)) : ?>
+                    <a href="#" id="btnImprimirVentas" class="btn btn-secondary text-white rounded-2">
+                        <b>Generar PDF</b>
+                    </a>
+                <?php endif; ?>
             </div>
-            <?php if($boleano == true && $valorFechasIncorrectasDeVentas == false): ?>
+            <div class="listaDeVentas-scroll">
+                <div class="row w-100 ms-0 border-top">
+                    <div class="col-4 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
+                        <p class="mb-0"><b>Titular</b></p>
+                    </div>
+                    <div class="col-2 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
+                        <p class="mb-0"><b>Fecha (Tiempo)</b></p>
+                    </div>
+                    <div class="col-3 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
+                        <p class="mb-0"><b>Total ($)</b></p>
+                    </div>
+                    <div class="col-3 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
+                        <p class="mb-0"><b>Acciones</b></p>
+                    </div>
+                </div>
                 <div class="bg-white pt-5 pb-5 border-top">
                     <div class="text-center">
-                        <img src="<?= base_url('assets/img/VentasNoRegistradas.png'); ?>" alt="Ventas no registrada" width="140px">
+                        <img src="<?= base_url('assets/img/VentasNoRegistradas.png'); ?>" alt="Ventas no registradas" width="140px">
                     </div>
-                    <h4 class="text-center ps-4 pe-4"><b>Ups, aún no hay ventas realizadas</b></h4>
-                </div>
-            <?php elseif($boleano == true && $valorFechasIncorrectasDeVentas == true): ?>
-                <div class="bg-white pt-5 pb-5 border-top">
-                    <div class="text-center">
-                        <img src="<?= base_url('assets/img/VentasNoRegistradas.png'); ?>" alt="Ventas no registrada" width="140px">
-                    </div>
-                    <h4 class="text-center ps-4 pe-4"><b>No se encontraron registros para las fechas especificadas</b></h4>
-                </div>
-            <?php else: ?>
-                <?php foreach($ventas as $venta): ?>
-                    <div class="row w-100 ms-0 border-top">
-                        <div class="col-4 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
-                            <p class="mb-0"><?= $venta['usuario_nombre']; ?></p>
-                        </div>
-                        <div class="col-2 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
-                            <?php 
-                                $fechaObj = new DateTime($venta['fecha']);
-                                $soloFecha = $fechaObj->format('Y-m-d');
-                                $soloHora = $fechaObj->format('H:i:s');
-                            ?>
-                            <p class="mb-0"><?= $soloFecha ?> (<?= $soloHora ?>)</p>
-                        </div>
-                        <div class="col-3 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
-                            <p class="mb-0">$<?= number_format($venta['total_venta'], 2); ?></p>
-                        </div>
-                        <div class="col-3 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
-                            <a href="<?= base_url('mostrarDetalleCompraCliente/' . $venta['id_venta_cabecera']) ?>" class="btn btn-primary text-white">
-                                <b>Detalles</b>
-                            </a>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            <?php endif; ?>
-        </div>
-    </div>
-    <?php if(isset($pager)): ?>
-        <div class="d-flex justify-content-end mt-3">
-            <?= $pager->links('default', 'my_template') ?>
-        </div>
-    <?php endif; ?>
-    <?php if(!empty($ventasPdf)): ?>
-        <div class="row bg-light rounded-2 ps-4 pe-4 d-flex justify-content-center">
-            <div class="col-xl-5 col-lg-5 col-md-12 col-sm-12 bg-white mt-3 mb-3 shadow rounded-2 me-xl-3 me-lg-3">
-                <h4 class="text-center mt-3 mb-3">Resumen estadístico</h4>
-                <ul class="list-unstyled ps-3">
-                    <li><b>Cantidad de ventas:</b> <?= $resumen['cantidadVentas'] ?></li>
-                    <li><b>Cantidad de clientes:</b> <?= $resumen['cantidadClientes'] ?></li>
-                    <li><b>Venta más alta:</b> $<?= number_format($resumen['ventaMax'], 2) ?></li>
-                    <li><b>Venta más baja:</b> $<?= number_format($resumen['ventaMin'], 2) ?></li>
-                    <li><b>Promedio por factura:</b> $<?= number_format($resumen['promedioFactura'], 2) ?></li>
-                    <li><b>Cliente más frecuente:</b> <?= $resumen['clienteFrecuente'] ?></li>
-                    <li><b>Día con mayor facturación:</b> <?= $resumen['diaMayorFacturacion'] ?> ($<?= number_format($resumen['montoDiaMayor'], 2) ?>)</li>
-                    <li><b>Método de pago más usado:</b> <?= $resumen['metodoMasUsado'] ?> (<?= $resumen['cantidadMetodoMasUsado'] ?> veces)</li>
-                    <li><b>Producto más vendido:</b> <?= $resumen['productoMasVendido'] ?> (<?= $resumen['cantidadProductoMasVendido'] ?> ventas)</li>
-                    <li><b>Cliente con mayor facturación:</b> <?= $resumen['clienteMayorFacturacion'] ?> ($<?= number_format($resumen['montoClienteMayor'], 2) ?>)</li>
-                    <li><b>TOTAL:</b> $<?= number_format($resumen['totalVentas'], 2) ?></li>
-                </ul>
-            </div>
-            <!-- Gráficos -->
-            <div class="col-xl-5 col-lg-5 col-md-12 col-sm-12 bg-white mt-3 mb-3 shadow rounded-2 ms-xl-3 ms-lg-3">
-                <h4 class="text-center mt-3 mb-3">Evolución temporal de ventas</h4>
-                <div class="d-flex justify-content-center mt-3 mb-3">
-                    <canvas id="ventasLineChart" style="max-height:400px;"></canvas>
-                </div>
-            </div>
-            <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 bg-white mt-3 mb-3 shadow rounded-2 me-xl-3 me-lg-3">
-                <h4 class="text-center mt-3 mb-3">Ventas por producto</h4>
-                <div class="mt-3 mb-3">
-                    <canvas id="ventasBarChart" style="max-height:400px;"></canvas>
-                </div>
-            </div>
-            <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 bg-white mt-3 mb-3 shadow rounded-2 ms-xl-3 ms-lg-3">
-                <h4 class="text-center mt-3 mb-3">Distribución por cliente frecuente</h4>
-                <div class="d-flex justify-content-center mt-3 mb-3">
-                    <canvas id="ventasPieChart" style="max-height:400px;"></canvas>
+                    <h4 class="text-center ps-4 pe-4"><b>No se encontraron ventas en el rango seleccionado</b></h4>
                 </div>
             </div>
         </div>
+    <?php else: ?>
+        <div class="mb-1 d-flex justify-content-end">
+            <form class="w-100" action="<?= base_url('enviar-formFechaQuery'); ?>" method="GET">
+                <div class="row">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2 text-center">
+                        <p class="mb-0"><b>Buscar desde: </b></p>
+                        <input type="date" name="fechaInicioQuery" value="<?= $valorFechaInicioQuery; ?>" class="w-75 p-2 border shadow mx-auto d-block" onkeydown="return false">
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2 text-center">
+                        <p class="mb-0"><b>Buscar hasta: </b></p>
+                        <input type="date" name="fechaFinQuery" value="<?= $valorFechaFinQuery; ?>" class="w-75 p-2 border shadow mx-auto d-block" onkeydown="return false">
+                    </div>
+                </div>
+                <div class="w-100 d-flex justify-content-center align-items-center">
+                    <button class="w-25 mt-2 mb-3 p-2 border btn btn-primary"><b>Buscar</b></button>
+                </div>
+            </form>
+        </div>
+        <div class="bg-white rounded-2">
+            <h1 class="text-center pt-2">Lista de Ventas</h1>
+            <div class="d-flex justify-content-end pb-2 pe-2">
+                <!-- <a href="#" id="btnImprimirVentas" class="btn btn-secondary text-white rounded-2"><b>Generar PDF</b></a> -->
+                <?php if (!empty($ventasPdf)) : ?>
+                    <a href="#" id="btnImprimirVentas" class="btn btn-secondary text-white rounded-2">
+                        <b>Generar PDF</b>
+                    </a>
+                <?php endif; ?>
+            </div>
+            <div class="listaDeVentas-scroll">
+                <div class="row w-100 ms-0 border-top">
+                    <div class="col-4 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
+                        <p class="mb-0"><b>Titular</b></p>
+                    </div>
+                    <div class="col-2 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
+                        <p class="mb-0"><b>Fecha (Tiempo)</b></p>
+                    </div>
+                    <div class="col-3 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
+                        <p class="mb-0"><b>Total ($)</b></p>
+                    </div>
+                    <div class="col-3 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
+                        <p class="mb-0"><b>Acciones</b></p>
+                    </div>
+                </div>
+                <?php if($boleano == true && $valorFechasIncorrectasDeVentas == false): ?>
+                    <div class="bg-white pt-5 pb-5 border-top">
+                        <div class="text-center">
+                            <img src="<?= base_url('assets/img/VentasNoRegistradas.png'); ?>" alt="Ventas no registrada" width="140px">
+                        </div>
+                        <h4 class="text-center ps-4 pe-4"><b>No se encontraron ventas en el rango seleccionado</b></h4>
+                    </div>
+                <?php elseif($boleano == true && $valorFechasIncorrectasDeVentas == true): ?>
+                    <div class="bg-white pt-5 pb-5 border-top">
+                        <div class="text-center">
+                            <img src="<?= base_url('assets/img/VentasNoRegistradas.png'); ?>" alt="Ventas no registrada" width="140px">
+                        </div>
+                        <h4 class="text-center ps-4 pe-4"><b>No se encontraron ventas en el rango seleccionado</b></h4>
+                    </div>
+                <?php else: ?>
+                    <?php foreach($ventas as $venta): ?>
+                        <div class="row w-100 ms-0 border-top">
+                            <div class="col-4 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
+                                <p class="mb-0"><?= $venta['usuario_nombre']; ?></p>
+                            </div>
+                            <div class="col-2 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
+                                <?php 
+                                    $fechaObj = new DateTime($venta['fecha']);
+                                    $soloFecha = $fechaObj->format('Y-m-d');
+                                    $soloHora = $fechaObj->format('H:i:s');
+                                ?>
+                                <p class="mb-0"><?= $soloFecha ?> (<?= $soloHora ?>)</p>
+                            </div>
+                            <div class="col-3 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
+                                <p class="mb-0">$<?= number_format($venta['total_venta'], 2); ?></p>
+                            </div>
+                            <div class="col-3 pb-3 pt-3 border-end d-flex justify-content-center align-items-center">
+                                <a href="<?= base_url('mostrarDetalleCompraCliente/' . $venta['id_venta_cabecera']) ?>" class="btn btn-primary text-white">
+                                    <b>Detalles</b>
+                                </a>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
+        </div>
+        <?php if(isset($pager)): ?>
+            <div class="d-flex justify-content-end mt-3">
+                <?= $pager->links('default', 'my_template') ?>
+            </div>
+        <?php endif; ?>
+        <?php if(!empty($ventasPdf)): ?>
+            <div class="row bg-light rounded-2 ps-4 pe-4 d-flex justify-content-center">
+                <div class="col-xl-5 col-lg-5 col-md-12 col-sm-12 bg-white mt-3 mb-3 shadow rounded-2 me-xl-3 me-lg-3">
+                    <h4 class="text-center mt-3 mb-3">Resumen estadístico</h4>
+                    <ul class="list-unstyled ps-3">
+                        <li><b>Cantidad de ventas:</b> <?= $resumen['cantidadVentas'] ?></li>
+                        <li><b>Cantidad de clientes:</b> <?= $resumen['cantidadClientes'] ?></li>
+                        <li><b>Venta más alta:</b> $<?= number_format($resumen['ventaMax'], 2) ?></li>
+                        <li><b>Venta más baja:</b> $<?= number_format($resumen['ventaMin'], 2) ?></li>
+                        <li><b>Promedio por factura:</b> $<?= number_format($resumen['promedioFactura'], 2) ?></li>
+                        <li><b>Cliente más frecuente:</b> <?= $resumen['clienteFrecuente'] ?></li>
+                        <li><b>Día con mayor facturación:</b> <?= $resumen['diaMayorFacturacion'] ?> ($<?= number_format($resumen['montoDiaMayor'], 2) ?>)</li>
+                        <li><b>Método de pago más usado:</b> <?= $resumen['metodoMasUsado'] ?> (<?= $resumen['cantidadMetodoMasUsado'] ?> veces)</li>
+                        <li><b>Producto más vendido:</b> <?= $resumen['productoMasVendido'] ?> (<?= $resumen['cantidadProductoMasVendido'] ?> ventas)</li>
+                        <li><b>Cliente con mayor facturación:</b> <?= $resumen['clienteMayorFacturacion'] ?> ($<?= number_format($resumen['montoClienteMayor'], 2) ?>)</li>
+                        <li><b>TOTAL:</b> $<?= number_format($resumen['totalVentas'], 2) ?></li>
+                    </ul>
+                </div>
+                <!-- Gráficos -->
+                <div class="col-xl-5 col-lg-5 col-md-12 col-sm-12 bg-white mt-3 mb-3 shadow rounded-2 ms-xl-3 ms-lg-3">
+                    <h4 class="text-center mt-3 mb-3">Evolución temporal de ventas</h4>
+                    <div class="d-flex justify-content-center mt-3 mb-3">
+                        <canvas id="ventasLineChart" style="max-height:400px;"></canvas>
+                    </div>
+                </div>
+                <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 bg-white mt-3 mb-3 shadow rounded-2 me-xl-3 me-lg-3">
+                    <h4 class="text-center mt-3 mb-3">Ventas por producto</h4>
+                    <div class="mt-3 mb-3">
+                        <canvas id="ventasBarChart" style="max-height:400px;"></canvas>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 bg-white mt-3 mb-3 shadow rounded-2 ms-xl-3 ms-lg-3">
+                    <h4 class="text-center mt-3 mb-3">Distribución por cliente frecuente</h4>
+                    <div class="d-flex justify-content-center mt-3 mb-3">
+                        <canvas id="ventasPieChart" style="max-height:400px;"></canvas>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
     <?php endif; ?>
 </main>
 

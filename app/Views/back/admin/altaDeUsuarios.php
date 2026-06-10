@@ -66,7 +66,7 @@
                     <label for="usuario"><b>Usuario(*)</b></label>      
                 </div>
                 <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
-                    <input type="text" id="usuario" name="usuario" placeholder="Ingrese el nombre de usuario..." value="<?= esc($valorUsuarioUsers); ?>" class="w-100 ps-2 pe-2 pt-1 pb-1 border shadow">
+                    <input type="text" id="usuario" name="usuario" placeholder="Ingrese un nombre de usuario..." value="<?= esc($valorUsuarioUsers); ?>" class="w-100 ps-2 pe-2 pt-1 pb-1 border shadow">
                 </div>
                 <?php if($validation->getError('usuario')) {?> 
                     <div class="text-center mt-2"> 
@@ -131,10 +131,10 @@
                 <?php }?>
 
                 <div class="col-12 mt-2 d-flex justify-content-center">
-                    <label for="numero"><b>Número</b></label>      
+                    <label for="numero"><b>Número de Calle</b></label>      
                 </div>
                 <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
-                    <input type="number" id="numero" name="numero" placeholder="Ingrese el número..." value="<?= esc($valorUsuarioNumero); ?>" class="w-100 ps-2 pe-2 pt-1 pb-1 border shadow">
+                    <input type="number" id="numero" name="numero" placeholder="Ingrese el número de calle..." value="<?= esc($valorUsuarioNumero); ?>" class="w-100 ps-2 pe-2 pt-1 pb-1 border shadow">
                 </div>
                 <?php if($validation->getError('numero')) {?> 
                     <div class="text-center mt-2"> 
@@ -147,14 +147,26 @@
                 </div>
                 <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
                     <select id="localidad" name="localidad" class="opacity-75 w-100 p-2 border shadow" style="cursor: pointer;">
-                        <option value="" disabled selected>Seleccione una localidad | provincia</option>
+                        <option value="" disabled selected>Seleccione una localidad | provincia (Código postal)</option>
                         <?php foreach($localidades as $loc): ?>
-                            <option value="<?= $loc['id_localidad'] ?>" 
+                            <?php 
+                                // Buscar la provincia asociada a la localidad
+                                $provinciaNombre = '';
+                                foreach($provincias as $prov){
+                                    if($prov['id_provincia'] == $loc['id_provincia']){
+                                        $provinciaNombre = $prov['nombre'];
+                                        break;
+                                    }
+                                }
+                            ?>
+                            <option value="<?= $loc['id_localidad'] ?>" data-provincia="<?= $loc['id_provincia'] ?>"
                                 <?= (isset($valorUsuarioLocalidad) && $valorUsuarioLocalidad == $loc['id_localidad']) ? 'selected' : ''; ?>>
-                                <?= esc($loc['localidad_nombre']) ?> | <?= esc($loc['provincia_nombre']) ?> (<?= esc($loc['codigo_postal']) ?>)
+                                <?= esc($loc['nombre']) ?> | <?= esc($provinciaNombre) ?> (<?= esc($loc['codigo_postal']) ?>)
                             </option>
                         <?php endforeach; ?>
                     </select>
+                    <!-- Campo oculto para provincia -->
+                    <input type="hidden" id="provincia" name="provincia" value="">
                 </div>
                 <?php if($validation->getError('localidad')) {?> 
                     <div class="text-center mt-2"> 
@@ -170,3 +182,10 @@
         </form>
     </div>
 </main>
+
+<script>
+    document.getElementById('localidad').addEventListener('change', function(){
+        let provinciaId = this.options[this.selectedIndex].getAttribute('data-provincia');
+        document.getElementById('provincia').value = provinciaId;
+    });
+</script>

@@ -7,11 +7,12 @@ class MetodoPago_model extends Model{
     protected $primaryKey = 'id_metodo_pago';
     protected $allowedFields = ['nombre', 'descripcion', 'estado'];
 
-    public function getMetodoPagoAll() {
-        return $this->findAll();
-    }
-
     public function getMetodosPagoActivos() {
         return $this->where('estado', 'Activo')->findAll();
+    }
+
+    public function validarMetodoPago($idMetodoPago) {
+        $metodo = $this->find($idMetodoPago);
+        return $metodo && $metodo['estado'] === 'Activo';
     }
 }

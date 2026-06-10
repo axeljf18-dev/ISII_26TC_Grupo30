@@ -11,8 +11,8 @@ class Proveedor_model extends Model{
         return $this->findAll();
     }
 
-    public function validarProveedor($id_proveedor){
-        $proveedor = $this->where('id_proveedor', $id_proveedor)->first();
+    public function validarProveedor($idProveedor){
+        $proveedor = $this->where('id_proveedor', $idProveedor)->first();
         return $proveedor !== null;
     }
 }

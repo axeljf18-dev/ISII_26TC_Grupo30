@@ -1427,7 +1427,7 @@ main div div div div div a{
 .conteiner__listaDeVentaDetalleCompraRealizada{
     background-color: #D3D3D3;
 
-    min-height: 81vh;
+    min-height: 101vh;
 
     padding-top: 40px;
     padding-left: 120px;
@@ -1503,4 +1503,46 @@ main div div div div div a{
         flex-wrap: nowrap !important;
         min-width: 600px !important;
     }
+}
+
+
+
+/* Fondo de la vista de confirmación (Admin) */
+.confirmacion__main {
+    background-color: #D3D3D3;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+}
+/* Caja central */
+.confirmacion__card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    max-width: 500px;
+    width: 100%;
+    padding: 20px;
+}
+/* Encabezado */
+.confirmacion__header {
+    font-weight: bold;
+    padding: 12px;
+    border-radius: 6px 6px 0 0;
+    text-align: center;
+}
+/* Texto del cuerpo */
+.confirmacion__body {
+    padding: 20px;
+    font-size: 16px;
+    color: #333;
+    text-align: center;
+}
+/* Botones */
+.confirmacion__footer {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
 }

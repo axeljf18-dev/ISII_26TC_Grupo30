@@ -7,11 +7,12 @@ class Perfil_model extends Model{
     protected $primaryKey = 'id_perfil';
     protected $allowedFields = ['descripcion', 'baja'];
 
-    public function getPerfilAll() {
-        return $this->findAll();
+    public function getPerfilesActivos() {
+        return $this->where('baja', 'NO')->findAll();
     }
 
-    public function getPerfilActivos() {
-        return $this->where('baja', 'NO')->findAll();
+    public function validarPerfil($idPerfil){
+        $perfil = $this->where('id_perfil', $idPerfil)->where('baja', 'NO')->first();
+        return $perfil ? true : false;
     }
 }

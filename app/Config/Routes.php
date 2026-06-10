@@ -31,19 +31,14 @@ $routes->get('/productosMenorPrecioCategoria/(:num)', 'Home::ordenarProductosPor
 $routes->get('/productosMayorPrecioBuscador/(:any)', 'Home::ordenarProductosPorMayorPrecioBuscador/$1', ['filter' => 'adminAuth']);
 $routes->get('/productosMenorPrecioBuscador/(:any)', 'Home::ordenarProductosPorMenorPrecioBuscador/$1', ['filter' => 'adminAuth']);
 
-// // Consulta
-// $routes->get('/consultas', 'Home::consultas', ['filter' => 'adminAuth']);
-// $routes->post('/enviar-formConsulta', 'Consulta_controller::formValidation', ['filter' => 'adminAuth']);
-// $routes->get('/limpiarConsulta', 'Consulta_controller::limpiarDatos', ['filter' => 'adminAuth']);
-
 // Registro y Inicio de sesión
-$routes->get('/registrarse', 'Usuario_controller::registrarse', ['filter' => 'auth']);
-$routes->post('/enviar-form', 'Usuario_controller::formValidation', ['filter' => 'auth']);
-$routes->get('/inicioSesion', 'Login_controller::inicioSesion', ['filter' => 'auth']);
-$routes->post('/enviar-login', 'Login_controller::formValidation', ['filter' => 'auth']);
-$routes->get('/limpiarUsuario', 'Usuario_controller::limpiarDatos', ['filter' => 'auth']);
-$routes->get('/limpiarSesion', 'Login_controller::limpiarDatos', ['filter' => 'auth']);
-$routes->get('/cerrarSesion', 'Login_controller::logeout');
+$routes->get('/registrarse', 'Usuario_controller::mostrarFormularioRegistrarse', ['filter' => 'auth']);
+$routes->post('/enviar-form', 'Usuario_controller::recibirDatosFormularioUsuario', ['filter' => 'auth']);
+$routes->get('/limpiarUsuario', 'Usuario_controller::limpiarDatosFormularioUsuario/registro', ['filter' => 'auth']);
+$routes->get('/inicioSesion', 'Login_controller::mostrarFormularioLogin', ['filter' => 'auth']);
+$routes->post('/enviar-login', 'Login_controller::recibirDatosFormularioLogin', ['filter' => 'auth']);
+$routes->get('/limpiarSesion', 'Login_controller::limpiarDatosFormularioLogin', ['filter' => 'auth']);
+$routes->get('/cerrarSesion', 'Login_controller::cerrarSesion');
 
 // Vista del Carrito
 $routes->get('/carrito', 'Carrito_controller::mostrarCarrito', ['filter' => ['adminAuth', 'carritoAuth']]);
@@ -52,33 +47,30 @@ $routes->get('/borrar-producto/(:any)', 'Carrito_controller::eliminarProducto/$1
 $routes->get('/borrar-carrito', 'Carrito_controller::eliminarCarrito', ['filter' => ['adminAuth', 'carritoAuth']]);
 $routes->get('/suma-carrito/(:any)', 'Carrito_controller::suma/$1', ['filter' => ['adminAuth', 'carritoAuth']]);
 $routes->get('/resta-carrito/(:any)', 'Carrito_controller::resta/$1', ['filter' => ['adminAuth', 'carritoAuth']]);
-// $routes->post('/comprar-carrito', 'VentaCabecera_controller::registrarVenta', ['filter' => ['adminAuth', 'carritoAuth']]);
-$routes->post('/comprar-carrito', 'VentaCabecera_controller::validarVenta', ['filter' => ['adminAuth', 'carritoAuth']]);
+$routes->post('/comprar-carrito', 'VentaCabecera_controller::recibirDatosDeLaVenta', ['filter' => ['adminAuth', 'carritoAuth']]);
 $routes->post('/enviar-formActualizaCarrito', 'Carrito_controller::update', ['filter' => ['adminAuth', 'carritoAuth']]);
 $routes->get('/misCompras', 'VentaCabecera_controller::mostrarMisComprasCliente', ['filter' => ['adminAuth', 'carritoAuth']]);
-
-// $routes->get('/vistaDetalleCompra/(:num)', 'VentaDetalle_controller::verFactura/$1', ['filter' => ['adminAuth', 'carritoAuth']]);
 $routes->get('/vistaDetalleCompra/(:num)', 'VentaDetalle_controller::mostrarDetalleVenta/$1', ['filter' => ['adminAuth', 'carritoAuth']]);
+
 
 
 // VISTA DEL ADMINISTRADOR
 // Vista de Usuarios
-$routes->get('/mostrarListaUsuarios', 'Usuario_controller::listaUsuarios', ['filter' => 'usuarioAuth']);
-$routes->get('/mostrarListaUsuariosDesactivados', 'Usuario_controller::indexDesactivados', ['filter' => 'usuarioAuth']);
-$routes->get('/mostrarListaUsuariosParaActivar', 'Usuario_controller::indexParaActivar', ['filter' => 'usuarioAuth']);
-$routes->get('/mostrarListaUsuariosActualizarEliminar', 'Usuario_controller::indexActualizarEliminar', ['filter' => 'usuarioAuth']);
-$routes->get('/altaDeUsuarios', 'Usuario_controller::crearUsuario', ['filter' => 'usuarioAuth']);
-$routes->post('/enviar-formUsuario', 'Usuario_controller::formValidationUsuario', ['filter' => 'usuarioAuth']);
-$routes->get('/actualizarUsuarios/(:num)', 'Usuario_controller::actualizarUsuario/$1', ['filter' => 'usuarioAuth']);
-$routes->post('/enviar-formUsuarioActualizar', 'Usuario_controller::formValidationUpdate', ['filter' => 'usuarioAuth']);
-$routes->get('/eliminarUsuarios/(:num)', 'Usuario_controller::eliminarUsuario/$1', ['filter' => 'usuarioAuth']);
-$routes->get('/activarUsuarios/(:num)', 'Usuario_controller::activarUsuario/$1', ['filter' => 'usuarioAuth']);
-$routes->get('/limpiarUsuarioUser', 'Usuario_controller::limpiarDatosUser', ['filter' => 'usuarioAuth']);
-$routes->get('/limpiarUsuarioUserAct/(:num)', 'Usuario_controller::limpiarDatosUserAct/$1', ['filter' => 'usuarioAuth']);
-$routes->post('/enviar-formUsuarioQuery', 'Usuario_controller::buscadorUsuarios', ['filter' => 'usuarioAuth']);
-$routes->post('/enviar-formUsuarioDesactivadoQuery', 'Usuario_controller::buscadorUsuariosDesactivados', ['filter' => 'usuarioAuth']);
-$routes->post('/enviar-formUsuarioActQuery', 'Usuario_controller::buscadorUsuariosAct', ['filter' => 'usuarioAuth']);
-$routes->post('/enviar-formUsuarioParaActivarQuery', 'Usuario_controller::buscadorUsuariosParaActivar', ['filter' => 'usuarioAuth']);
+$routes->get('/mostrarListaUsuarios', 'Usuario_controller::listarUsuarios/activos', ['filter' => 'usuarioAuth']);
+$routes->get('/mostrarListaUsuariosDesactivados', 'Usuario_controller::listarUsuarios/desactivados', ['filter' => 'usuarioAuth']);
+$routes->get('/mostrarListaUsuariosActualizarEliminar', 'Usuario_controller::listarUsuarios/actualizarEliminar', ['filter' => 'usuarioAuth']);
+$routes->get('/altaDeUsuarios', 'Usuario_controller::mostrarFormularioCrearUsuario', ['filter' => 'usuarioAuth']);
+$routes->post('/enviar-formUsuario', 'Usuario_controller::recibirDatosFormularioUsuario', ['filter' => 'usuarioAuth']);
+$routes->get('/actualizarUsuarios/(:num)', 'Usuario_controller::mostrarFormularioActualizarUsuario/$1', ['filter' => 'usuarioAuth']);
+$routes->post('/enviar-formUsuarioActualizar', 'Usuario_controller::recibirDatosFormularioUsuario', ['filter' => 'usuarioAuth']);
+$routes->get('/mostrarMensajeConfirmacionUsuario/(:num)/(:any)', 'Usuario_controller::mostrarMensajeConfirmacionUsuario/$1/$2', ['filter' => 'usuarioAuth']);
+$routes->get('/eliminarUsuarios/(:num)', 'Usuario_controller::darDeBajaUsuario/$1', ['filter' => 'usuarioAuth']);
+$routes->get('/activarUsuarios/(:num)', 'Usuario_controller::habilitarUsuario/$1', ['filter' => 'usuarioAuth']);
+$routes->get('/limpiarUsuarioUser', 'Usuario_controller::limpiarDatosFormularioUsuario/altaUsuario', ['filter' => 'usuarioAuth']);
+$routes->get('/limpiarUsuarioUserAct/(:num)', 'Usuario_controller::limpiarDatosFormularioUsuario/actualizarUsuario/$1', ['filter' => 'usuarioAuth']);
+$routes->get('/enviar-formUsuarioQuery', 'Usuario_controller::buscarUsuarios/activos', ['filter' => 'usuarioAuth']);
+$routes->get('/enviar-formUsuarioDesactivadoQuery', 'Usuario_controller::buscarUsuarios/desactivados', ['filter' => 'usuarioAuth']);
+$routes->get('/enviar-formUsuarioActQuery', 'Usuario_controller::buscarUsuarios/actualizarEliminar', ['filter' => 'usuarioAuth']);
 
 // Vista de Productos
 $routes->get('/mostrarListaProductos', 'Producto_controller::listarProductos/activos', ['filter' => 'usuarioAuth']);
@@ -88,6 +80,7 @@ $routes->get('/altaDeProductos', 'Producto_controller::mostrarFormularioCrearPro
 $routes->post('/enviar-formProducto', 'Producto_controller::recibirDatosFormularioProducto', ['filter' => 'usuarioAuth']);
 $routes->get('/actualizarProductos/(:num)', 'Producto_controller::mostrarFormularioActualizarProducto/$1', ['filter' => 'usuarioAuth']);
 $routes->post('/enviar-formProductoActualizar', 'Producto_controller::recibirDatosFormularioProducto', ['filter' => 'usuarioAuth']);
+$routes->get('/mostrarMensajeConfirmacionProducto/(:num)/(:any)', 'Producto_controller::mostrarMensajeConfirmacion/$1/$2', ['filter' => 'usuarioAuth']);
 $routes->get('/eliminarProductos/(:num)', 'Producto_controller::desactivarProducto/$1', ['filter' => 'usuarioAuth']);
 $routes->get('/activarProductos/(:num)', 'Producto_controller::reactivarProducto/$1', ['filter' => 'usuarioAuth']);
 $routes->get('/limpiarProducto', 'Producto_controller::limpiarDatosFormularioProducto', ['filter' => 'usuarioAuth']);
@@ -96,60 +89,8 @@ $routes->get('/enviar-formProductoQuery', 'Producto_controller::buscarProductos/
 $routes->get('/enviar-formProductoDesactivadoQuery', 'Producto_controller::buscarProductos/desactivados', ['filter' => 'usuarioAuth']);
 $routes->get('/enviar-formProductoActQuery', 'Producto_controller::buscarProductos/actualizarEliminar', ['filter' => 'usuarioAuth']);
 
-// // Vista de Perfiles
-// $routes->get('/mostrarListaPerfiles', 'Perfil_controller::index', ['filter' => 'usuarioAuth']);
-// $routes->get('/mostrarListaPerfilesDesactivados', 'Perfil_controller::indexDesactivados', ['filter' => 'usuarioAuth']);
-// $routes->get('/mostrarListaPerfilesParaActivar', 'Perfil_controller::indexParaActivar', ['filter' => 'usuarioAuth']);
-// $routes->get('/mostrarListaPerfilesActualizarEliminar', 'Perfil_controller::indexActualizarEliminar', ['filter' => 'usuarioAuth']);
-// $routes->get('/altaDePerfiles', 'Perfil_controller::crearPerfil', ['filter' => 'usuarioAuth']);
-// $routes->post('/enviar-formPerfil', 'Perfil_controller::formValidation', ['filter' => 'usuarioAuth']);
-// $routes->get('/actualizarPerfiles/(:num)', 'Perfil_controller::actualizarPerfil/$1', ['filter' => 'usuarioAuth']);
-// $routes->post('/enviar-formPerfilActualizar', 'Perfil_controller::formValidationUpdate', ['filter' => 'usuarioAuth']);
-// $routes->get('/eliminarPerfiles/(:num)', 'Perfil_controller::eliminarPerfil/$1', ['filter' => 'usuarioAuth']);
-// $routes->get('/activarPerfiles/(:num)', 'Perfil_controller::activarPerfil/$1', ['filter' => 'usuarioAuth']);
-// $routes->get('/limpiarPerfil', 'Perfil_controller::limpiarDatos', ['filter' => 'usuarioAuth']);
-// $routes->get('/limpiarPerfilAct/(:num)', 'Perfil_controller::limpiarDatosAct/$1', ['filter' => 'usuarioAuth']);
-
-// // Vista de Categorias
-// $routes->get('/mostrarListaCategorias', 'Categoria_controller::index', ['filter' => 'usuarioAuth']);
-// $routes->get('/mostrarListaCategoriasDesactivados', 'Categoria_controller::indexDesactivados', ['filter' => 'usuarioAuth']);
-// $routes->get('/mostrarListaCategoriasParaActivar', 'Categoria_controller::indexParaActivar', ['filter' => 'usuarioAuth']);
-// $routes->get('/mostrarListaCategoriasActualizarEliminar', 'Categoria_controller::indexActualizarEliminar', ['filter' => 'usuarioAuth']);
-// $routes->get('/altaDeCategorias', 'Categoria_controller::crearCategoria', ['filter' => 'usuarioAuth']);
-// $routes->post('/enviar-formCategoria', 'Categoria_controller::formValidation', ['filter' => 'usuarioAuth']);
-// $routes->get('/actualizarCategorias/(:num)', 'Categoria_controller::actualizarCategoria/$1', ['filter' => 'usuarioAuth']);
-// $routes->post('/enviar-formCategoriaActualizar', 'Categoria_controller::formValidationUpdate', ['filter' => 'usuarioAuth']);
-// $routes->get('/eliminarCategorias/(:num)', 'Categoria_controller::eliminarCategoria/$1', ['filter' => 'usuarioAuth']);
-// $routes->get('/activarCategorias/(:num)', 'Categoria_controller::activarCategoria/$1', ['filter' => 'usuarioAuth']);
-// $routes->get('/limpiarCategoria', 'Categoria_controller::limpiarDatos', ['filter' => 'usuarioAuth']);
-// $routes->get('/limpiarCategoriaAct/(:num)', 'Categoria_controller::limpiarDatosAct/$1', ['filter' => 'usuarioAuth']);
-
-// // Vista de Marcas
-// $routes->get('/mostrarListaMarcas', 'Marca_controller::index', ['filter' => 'usuarioAuth']);
-// $routes->get('/mostrarListaMarcasDesactivados', 'Marca_controller::indexDesactivados', ['filter' => 'usuarioAuth']);
-// $routes->get('/mostrarListaMarcasParaActivar', 'Marca_controller::indexParaActivar', ['filter' => 'usuarioAuth']);
-// $routes->get('/mostrarListaMarcasActualizarEliminar', 'Marca_controller::indexActualizarEliminar', ['filter' => 'usuarioAuth']);
-// $routes->get('/altaDeMarcas', 'Marca_controller::crearMarca', ['filter' => 'usuarioAuth']);
-// $routes->post('/enviar-formMarca', 'Marca_controller::formValidation', ['filter' => 'usuarioAuth']);
-// $routes->get('/actualizarMarcas/(:num)', 'Marca_controller::actualizarMarca/$1', ['filter' => 'usuarioAuth']);
-// $routes->post('/enviar-formMarcaActualizar', 'Marca_controller::formValidationUpdate', ['filter' => 'usuarioAuth']);
-// $routes->get('/eliminarMarcas/(:num)', 'Marca_controller::eliminarMarca/$1', ['filter' => 'usuarioAuth']);
-// $routes->get('/activarMarcas/(:num)', 'Marca_controller::activarMarca/$1', ['filter' => 'usuarioAuth']);
-// $routes->get('/limpiarMarca', 'Marca_controller::limpiarDatos', ['filter' => 'usuarioAuth']);
-// $routes->get('/limpiarMarcaAct/(:num)', 'Marca_controller::limpiarDatosAct/$1', ['filter' => 'usuarioAuth']);
-
 // Vista de Ventas
 $routes->get('/mostrarListaVentas', 'VentaCabecera_controller::mostrarVentasAdmin', ['filter' => 'usuarioAuth']);
-
-// $routes->get('/mostrarDetalleCompraCliente/(:num)', 'VentaDetalle_controller::indexDetalleCompra/$1', ['filter' => 'usuarioAuth']);
 $routes->get('/mostrarDetalleCompraCliente/(:num)', 'VentaDetalle_controller::mostrarDetalleVenta/$1', ['filter' => 'usuarioAuth']);
-
 $routes->get('/enviar-formFechaQuery', 'VentaCabecera_controller::mostrarVentasPorFechasAdmin', ['filter' => 'usuarioAuth']);
 $routes->get('/enviar-formFechaQuery20', 'VentaCabecera_controller::mostrarComprasPorFechasCliente', ['filter' => ['adminAuth', 'carritoAuth']]);
-
-
-// // Vista de Consultas
-// $routes->get('/mostrarListaConsultas', 'Consulta_controller::index', ['filter' => 'usuarioAuth']);
-// $routes->get('/mostrarListaConsultasDesactivadas', 'Consulta_controller::indexDesactivadas', ['filter' => 'usuarioAuth']);
-// $routes->get('/marcarConsulta/(:num)', 'Consulta_controller::marcarConsulta/$1', ['filter' => 'usuarioAuth']);
-// $routes->get('/eliminarConsulta/(:num)', 'Consulta_controller::eliminarConsulta/$1', ['filter' => 'usuarioAuth']);

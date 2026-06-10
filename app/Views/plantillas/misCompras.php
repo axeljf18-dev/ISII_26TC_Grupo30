@@ -18,7 +18,7 @@
     <?php elseif(empty($ventas) && $valorFechasIncorrectas == true): ?>
         <div class="row bg-light rounded-2 w-100 pt-5 pb-5">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                <p class="fs-5 text-center"><b>No se encontraron registros para las fechas especificadas</b></p>
+                <p class="fs-5 text-center"><b>No se encontraron compras registradas en el rango seleccionado</b></p>
             </div>
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mt-2 d-flex justify-content-center align-items-center">
                 <a href="<?php echo base_url('misCompras'); ?>" class="text-white text-decoration-none rounded-2 me-2 conteiner__div-boton-carrito"><b>Ir a Mis Compras</b></a>
@@ -57,29 +57,25 @@
                     <tbody>
                         <?php $numero = 0; ?>
                         <?php foreach($ventas as $venta): ?>
-                            <?php foreach($usuarios as $usuario): ?>
-                                <?php if($usuario['id_usuario'] == $venta['id_usuario']): ?>
-                                <tr>
-                                    <td class="text-center"><?= $usuario['apellido'] ?>, <?= $usuario['nombre'] ?></td>
-                                    <td class="text-center">
-                                        <?php 
-                                            $fechaObj = new DateTime($venta['fecha']);
-                                            $soloFecha = $fechaObj->format('Y-m-d');
-                                            $soloHora = $fechaObj->format('H:i:s');
-                                        ?>
-                                        <?= $soloFecha ?> (<?= $soloHora ?>)
-                                    </td>
-                                    <td class="text-center">$<?= number_format($venta['total_venta'], 2) ?></td>
-                                    <td class="text-center">
-                                        <div class="text-center">
-                                            <a href="<?= base_url('vistaDetalleCompra/' . $venta['id_venta_cabecera']) ?>" class="text-decoration-none">
-                                                <b class="text-white p-1 bg-opacity-75 rounded-2">Detalles</b>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <?php endif; ?>
-                            <?php endforeach; ?>
+                            <tr>
+                                <td class="text-center"><?= $venta['apellido'] ?>, <?= $venta['nombre'] ?></td>
+                                <td class="text-center">
+                                    <?php 
+                                        $fechaObj = new DateTime($venta['fecha']);
+                                        $soloFecha = $fechaObj->format('Y-m-d');
+                                        $soloHora = $fechaObj->format('H:i:s');
+                                    ?>
+                                    <?= $soloFecha ?> (<?= $soloHora ?>)
+                                </td>
+                                <td class="text-center">$<?= number_format($venta['total_venta'], 2) ?></td>
+                                <td class="text-center">
+                                    <div class="text-center">
+                                        <a href="<?= base_url('vistaDetalleCompra/' . $venta['id_venta_cabecera']) ?>" class="text-decoration-none">
+                                            <b class="text-white p-1 bg-opacity-75 rounded-2">Detalles</b>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>

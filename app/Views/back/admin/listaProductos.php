@@ -56,7 +56,8 @@
                     <div class="text-center">
                         <img src="<?= base_url('assets/img/Producto no disponible.png'); ?>" alt="Producto no agregado" width="140px">
                     </div>
-                    <h4 class="text-center ps-4 pe-4"><b>Ups, parece que no hay productos registrados</b></h4>
+                    <h4 class="text-center ps-4 pe-4"><b>No encontramos coincidencias con tu búsqueda</b></h4>
+                    <p class="text-center opacity-75 ps-4 pe-4">¿Quizás escribiste el nombre del producto de manera incorrecta? Intenta nuevamente</p>
                 </div>
             <?php else: ?>
                 <?php foreach($productos as $producto): ?>

@@ -14,9 +14,9 @@ class Home extends BaseController
         $productoModel = new Producto_model();
         $data['productos'] = $productoModel->getProductosConMarcaYCategoria();
         $categoriaModel = new Categoria_model();
-        $data['categorias'] = $categoriaModel->getCategoriaAll();
+        $data['categorias'] = $categoriaModel->getCategoriasActivas();
         $marcaModel = new Marca_model();
-        $data['marcas'] = $marcaModel->getMarcaAll();
+        $data['marcas'] = $marcaModel->getMarcasActivas();
         
         $data['titulo'] = 'NetShop | Principal';
         echo view('plantillas/header', $data);
@@ -30,9 +30,9 @@ class Home extends BaseController
         $session = session();
         $query = $this->request->getVar('query'); 
         $categoriaModel = new Categoria_model();
-        $data['categorias'] = $categoriaModel->getCategoriaAll();
+        $data['categorias'] = $categoriaModel->getCategoriasActivas();
         $marcaModel = new Marca_model();
-        $data['marcas'] = $marcaModel->getMarcaAll();
+        $data['marcas'] = $marcaModel->getMarcasActivas();
         $productoModel = new Producto_model();
         $data['productosTotal'] = $productoModel->getProductosConMarcaYCategoria();
         $productoModel = new Producto_model();
@@ -76,9 +76,9 @@ class Home extends BaseController
         $productosModel = new Producto_model();
         $data['productosTotal'] = $productosModel->getProductosConMarcaYCategoria();
         $categoriaModel = new Categoria_model();
-        $data['categorias'] = $categoriaModel->getCategoriaAll();
+        $data['categorias'] = $categoriaModel->getCategoriasActivas();
         $marcaModel = new Marca_model();
-        $data['marcas'] = $marcaModel->getMarcaAll();
+        $data['marcas'] = $marcaModel->getMarcasActivas();
         $productoModel = new Producto_model();
 
         if (is_numeric($precioMin) && is_numeric($precioMax)) {
@@ -104,9 +104,9 @@ class Home extends BaseController
         $productosModel = new Producto_model();
         $data['productosTotal'] = $productosModel->getProductosConMarcaYCategoria();
         $categoriaModel = new Categoria_model();
-        $data['categorias'] = $categoriaModel->getCategoriaAll();
+        $data['categorias'] = $categoriaModel->getCategoriasActivas();
         $marcaModel = new Marca_model();
-        $data['marcas'] = $marcaModel->getMarcaAll();
+        $data['marcas'] = $marcaModel->getMarcasActivas();
 
         $productoModel = new Producto_model();
         $data['productos'] = $productoModel
@@ -127,9 +127,9 @@ class Home extends BaseController
         $productosModel = new Producto_model();
         $data['productosTotal'] = $productosModel->getProductosConMarcaYCategoria();
         $categoriaModel = new Categoria_model();
-        $data['categorias'] = $categoriaModel->getCategoriaAll(); 
+        $data['categorias'] = $categoriaModel->getCategoriasActivas(); 
         $marcaModel = new Marca_model();
-        $data['marcas'] = $marcaModel->getMarcaAll();
+        $data['marcas'] = $marcaModel->getMarcasActivas();
 
         $productoModel = new Producto_model();
         $data['productos'] = $productoModel
@@ -150,9 +150,9 @@ class Home extends BaseController
         $productoModel = new Producto_model();
         $data['productos'] = $productoModel->getProductosConMarcaYCategoria();
         $categoriaModel = new Categoria_model();
-        $data['categorias'] = $categoriaModel->getCategoriaAll();
+        $data['categorias'] = $categoriaModel->getCategoriasActivas();
         $marcaModel = new Marca_model();
-        $data['marcas'] = $marcaModel->getMarcaAll();
+        $data['marcas'] = $marcaModel->getMarcasActivas();
 
         $this->mostrarVistaProductos($data, 'plantillas/productos');
     }
@@ -172,9 +172,9 @@ class Home extends BaseController
         $productosModel = new Producto_model();
         $data['productosTotal'] = $productosModel->getProductosConMarcaYCategoria();
         $categoriaModel = new Categoria_model();
-        $data['categorias'] = $categoriaModel->getCategoriaAll();
+        $data['categorias'] = $categoriaModel->getCategoriasActivas();
         $marcaModel = new Marca_model();
-        $data['marcas'] = $marcaModel->getMarcaAll();
+        $data['marcas'] = $marcaModel->getMarcasActivas();
         $productoModel = new Producto_model();
 
         if (is_numeric($precioMin) && is_numeric($precioMax)) {
@@ -197,9 +197,9 @@ class Home extends BaseController
 
     public function ordenarProductosPorMayorPrecioProductos(){
         $categoriaModel = new Categoria_model();
-        $data['categorias'] = $categoriaModel->getCategoriaAll();
+        $data['categorias'] = $categoriaModel->getCategoriasActivas();
         $marcaModel = new Marca_model();
-        $data['marcas'] = $marcaModel->getMarcaAll();
+        $data['marcas'] = $marcaModel->getMarcasActivas();
         $productoModel = new Producto_model();
 
         $data['productos'] = $productoModel
@@ -212,9 +212,9 @@ class Home extends BaseController
 
     public function ordenarProductosPorMenorPrecioProductos(){
         $categoriaModel = new Categoria_model();
-        $data['categorias'] = $categoriaModel->getCategoriaAll();
+        $data['categorias'] = $categoriaModel->getCategoriasActivas();
         $marcaModel = new Marca_model();
-        $data['marcas'] = $marcaModel->getMarcaAll();
+        $data['marcas'] = $marcaModel->getMarcasActivas();
         $productoModel = new Producto_model();
 
         $data['productos'] = $productoModel
@@ -225,15 +225,15 @@ class Home extends BaseController
         $this->mostrarVistaProductos($data, 'plantillas/productosOrdenados');
     }
 
-    public function listarProductosPorMarca($id){
+    public function listarProductosPorMarca($idMarca){
         $productosModel = new Producto_model();
         $data['productosTotal'] = $productosModel->getProductosConMarcaYCategoria();
         $categoriaModel = new Categoria_model();
-        $data['categorias'] = $categoriaModel->getCategoriaAll();
+        $data['categorias'] = $categoriaModel->getCategoriasActivas();
         $marcaModel = new Marca_model();
-        $data['marcas'] = $marcaModel->getMarcaAll();
+        $data['marcas'] = $marcaModel->getMarcasActivas();
         $marcaModel = new Marca_model();
-        $data['marca'] = $marcaModel->find($id);
+        $data['marca'] = $marcaModel->find($idMarca);
         $productosModel = new Producto_model();
         $data['productos'] = $productosModel->getProductosConMarcaYCategoria();
 
@@ -246,9 +246,9 @@ class Home extends BaseController
         $productosModel = new Producto_model();
         $data['productosTotal'] = $productosModel->getProductosConMarcaYCategoria();
         $categoriaModel = new Categoria_model();
-        $data['categorias'] = $categoriaModel->getCategoriaAll();
+        $data['categorias'] = $categoriaModel->getCategoriasActivas();
         $marcaModel = new Marca_model();
-        $data['marcas'] = $marcaModel->getMarcaAll();
+        $data['marcas'] = $marcaModel->getMarcasActivas();
         $marcaModel = new Marca_model();
         $data['marca'] = $marcaModel->find($idMarca); 
         $productoModel = new Producto_model();
@@ -275,9 +275,9 @@ class Home extends BaseController
         $productosModel = new Producto_model();
         $data['productosTotal'] = $productosModel->getProductosConMarcaYCategoria();
         $categoriaModel = new Categoria_model();
-        $data['categorias'] = $categoriaModel->getCategoriaAll();
+        $data['categorias'] = $categoriaModel->getCategoriasActivas();
         $marcaModel = new Marca_model();
-        $data['marcas'] = $marcaModel->getMarcaAll();
+        $data['marcas'] = $marcaModel->getMarcasActivas();
         $marcaModel = new Marca_model();
         $data['marca'] = $marcaModel->find($idMarca);
 
@@ -299,9 +299,9 @@ class Home extends BaseController
         $productosModel = new Producto_model();
         $data['productosTotal'] = $productosModel->getProductosConMarcaYCategoria();
         $categoriaModel = new Categoria_model();
-        $data['categorias'] = $categoriaModel->getCategoriaAll();
+        $data['categorias'] = $categoriaModel->getCategoriasActivas();
         $marcaModel = new Marca_model();
-        $data['marcas'] = $marcaModel->getMarcaAll();
+        $data['marcas'] = $marcaModel->getMarcasActivas();
         $marcaModel = new Marca_model();
         $data['marca'] = $marcaModel->find($idMarca);
 
@@ -319,15 +319,15 @@ class Home extends BaseController
         $this->mostrarVistaProductos($data, 'plantillas/productosMarca');
     }
 
-    public function listarProductosPorCategoria($id){
+    public function listarProductosPorCategoria($idCategoria){
         $productoModel = new Producto_model();
         $dato['productosTotal'] = $productoModel->getProductosConMarcaYCategoria();
         $categoriaModel = new Categoria_model();
-        $dato['categorias'] = $categoriaModel->getCategoriaAll();
+        $dato['categorias'] = $categoriaModel->getCategoriasActivas();
         $categoriaModel = new Categoria_model();
-        $dato['categoria'] = $categoriaModel->find($id);
+        $dato['categoria'] = $categoriaModel->find($idCategoria);
         $marcaModel = new Marca_model();
-        $dato['marcas'] = $marcaModel->getMarcaAll();
+        $dato['marcas'] = $marcaModel->getMarcasActivas();
         $productosModel = new Producto_model();
         $dato['productos'] = $productosModel->getProductosConMarcaYCategoria();
 
@@ -344,11 +344,11 @@ class Home extends BaseController
         $productosModel = new Producto_model();
         $data['productosTotal'] = $productosModel->getProductosConMarcaYCategoria();
         $categoriaModel = new Categoria_model();
-        $data['categorias'] = $categoriaModel->getCategoriaAll();
+        $data['categorias'] = $categoriaModel->getCategoriasActivas();
         $categoriaModel = new Categoria_model();
         $data['categoria'] = $categoriaModel->find($idCategoria); 
         $marcaModel = new Marca_model();
-        $data['marcas'] = $marcaModel->getMarcaAll();
+        $data['marcas'] = $marcaModel->getMarcasActivas();
         $productoModel = new Producto_model();
 
         if (is_numeric($precioMin) && is_numeric($precioMax)) {
@@ -373,11 +373,11 @@ class Home extends BaseController
         $productosModel = new Producto_model();
         $data['productosTotal'] = $productosModel->getProductosConMarcaYCategoria();
         $categoriaModel = new Categoria_model();
-        $data['categorias'] = $categoriaModel->getCategoriaAll();
+        $data['categorias'] = $categoriaModel->getCategoriasActivas();
         $categoriaModel = new Categoria_model();
         $data['categoria'] = $categoriaModel->find($idCategoria); 
         $marcaModel = new Marca_model();
-        $data['marcas'] = $marcaModel->getMarcaAll();
+        $data['marcas'] = $marcaModel->getMarcasActivas();
 
         $productoModel = new Producto_model();
         $data['productos'] = $productoModel->select('producto.*, marca.activo as activo_marca, categoria.activo as activo_categoria, categoria.descripcion as categoria_descripcion')
@@ -397,11 +397,11 @@ class Home extends BaseController
         $productosModel = new Producto_model();
         $data['productosTotal'] = $productosModel->getProductosConMarcaYCategoria();
         $categoriaModel = new Categoria_model();
-        $data['categorias'] = $categoriaModel->getCategoriaAll();
+        $data['categorias'] = $categoriaModel->getCategoriasActivas();
         $categoriaModel = new Categoria_model();
         $data['categoria'] = $categoriaModel->find($idCategoria); 
         $marcaModel = new Marca_model();
-        $data['marcas'] = $marcaModel->getMarcaAll();
+        $data['marcas'] = $marcaModel->getMarcasActivas();
 
         $productoModel = new Producto_model();
         $data['productos'] = $productoModel->select('producto.*, marca.activo as activo_marca, categoria.activo as activo_categoria, categoria.descripcion as categoria_descripcion')
@@ -419,9 +419,9 @@ class Home extends BaseController
 
     public function ayuda(){
         $categoriaModel = new Categoria_model();
-        $dato['categorias'] = $categoriaModel->getCategoriaAll();
+        $dato['categorias'] = $categoriaModel->getCategoriasActivas();
         $marcaModel = new Marca_model();
-        $dato['marcas'] = $marcaModel->getMarcaAll();
+        $dato['marcas'] = $marcaModel->getMarcasActivas();
 
         $data['titulo'] = 'NetShop | Ayuda';
         echo view('plantillas/header', $data);
@@ -432,9 +432,9 @@ class Home extends BaseController
 
     public function contacto(){
         $categoriaModel = new Categoria_model();
-        $dato['categorias'] = $categoriaModel->getCategoriaAll();
+        $dato['categorias'] = $categoriaModel->getCategoriasActivas();
         $marcaModel = new Marca_model();
-        $dato['marcas'] = $marcaModel->getMarcaAll();
+        $dato['marcas'] = $marcaModel->getMarcasActivas();
 
         $data['titulo'] = 'NetShop | Contacto';
         echo view('plantillas/header', $data);
@@ -445,9 +445,9 @@ class Home extends BaseController
 
     public function consultas(){
         $categoriaModel = new Categoria_model();
-        $dato['categorias'] = $categoriaModel->getCategoriaAll();
+        $dato['categorias'] = $categoriaModel->getCategoriasActivas();
         $marcaModel = new Marca_model();
-        $dato['marcas'] = $marcaModel->getMarcaAll();
+        $dato['marcas'] = $marcaModel->getMarcasActivas();
 
         $data['titulo'] = 'NetShop | Consultas';
         echo view('plantillas/header', $data);
@@ -458,9 +458,9 @@ class Home extends BaseController
 
     public function quienesSomos(){
         $categoriaModel = new Categoria_model();
-        $dato['categorias'] = $categoriaModel->getCategoriaAll();
+        $dato['categorias'] = $categoriaModel->getCategoriasActivas();
         $marcaModel = new Marca_model();
-        $dato['marcas'] = $marcaModel->getMarcaAll();
+        $dato['marcas'] = $marcaModel->getMarcasActivas();
 
         $data['titulo'] = 'NetShop | Quienes Somos';
         echo view('plantillas/header', $data);
@@ -471,9 +471,9 @@ class Home extends BaseController
 
     public function comercializacion(){
         $categoriaModel = new Categoria_model();
-        $dato['categorias'] = $categoriaModel->getCategoriaAll();
+        $dato['categorias'] = $categoriaModel->getCategoriasActivas();
         $marcaModel = new Marca_model();
-        $dato['marcas'] = $marcaModel->getMarcaAll();
+        $dato['marcas'] = $marcaModel->getMarcasActivas();
 
         $data['titulo'] = 'NetShop | Comercializacion';
         echo view('plantillas/header', $data);
@@ -484,9 +484,9 @@ class Home extends BaseController
 
     public function terminosUsos(){
         $categoriaModel = new Categoria_model();
-        $dato['categorias'] = $categoriaModel->getCategoriaAll();
+        $dato['categorias'] = $categoriaModel->getCategoriasActivas();
         $marcaModel = new Marca_model();
-        $dato['marcas'] = $marcaModel->getMarcaAll();
+        $dato['marcas'] = $marcaModel->getMarcasActivas();
 
         $data['titulo'] = 'NetShop | Terminos y Uso';
         echo view('plantillas/header', $data);

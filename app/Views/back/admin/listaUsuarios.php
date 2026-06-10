@@ -14,7 +14,7 @@
 
 <main class="conteiner__listaDeUsuarios">
     <div class="mb-1 d-flex justify-content-end">
-        <form class="w-100 d-flex justify-content-end" action="<?php echo base_url('enviar-formUsuarioQuery'); ?>" method="POST">
+        <form class="w-100 d-flex justify-content-end" action="<?php echo base_url('enviar-formUsuarioQuery'); ?>" method="GET">
             <div class="w-100 d-flex align-items-center">
                 <input type="search" name="usuarioQuery" placeholder="Escribe el nombre del usuario que quieres buscar..." value="<?= $valorUsuarioQuery; ?>" class="w-100 p-2 border rounded-start-2">
             </div>
@@ -50,7 +50,8 @@
                     <div class="text-center">
                         <img src="<?= base_url('assets/img/Perfil no agregado.png'); ?>" alt="Usuario no agregado" width="140px">
                     </div>
-                    <h4 class="text-center ps-4 pe-4"><b>Ups, parece que no hay usuarios registrados</b></h4>
+                    <h4 class="text-center ps-4 pe-4"><b>No encontramos coincidencias con tu búsqueda</b></h4>
+                    <p class="text-center opacity-75 ps-4 pe-4">¿Quizás escribiste el nombre del usuario de manera incorrecta? Intenta nuevamente</p>
                 </div>
             <?php else: ?>
                 <?php foreach($usuarios as $usuario): ?>

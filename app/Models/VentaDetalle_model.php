@@ -7,20 +7,17 @@ class VentaDetalle_model extends Model{
     protected $primaryKey = 'id_venta_detalle';
     protected $allowedFields = ['id_venta_cabecera', 'id_producto', 'cantidad', 'precio'];
 
-    public function getVentasDetalleAll() {
-        return $this->findAll();
+    public function getBuscarDetalles($idVenta){
+        return $this->select('venta_detalle.*, producto.nombre, producto.descripcion')->join('producto', 'producto.id_producto = venta_detalle.id_producto')->where('venta_detalle.id_venta_cabecera', $idVenta)->findAll();
     }
 
-    // public function getDetalles($ventaId) {
-    //     return $this->where('id_venta_cabecera', $ventaId)->findAll();
-    // }
-
-    // public function getDetalles($ventaId){
-    //     return $this->select('venta_detalle.*, producto.nombre, producto.descripcion, producto.precio_vta')->join('producto', 'producto.id_producto = venta_detalle.id_producto')->where('venta_detalle.id_venta_cabecera', $ventaId)->findAll();
-    // }
-
-    public function getDetalles($ventaId){
-        return $this->select('venta_detalle.*, producto.nombre, producto.descripcion')->join('producto', 'producto.id_producto = venta_detalle.id_producto')->where('venta_detalle.id_venta_cabecera', $ventaId)->findAll();
+    public function registrarDetalleVenta($idVenta, $item) {
+        $detalle = [
+            'id_venta_cabecera' => $idVenta,
+            'id_producto' => $item['id'],
+            'cantidad' => $item['qty'],
+            'precio' => $item['price']
+        ];
+        return $this->insert($detalle);
     }
-
 }

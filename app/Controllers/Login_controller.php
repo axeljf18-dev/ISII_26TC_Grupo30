@@ -11,11 +11,12 @@ class Login_controller extends Controller{
         helper(['form', 'url']);
     }
 
-    public function inicioSesion(){
+    // MOSTRAR FORMULARIO DE LOGIN
+    public function mostrarFormularioLogin(){
         $categoriaModel = new Categoria_model();
-        $dato['categorias'] = $categoriaModel->getCategoriaAll();
+        $dato['categorias'] = $categoriaModel->getCategoriasActivas();
         $marcaModel = new Marca_model();
-        $dato['marcas'] = $marcaModel->getMarcaAll();
+        $dato['marcas'] = $marcaModel->getMarcasActivas();
 
         $data['titulo'] = 'NetShop | Inicio de Sesion';
         echo view('plantillas/header', $data);
@@ -24,13 +25,36 @@ class Login_controller extends Controller{
         echo view('plantillas/footer', $dato);
     }
 
-    public function formValidation(){
-        $session = session();
-        $model = new Usuarios_model();
-
+    // VALIDACIÓN Y AUTENTICACIÓN
+    public function recibirDatosFormularioLogin(){
         $correo = $this->request->getVar('email');
         $contraseña = $this->request->getVar('contraseña');
+        return $this->validarDatosLogin($correo, $contraseña);
+    }
 
+    public function validarDatosLogin($correo, $contraseña){
+        $session = session();
+
+        // reglas validacion 
+        $valido = $this->validate([
+            'email' => ['label' => 'Correo electrónico', 'rules' => 'required|valid_email'],
+            'contraseña' => ['label' => 'Contraseña', 'rules' => 'required']
+        ]);
+
+        if(!$valido){
+            $session->setFlashdata('emailValor2', $correo);
+            $session->setFlashdata('passwordValor2', $contraseña);
+            $session->setFlashdata('validationErrors', $this->validator->getErrors());
+            return redirect()->to('/inicioSesion');
+        }
+
+        // si pasa la validacion, vamos a la autenticación
+        return $this->autenticarUsuario($correo, $contraseña);
+    }
+
+    private function autenticarUsuario($correo, $contraseña){
+        $session = session();
+        $model = new Usuarios_model();
         $data = $model->where('email', $correo)->first();
 
         if($data){
@@ -38,24 +62,25 @@ class Login_controller extends Controller{
             $ba = $data['baja'];
 
             if($ba == 'SI'){
-                $session->setFlashdata('msgUser', 'El usuario esta dado de baja');
+                $session->setFlashdata('msgUser', 'Esta cuenta está dada de baja');
                 return redirect()->to('/inicioSesion');
             }
 
-            // Se verifica la contraseña utilizando password_verify.
             $verify_pass = password_verify($contraseña, $pass);
+
             if ($verify_pass) {
-                // Se prepara la información a guardar en la sesión.
                 $ses_data = [
-                    'id_usuario'  => $data['id_usuario'],
-                    'nombre'      => $data['nombre'],
-                    'apellido'    => $data['apellido'],
-                    'email'       => $data['email'],
-                    'usuario'     => $data['usuario'],
-                    'id_perfil'   => $data['id_perfil'],
-                    'logged_in'   => TRUE
+                    'id_usuario' => $data['id_usuario'],
+                    'nombre' => $data['nombre'],
+                    'apellido' => $data['apellido'],
+                    'email' => $data['email'],
+                    'usuario' => $data['usuario'],
+                    'id_perfil' => $data['id_perfil'],
+                    'logged_in' => TRUE
                 ];
                 $session->set($ses_data); 
+
+                // redireccion segun el rol del usuario
                 if ($data['id_perfil'] == 1) { 
                     return redirect()->to('/mostrarListaProductos');
                 } elseif ($data['id_perfil'] == 2) {
@@ -69,7 +94,7 @@ class Login_controller extends Controller{
                 $session->setFlashdata('passwordValor2', $contraseña);
                 return redirect()->to('/inicioSesion');
             }
-        } else{
+        } else {
             $session->setFlashdata('msgEmail', 'El correo electrónico ingresado es incorrecto');
             $session->setFlashdata('emailValor2', $correo);
             $session->setFlashdata('passwordValor2', $contraseña);
@@ -77,14 +102,14 @@ class Login_controller extends Controller{
         }
     }
 
-    public function limpiarDatos() {
+    // LIMPIEZA DE DATOS Y CIERRE DE SESIÓN
+    public function limpiarDatosFormularioLogin() {
         session()->remove(['emailValor2', 'passwordValor2']);
         return redirect()->to('/inicioSesion');
     }
 
-    public function logeout(){
-        $session = session();
-        $session->destroy();
+    public function cerrarSesion(){
+        session()->destroy();
         return redirect()->to('/');
     }
 }

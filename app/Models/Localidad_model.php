@@ -7,11 +7,20 @@ class Localidad_model extends Model{
     protected $primaryKey = 'id_localidad';
     protected $allowedFields = ['nombre', 'codigo_postal', 'id_provincia'];
 
-    public function getLocalidadAll() {
-        return $this->findAll();
+    public function getLocalidadesActivas(){
+        return $this->select('id_localidad, nombre, id_provincia, codigo_postal')->findAll();
     }
 
-    public function getLocalidadConProvincia(){
-        return $this->select('localidad.id_localidad, localidad.nombre as localidad_nombre, localidad.codigo_postal, provincia.nombre as provincia_nombre')->join('provincia', 'provincia.id_provincia = localidad.id_provincia')->findAll();
+    public function validarLocalidad($idLocalidad, $idProvincia){
+        // Primero verificamos que la localidad exista
+        $localidad = $this->where('id_localidad', $idLocalidad)->first();
+
+        if(!$localidad){
+            return false; // localidad no existe
+        }
+
+        // Si existe, llamamos al modelo Provincia para validar la relación
+        $provinciaModel = new Provincia_model();
+        return $provinciaModel->validarLocalidadConProvincia($idLocalidad, $idProvincia);
     }
 }

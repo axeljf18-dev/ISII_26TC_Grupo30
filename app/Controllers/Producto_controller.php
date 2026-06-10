@@ -3,6 +3,8 @@ namespace App\Controllers;
 use CodeIgniter\Controller; 
 use App\Models\Producto_model;
 use App\Models\Categoria_model;
+use App\Models\Direccion_model;
+use App\Models\Localidad_model;
 use App\Models\Marca_model;
 use App\Models\Proveedor_model;
 use App\models\Usuarios_model;
@@ -16,21 +18,24 @@ class Producto_controller extends Controller{
     public function listarProductos($estadoProductos){
         $productoModel = new Producto_model();
 
+        $hayProductosTotales = $productoModel->countAllResults() > 0;
+
         switch($estadoProductos){
             case 'desactivados':
-                $data['productos'] = $productoModel->orderBy('producto.id_producto', 'DESC')->getProductosDesactivadosPaginados(7);
+                $data['productos'] = $productoModel->orderBy('producto.id_producto', 'DESC')->getProductosDesactivados();
                 $vista = 'back/admin/listaProductosDesactivados';
                 break;
             case 'actualizarEliminar':
-                $data['productos'] = $productoModel->orderBy('producto.id_producto', 'DESC')->getProductoAll(7);
+                $data['productos'] = $productoModel->orderBy('producto.id_producto', 'DESC')->verificarProductos();
                 $vista = 'back/admin/listaProductosActualizarEliminar';
                 break;
             default: // activos
-                $data['productos'] = $productoModel->orderBy('producto.id_producto', 'DESC')->getProductosPaginados(7);
+                $data['productos'] = $productoModel->orderBy('producto.id_producto', 'DESC')->getProductosActivados();
                 $vista = 'back/admin/listaProductos';
                 break;
         }
 
+        $data['hayProductosTotales'] = $hayProductosTotales;
         $data['pager'] = $productoModel->pager;
         $dato['titulo'] = 'Dashboard | Lista de Productos';
 
@@ -44,27 +49,30 @@ class Producto_controller extends Controller{
         $session = session();
         $productoModel = new Producto_model();
 
+        $hayProductosTotales = $productoModel->countAllResults() > 0;
+
         switch($estadoProductos){
             case 'desactivados':
                 $query = $this->request->getVar('productoDesactivadoQuery');
-                $data['productos'] = $productoModel->buscarProductosDesactivados($query, 7);
+                $data['productos'] = $productoModel->orderBy('producto.id_producto', 'DESC')->buscarProductosDesactivados($query);
                 $session->setFlashdata('productoDesactivadoQueryValor', $query);
                 $vista = 'back/admin/listaProductosDesactivados';
                 break;
             case 'actualizarEliminar':
                 $query = $this->request->getVar('productoActQuery');
-                $data['productos'] = $productoModel->buscarProductosAll($query, 7);
+                $data['productos'] = $productoModel->orderBy('producto.id_producto', 'DESC')->buscarProductosAll($query);
                 $session->setFlashdata('productoActQueryValor', $query);
                 $vista = 'back/admin/listaProductosActualizarEliminar';
                 break;
             default: // activos
                 $query = $this->request->getVar('productoQuery');
-                $data['productos'] = $productoModel->buscarProductosActivos($query, 7);
+                $data['productos'] = $productoModel->orderBy('producto.id_producto', 'DESC')->buscarProductosActivos($query);
                 $session->setFlashdata('productoQueryValor', $query);
                 $vista = 'back/admin/listaProductos';
                 break;
         }
 
+        $data['hayProductosTotales'] = $hayProductosTotales;
         $data['pager'] = $productoModel->pager;
         $dato['titulo'] = 'Dashboard | Lista de Productos';
 
@@ -75,10 +83,10 @@ class Producto_controller extends Controller{
     }
 
     public function mostrarFormularioCrearProducto(){
-        $categoriaModel = new Categoria_model();
-        $data['categorias'] = $categoriaModel->getCategoriasActivas();
         $marcaModel = new Marca_model();
         $data['marcas'] = $marcaModel->getMarcasActivas();
+        $categoriaModel = new Categoria_model();
+        $data['categorias'] = $categoriaModel->getCategoriasActivas();
         $proveedorModel = new Proveedor_model();
         $data['proveedores'] = $proveedorModel->getProveedoresActivos();
 
@@ -91,13 +99,13 @@ class Producto_controller extends Controller{
         echo view('plantillas/footer');
     }
 
-    public function mostrarFormularioActualizarProducto($id_producto){
-        $categoriaModel = new Categoria_model();
-        $data['categorias'] = $categoriaModel->getCategoriasActivas();
+    public function mostrarFormularioActualizarProducto($idProducto){
         $productoModel = new Producto_model();
-        $data['producto'] = $productoModel->find($id_producto);
+        $data['producto'] = $productoModel->find($idProducto);
         $marcaModel = new Marca_model();
         $data['marcas'] = $marcaModel->getMarcasActivas();
+        $categoriaModel = new Categoria_model();
+        $data['categorias'] = $categoriaModel->getCategoriasActivas();
         $proveedorModel = new Proveedor_model();
         $data['proveedores'] = $proveedorModel->getProveedoresActivos();
 
@@ -110,25 +118,35 @@ class Producto_controller extends Controller{
         echo view('plantillas/footer');
     }
 
-    public function desactivarProducto($id_producto){
+    public function mostrarMensajeConfirmacion($idProducto, $accion) {
         $productoModel = new Producto_model();
-        $data['producto'] = $productoModel->find($id_producto);
+        $producto = $productoModel->find($idProducto);
+
+        $dato['titulo'] = 'Dashboard | Confirmar acción';
+        echo view('plantillas/header', $dato);
+        echo view('back/admin/confirmacionProducto', ['producto' => $producto, 'accion' => $accion]);
+        echo view('plantillas/footer');
+    }
+
+    public function desactivarProducto($idProducto){
+        $productoModel = new Producto_model();
+        $data['producto'] = $productoModel->find($idProducto);
 
         $data = ['eliminado' => 'SI'];
-        $productoModel->update($id_producto, $data);
+        $productoModel->update($idProducto, $data);
 
-        session()->setFlashdata('msgExitoso', 'Producto desactivado exitosamente');
+        session()->setFlashdata('msgExitoso', 'Producto desactivado correctamente');
         return redirect()->to('/mostrarListaProductosActualizarEliminar');
     }
 
-    public function reactivarProducto($id_producto){
+    public function reactivarProducto($idProducto){
         $productoModel = new Producto_model();
-        $data['producto'] = $productoModel->find($id_producto);
+        $data['producto'] = $productoModel->find($idProducto);
 
         $data = ['eliminado' => 'NO'];
-        $productoModel->update($id_producto, $data);
+        $productoModel->update($idProducto, $data);
 
-        session()->setFlashdata('msgExitoso', 'Producto activado exitosamente');
+        session()->setFlashdata('msgExitoso', 'Producto activado correctamente');
         return redirect()->to('/mostrarListaProductosActualizarEliminar');
     }
 
@@ -148,13 +166,13 @@ class Producto_controller extends Controller{
         $session = session();
 
         $valido = $this->validate([
-            'nombre'    => 'required|trim|min_length[2]|max_length[50]',
-            'precio'    => 'required|trim|numeric|greater_than[0]',
-            'precioVta' => 'required|trim|numeric|greater_than[0]',
-            'stock'     => 'required|trim|is_natural',
-            'stockMin'  => 'required|trim|is_natural',
-            'imagen'    => 'uploaded[imagen]|max_size[imagen,8192]|ext_in[imagen,png,jpg,jpeg]',
-            'descripcion' => 'permit_empty|trim|min_length[5]|max_length[255]',
+            'nombre' => ['label' => 'Nombre del producto', 'rules' => 'required|trim|min_length[2]|max_length[50]'],
+            'precio' => ['label' => 'Precio', 'rules' => 'required|trim|numeric|greater_than[0]'],
+            'precioVta' => ['label' => 'Precio de venta', 'rules' => 'required|trim|numeric|greater_than[0]'],
+            'stock' => ['label' => 'Stock', 'rules' => 'required|trim|is_natural'],
+            'stockMin' => ['label' => 'Stock mínimo', 'rules' => 'required|trim|is_natural'],
+            'imagen' => ['label' => 'Imagen', 'rules' => 'uploaded[imagen]|max_size[imagen,8192]|ext_in[imagen,png,jpg,jpeg]'],
+            'descripcion' => ['label' => 'Descripción', 'rules' => 'permit_empty|trim|min_length[5]|max_length[255]']
         ], $datos->getPost());
 
         $marcaModel = new Marca_model();
@@ -162,17 +180,17 @@ class Producto_controller extends Controller{
         $proveedorModel = new Proveedor_model();
 
         if(!$marcaModel->validarMarca($datos->getVar('marca'))){
-            $this->validator->setError('marca', 'La marca seleccionada no es válida o está inactiva.');
+            $this->validator->setError('marca', 'La Marca seleccionada no es válida.');
             $valido = false;
         }
 
         if(!$categoriaModel->validarCategoria($datos->getVar('categoria'))){
-            $this->validator->setError('categoria', 'La categoría seleccionada no es válida o está inactiva.');
+            $this->validator->setError('categoria', 'La Categoría seleccionada no es válida.');
             $valido = false;
         }
 
         if(!$proveedorModel->validarProveedor($datos->getVar('proveedor'))){
-            $this->validator->setError('proveedor', 'El proveedor seleccionado no existe.');
+            $this->validator->setError('proveedor', 'El Proveedor seleccionado no existe.');
             $valido = false;
         }
 
@@ -201,22 +219,22 @@ class Producto_controller extends Controller{
         $img->move(ROOTPATH . 'assets/uploads', $nombreImagen);
 
         $datos = [
-            'nombre'       => $datosProducto->getVar('nombre'),
-            'imagen'       => $nombreImagen,
+            'nombre' => $datosProducto->getVar('nombre'),
+            'imagen' => $nombreImagen,
             'id_categoria' => $datosProducto->getVar('categoria'),
-            'precio'       => $datosProducto->getVar('precio'),
-            'precio_vta'   => $datosProducto->getVar('precioVta'),
-            'stock'        => $datosProducto->getVar('stock'),
-            'stock_min'    => $datosProducto->getVar('stockMin'),
-            'descripcion'  => $datosProducto->getVar('descripcion'),
-            'id_marca'     => $datosProducto->getVar('marca'),
+            'precio' => $datosProducto->getVar('precio'),
+            'precio_vta' => $datosProducto->getVar('precioVta'),
+            'stock' => $datosProducto->getVar('stock'),
+            'stock_min' => $datosProducto->getVar('stockMin'),
+            'descripcion' => $datosProducto->getVar('descripcion'),
+            'id_marca' => $datosProducto->getVar('marca'),
             'id_proveedor' => $datosProducto->getVar('proveedor')
         ];
 
         $productoModel = new Producto_model();
         $productoModel->insert($datos);
 
-        $session->setFlashdata('msgExitoso', 'Producto registrado exitosamente');
+        $session->setFlashdata('msgExitoso', 'Producto creado correctamente');
         return $this->response->redirect(site_url('altaDeProductos'));
     }
 
@@ -225,14 +243,14 @@ class Producto_controller extends Controller{
         $session = session();
 
         $valido = $this->validate([
-            'id'        => 'required|numeric',
-            'nombre'    => 'required|trim|min_length[2]|max_length[50]',
-            'precio'    => 'required|trim|numeric|greater_than[0]',
-            'precioVta' => 'required|trim|numeric|greater_than[0]',
-            'stock'     => 'required|trim|is_natural',
-            'stockMin'  => 'required|trim|is_natural',
-            'imagen'    => 'max_size[imagen,8192]|ext_in[imagen,png,jpg,jpeg]',
-            'descripcion' => 'permit_empty|trim|min_length[5]|max_length[255]',
+            'id' => ['label' => 'ID del producto', 'rules' => 'required|numeric'],
+            'nombre' => ['label' => 'Nombre del producto', 'rules' => 'required|trim|min_length[2]|max_length[50]'],
+            'precio' => ['label' => 'Precio', 'rules' => 'required|trim|numeric|greater_than[0]'],
+            'precioVta' => ['label' => 'Precio de venta', 'rules' => 'required|trim|numeric|greater_than[0]'],
+            'stock' => ['label' => 'Stock', 'rules' => 'required|trim|is_natural'],
+            'stockMin' => ['label' => 'Stock mínimo', 'rules' => 'required|trim|is_natural'],
+            'imagen' => ['label' => 'Imagen', 'rules' => 'max_size[imagen,8192]|ext_in[imagen,png,jpg,jpeg]'],
+            'descripcion' => ['label' => 'Descripción', 'rules' => 'permit_empty|trim|min_length[5]|max_length[255]']
         ], $datos->getPost());
 
         $marcaModel = new Marca_model();
@@ -240,17 +258,17 @@ class Producto_controller extends Controller{
         $proveedorModel = new Proveedor_model();
 
         if(!$marcaModel->validarMarca($datos->getVar('marca'))){
-            $this->validator->setError('marca', 'La marca seleccionada no es válida o está inactiva.');
+            $this->validator->setError('marca', 'La Marca seleccionada no es válida.');
             $valido = false;
         }
 
         if(!$categoriaModel->validarCategoria($datos->getVar('categoria'))){
-            $this->validator->setError('categoria', 'La categoría seleccionada no es válida o está inactiva.');
+            $this->validator->setError('categoria', 'La Categoría seleccionada no es válida.');
             $valido = false;
         }
 
         if(!$proveedorModel->validarProveedor($datos->getVar('proveedor'))){
-            $this->validator->setError('proveedor', 'El proveedor seleccionado no existe.');
+            $this->validator->setError('proveedor', 'El Proveedor seleccionado no existe.');
             $valido = false;
         }
 
@@ -261,7 +279,7 @@ class Producto_controller extends Controller{
         }
     }
 
-    private function guardarProductoActualizado($id_producto, $datosProducto){
+    private function guardarProductoActualizado($idProducto, $datosProducto){
         $session = session();
 
         $img = $datosProducto->getFile('imagen');
@@ -272,16 +290,16 @@ class Producto_controller extends Controller{
         }
 
         $datos = [
-            'id_producto'   => $id_producto,
-            'nombre'        => $datosProducto->getVar('nombre'),
-            'id_categoria'  => $datosProducto->getVar('categoria'),
-            'precio'        => $datosProducto->getVar('precio'),
-            'precio_vta'    => $datosProducto->getVar('precioVta'),
-            'stock'         => $datosProducto->getVar('stock'),
-            'stock_min'     => $datosProducto->getVar('stockMin'),
-            'descripcion'   => $datosProducto->getVar('descripcion'),
-            'id_marca'      => $datosProducto->getVar('marca'),
-            'id_proveedor'  => $datosProducto->getVar('proveedor')
+            'id_producto' => $idProducto,
+            'nombre' => $datosProducto->getVar('nombre'),
+            'id_categoria' => $datosProducto->getVar('categoria'),
+            'precio' => $datosProducto->getVar('precio'),
+            'precio_vta' => $datosProducto->getVar('precioVta'),
+            'stock' => $datosProducto->getVar('stock'),
+            'stock_min' => $datosProducto->getVar('stockMin'),
+            'descripcion' => $datosProducto->getVar('descripcion'),
+            'id_marca' => $datosProducto->getVar('marca'),
+            'id_proveedor' => $datosProducto->getVar('proveedor')
         ];
 
         if($nombreImagen){
@@ -289,22 +307,22 @@ class Producto_controller extends Controller{
         }
 
         $productoModel = new Producto_model();
-        $productoModel->update($id_producto, $datos);
+        $productoModel->update($idProducto, $datos);
 
-        $session->setFlashdata('msgExitoso', 'Producto actualizado exitosamente');
+        $session->setFlashdata('msgExitoso', 'Los datos del producto se han guardado correctamente');
         return $this->response->redirect(site_url('mostrarListaProductosActualizarEliminar'));
     }
 
-    public function limpiarDatosFormularioProducto($id = null) {
+    public function limpiarDatosFormularioProducto($idProducto = null) {
         $session = session();
 
-        if ($id === null) { // Del formulario alta de producto
+        if ($idProducto === null) { // Del formulario alta de producto
             $session->remove(['productoValor', 'descripcionProductoValor', 'categoriaProductoValor', 'marcaProductoValor', 'precioProductoValor', 'precioVtaProductoValor', 'stockProductoValor', 'stockMinProductoValor']);
             return redirect()->to('/altaDeProductos');
         } else { // Del formulario actualizar un producto
             $session->setFlashdata('limpiarProductoValor', true);
             $session->setFlashdata('limpiarImagenValor', true);
-            return redirect()->to('/actualizarProductos/' . $id);
+            return redirect()->to('/actualizarProductos/' . $idProducto);
         }
     }
 }

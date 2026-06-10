@@ -9,7 +9,7 @@ use App\Models\Usuarios_model;
 use App\Models\MetodoPago_model;
 // use Config\Services;
 
-class Carrito_controller extends Controller{
+class Carrito_controller extends BaseController{
     public function __construct(){
         helper(['url', 'form', 'cart']);
         $session = session();
@@ -101,21 +101,25 @@ class Carrito_controller extends Controller{
     }
 
     public function mostrarCarrito(){
-        $categoriaModel = new Categoria_model();
-        $dato['categorias'] = $categoriaModel->getCategoriaAll();
-        $marcaModel = new Marca_model();
-        $dato['marcas'] = $marcaModel->getMarcaAll();
+        $metodoModel = new MetodoPago_model();
+        $data['metodosPago'] = $metodoModel->getMetodosPagoActivos();
 
         $cart = \Config\Services::cart();
-        $dato['cart'] = $cart;
+        $data['cart'] = $cart;
 
-        $metodoModel = new MetodoPago_model();
-        $dato['metodosPago'] = $metodoModel->getMetodosPagoActivos();
+        if (!$this->verificarCarrito()) {
+            $data['mensaje'] = 'No hay productos en "Mi Carrito"';
+        }
 
         $data['titulo'] = 'NetShop | Carrito';
         echo view('plantillas/header', $data);
-        echo view('plantillas/nav', $dato);
-        echo view('plantillas/carrito', $dato);
-        echo view('plantillas/footer', $dato);
+        echo view('plantillas/nav', $this->dato);
+        echo view('plantillas/carrito', $data);
+        echo view('plantillas/footer', $this->dato);
+    }
+
+    private function verificarCarrito(){
+        $cart = \Config\Services::cart();
+        return !empty($cart->contents()); // da true si hay productos y false si está vacío
     }
 }

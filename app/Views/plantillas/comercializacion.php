@@ -27,7 +27,7 @@
             </div>
 
             <div class="col-12 border-bottom">
-                <h2 class="text-center mb-3 pt-2">Formas de Pago</h2>
+                <h2 class="text-center mb-3 pt-2">Método de Pago</h2>
                 <div class="row pb-3">
                     <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 text-center pt-1 pb-1">
                         <img src="<?= base_url('assets/img/Visa debito.svg'); ?>" alt="Visa Debito" width="160px" height="100px" class="border border-secondary-subtle">
@@ -35,8 +35,17 @@
                     <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 text-center pt-1 pb-1">
                         <img src="<?= base_url('assets/img/Mastercard debito.svg'); ?>" alt="Mastercard Debito" width="160px" height="100px" class="border border-secondary-subtle">
                     </div>
+                    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 text-center pt-1 pb-1">
+                        <img src="<?= base_url('assets/img/VisaCredito.png'); ?>" alt="Visa Crédito" width="160px" height="100px" class="border border-secondary-subtle">
+                    </div>
                     <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 text-center pt-1 pb-1">
                         <img src="<?= base_url('assets/img/Naranja X.webp'); ?>" alt="Naranja X" width="160px" height="100px" class="border border-secondary-subtle">
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 text-center pt-1 pb-1">
+                        <img src="<?= base_url('assets/img/mercadoPagoLogo.png'); ?>" alt="Mercado Pago" width="160px" height="100px" class="border border-secondary-subtle">
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 text-center pt-1 pb-1">
+                        <img src="<?= base_url('assets/img/transferenciaBancaria.png'); ?>" alt="Transferencia Bancaria" width="160px" height="100px" class="border border-secondary-subtle">
                     </div>
                 </div>
             </div>

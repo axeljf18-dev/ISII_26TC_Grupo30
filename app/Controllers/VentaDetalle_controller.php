@@ -14,57 +14,20 @@ class VentaDetalle_controller extends Controller{
         helper(['form', 'url']);
     }
 
-    // public function verFactura($ventaId){
-    //     $categoriaModel = new Categoria_model();
-    //     $data['categorias'] = $categoriaModel->getCategoriaAll();
-    //     $detalleVentasModel = new VentaDetalle_model();
-    //     $data['ventas'] = $detalleVentasModel->getDetalles($ventaId);
-    //     // $productoModel = new Producto_model();
-    //     // $data['productos'] = $productoModel->getProductoAll();
-    //     $marcaModel = new Marca_model();
-    //     $data['marcas'] = $marcaModel->getMarcaAll();
-
-    //     $dato['titulo'] = "NetShop | Detalles";
-    //     echo view('plantillas/header', $dato);
-    //     echo view('plantillas/nav', $data);
-    //     echo view('plantillas/detalleDeCompra', $data);
-    //     echo view('plantillas/footer', $data);
-    // }
-
-    // public function indexDetalleCompra($ventaIdCliente){
-    //     $ventasCabeceraModel = new VentaCabecera_model();
-    //     $ventaGeneral = $ventasCabeceraModel->find($ventaIdCliente);
-    //     $data['venta_general'] = $ventaGeneral;
-    //     $usuarioModel = new Usuarios_model();
-    //     $data['usuario'] = $usuarioModel->find($ventaGeneral['id_usuario']);
-    //     $detalleVentasModel = new VentaDetalle_model();
-    //     $data['detalles'] = $detalleVentasModel->getDetalles($ventaIdCliente);
-    //     $productoModel = new Producto_model();
-    //     $data['productos'] = $productoModel->getProductoAll();
-
-    //     $dato['titulo'] = "Dashboard | Detalles";
-    //     echo view('plantillas/header', $dato);
-    //     echo view('plantillas/nav');
-    //     echo view('back/admin/detallesVentas', $data);
-    //     echo view('plantillas/footer');
-    // }
-
-    public function mostrarDetalleVenta($ventaId){
+    public function mostrarDetalleVenta($idVenta){
         $ventasCabeceraModel = new VentaCabecera_model();
-        $ventaGeneral = $ventasCabeceraModel->find($ventaId);
+        $ventaGeneral = $ventasCabeceraModel->find($idVenta);
         $data['venta_general'] = $ventaGeneral;
         $usuarioModel = new Usuarios_model();
         $data['usuario'] = $usuarioModel->find($ventaGeneral['id_usuario']);
         $detalleVentasModel = new VentaDetalle_model();
-        $data['detalles'] = $detalleVentasModel->getDetalles($ventaId);
+        $data['detalles'] = $detalleVentasModel->getBuscarDetalles($idVenta);
         $detalleVentasModel = new VentaDetalle_model();
-        $data['ventas'] = $detalleVentasModel->getDetalles($ventaId);
-        $productoModel = new Producto_model();
-        $data['productos'] = $productoModel->getProductoAll();
+        $data['ventas'] = $detalleVentasModel->getBuscarDetalles($idVenta);
         $categoriaModel = new Categoria_model();
-        $data['categorias'] = $categoriaModel->getCategoriaAll();
+        $data['categorias'] = $categoriaModel->getCategoriasActivas();
         $marcaModel = new Marca_model();
-        $data['marcas'] = $marcaModel->getMarcaAll();
+        $data['marcas'] = $marcaModel->getMarcasActivas();
 
         $dato['titulo'] = "NetShop | Detalles";
         echo view('plantillas/header', $dato);
