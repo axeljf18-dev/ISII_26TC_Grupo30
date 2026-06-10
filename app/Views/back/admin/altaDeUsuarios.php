@@ -26,6 +26,7 @@
         <form action="<?php echo base_url('enviar-formUsuario'); ?>" method="POST">
             <?= csrf_field() ?> 
             <div class="row mt-3">
+                <!-- <input type="hidden" name="perfil" value="admin"> -->
                 <div class="col-12 mt-2 d-flex justify-content-center">
                     <label for="nombre"><b>Nombre(*)</b></label>      
                 </div>

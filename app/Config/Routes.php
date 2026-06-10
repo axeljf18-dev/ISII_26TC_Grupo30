@@ -33,7 +33,7 @@ $routes->get('/productosMenorPrecioBuscador/(:any)', 'Home::ordenarProductosPorM
 
 // Registro y Inicio de sesión
 $routes->get('/registrarse', 'Usuario_controller::mostrarFormularioRegistrarse', ['filter' => 'auth']);
-$routes->post('/enviar-form', 'Usuario_controller::recibirDatosFormularioUsuario', ['filter' => 'auth']);
+$routes->post('/enviar-form', 'Usuario_controller::recibirDatosFormularioUsuarioCliente', ['filter' => 'auth']);
 $routes->get('/limpiarUsuario', 'Usuario_controller::limpiarDatosFormularioUsuario/registro', ['filter' => 'auth']);
 $routes->get('/inicioSesion', 'Login_controller::mostrarFormularioLogin', ['filter' => 'auth']);
 $routes->post('/enviar-login', 'Login_controller::recibirDatosFormularioLogin', ['filter' => 'auth']);

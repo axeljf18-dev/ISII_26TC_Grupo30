@@ -5,6 +5,7 @@
         <form action="<?php echo base_url('enviar-formUsuarioActualizar'); ?>" method="POST">
             <?= csrf_field() ?> 
             <div class="row mt-3">
+                <!-- <input type="hidden" name="perfil" value="admin"> -->
                 <!-- Campo oculto para el id -->
                 <div class="col-12 mt-2 d-flex justify-content-center ps-5 pe-5">
                     <input type="hidden" name="id" readonly value="<?= $usuario['id_usuario']; ?>" class="w-100 ps-2 pe-2 pt-1 pb-1 border shadow">

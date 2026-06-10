@@ -147,11 +147,6 @@ class Usuario_controller extends Controller{
     public function recibirDatosFormularioUsuario(){
         $datos = $this->request;
 
-        // Si viene de la vista pública de registro
-        if(!$datos->getPost('id') && !$datos->getPost('perfil')){
-            return $this->validarDatosRegistro($datos);
-        }
-
         // Si viene del admin
         if ($datos->getPost('id')) {
             return $this->validarDatosUsuarioActualizar($datos);
@@ -336,6 +331,11 @@ class Usuario_controller extends Controller{
         echo view('plantillas/nav', $dato);
         echo view('back/usuario/registrarse', $dato);
         echo view('plantillas/footer', $dato);
+    }
+
+    public function recibirDatosFormularioUsuarioCliente(){
+        $datos = $this->request;
+        return $this->validarDatosRegistro($datos);
     }
 
     public function validarDatosRegistro($datos){
