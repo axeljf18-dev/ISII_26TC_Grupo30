@@ -25,14 +25,15 @@ class Login_controller extends Controller{
         echo view('plantillas/footer', $dato);
     }
 
-    // VALIDACIÓN Y AUTENTICACIÓN
+    // RECIBIR DATOS DE FORMULARIO DE LOGIN
     public function recibirDatosFormularioLogin(){
         $correo = $this->request->getVar('email');
         $contraseña = $this->request->getVar('contraseña');
         return $this->validarDatosLogin($correo, $contraseña);
     }
 
-    public function validarDatosLogin($correo, $contraseña){
+    // VALIDACIÓN DE DATOS DE LOGIN
+    public function validarDatosLogin(string $correo, string $contraseña){
         $session = session();
 
         // reglas validacion 
@@ -52,7 +53,8 @@ class Login_controller extends Controller{
         return $this->autenticarUsuario($correo, $contraseña);
     }
 
-    private function autenticarUsuario($correo, $contraseña){
+    // AUTENTICACIÓN DE USUARIO
+    private function autenticarUsuario(string $correo, string $contraseña){
         $session = session();
         $model = new Usuarios_model();
         $data = $model->where('email', $correo)->first();
@@ -102,12 +104,13 @@ class Login_controller extends Controller{
         }
     }
 
-    // LIMPIEZA DE DATOS Y CIERRE DE SESIÓN
+    // LIMPIEZA DE DATOS DE FORMULARIO DE LOGIN
     public function limpiarDatosFormularioLogin() {
         session()->remove(['emailValor2', 'passwordValor2']);
         return redirect()->to('/inicioSesion');
     }
 
+    // CERRAR SESIÓN
     public function cerrarSesion(){
         session()->destroy();
         return redirect()->to('/');

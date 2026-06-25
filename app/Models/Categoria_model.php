@@ -7,11 +7,13 @@ class Categoria_model extends Model{
     protected $primaryKey = 'id_categoria';
     protected $allowedFields = ['descripcion', 'activo'];
 
+    // Método para obtener todas las categorías activas
     public function getCategoriasActivas() {
         return $this->where('activo', '1')->findAll();
     }
-
-    public function validarCategoria($idCategoria){
+    
+    // Método para validar si una categoría existe y está activa
+    public function validarCategoria(int $idCategoria){
         $categoria = $this->where('id_categoria', $idCategoria)->where('activo', 1)->first();
         return $categoria !== null;
     }

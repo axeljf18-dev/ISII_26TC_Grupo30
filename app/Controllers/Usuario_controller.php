@@ -9,6 +9,7 @@ use App\Models\Perfil_model;
 use App\Models\Provincia_model;
 use App\Models\Usuarios_model;
 use CodeIgniter\Controller;
+use CodeIgniter\HTTP\IncomingRequest;
 
 class Usuario_controller extends Controller{
     public function index(){
@@ -16,7 +17,7 @@ class Usuario_controller extends Controller{
     }
 
      // LISTAR Y BUSCAR USUARIOS (ADMIN)
-    public function listarUsuarios($estadoUsuarios){
+    public function listarUsuarios(string $estadoUsuarios){
         $usuarioModel = new Usuarios_model();
 
         switch($estadoUsuarios){
@@ -43,7 +44,8 @@ class Usuario_controller extends Controller{
         echo view('plantillas/footer');
     }
 
-    public function buscarUsuarios($estadoUsuarios){
+    // BUSCAR USUARIOS DE ACUERDO AL ESTADO (ADMIN)
+    public function buscarUsuarios(string $estadoUsuarios){
         $session = session();
         $usuarioModel = new Usuarios_model();
 
@@ -77,7 +79,7 @@ class Usuario_controller extends Controller{
         echo view('plantillas/footer');
     }
 
-    // MOSTRAR FORMULARIOS (ADMIN)
+    // MOSTRAR FORMULARIO DE ALTA DE USUARIO (ADMIN)
     public function mostrarFormularioCrearUsuario(){
         $perfilModel = new Perfil_model();
         $data['perfiles'] = $perfilModel->getPerfilesActivos();
@@ -95,7 +97,8 @@ class Usuario_controller extends Controller{
         echo view('plantillas/footer');
     }
 
-    public function mostrarFormularioActualizarUsuario($idUsuario){
+    // MOSTRAR FORMULARIO DE ACTUALIZACIÓN DE USUARIO (ADMIN)
+    public function mostrarFormularioActualizarUsuario(int $idUsuario){
         $perfilModel = new Perfil_model();
         $data['perfiles'] = $perfilModel->getPerfilesActivos();
         $usuarioModel = new Usuarios_model();
@@ -116,7 +119,8 @@ class Usuario_controller extends Controller{
         echo view('plantillas/footer');
     }
 
-    public function mostrarMensajeConfirmacionUsuario($idUsuario, $accion) {
+    // MOSTRAR MENSAJE DE CONFIRMACIÓN PARA DAR DE BAJA O HABILITAR USUARIO (ADMIN)
+    public function mostrarMensajeConfirmacionUsuario(int $idUsuario, string $accion) {
         $usuarioModel = new Usuarios_model();
         $usuario = $usuarioModel->find($idUsuario);
 
@@ -126,7 +130,8 @@ class Usuario_controller extends Controller{
         echo view('plantillas/footer');
     }
 
-    public function darDeBajaUsuario($idUsuario){
+    // DAR DE BAJA USUARIO (ADMIN)
+    public function darDeBajaUsuario(int $idUsuario){
         $usuarioModel = new Usuarios_model();
         $data = ['baja' => 'SI'];
         $usuarioModel->update($idUsuario, $data);
@@ -135,7 +140,8 @@ class Usuario_controller extends Controller{
         return redirect()->to('/mostrarListaUsuariosActualizarEliminar');
     }
 
-    public function habilitarUsuario($idUsuario){
+    // HABILITAR USUARIO (ADMIN)
+    public function habilitarUsuario(int $idUsuario){
         $usuarioModel = new Usuarios_model();
         $data = ['baja' => 'NO'];
         $usuarioModel->update($idUsuario, $data);
@@ -144,6 +150,7 @@ class Usuario_controller extends Controller{
         return redirect()->to('/mostrarListaUsuariosActualizarEliminar');
     }
 
+    // RECIBIR DATOS DEL FORMULARIO DE USUARIO 
     public function recibirDatosFormularioUsuario(){
         $datos = $this->request;
 
@@ -156,7 +163,7 @@ class Usuario_controller extends Controller{
     }
 
     // CREAR USUARIO (ADMIN)
-    public function validarDatosUsuario($datos){
+    public function validarDatosUsuario(IncomingRequest $datos){
         $session = session();
 
         $valido = $this->validate([
@@ -207,7 +214,8 @@ class Usuario_controller extends Controller{
         }
     }
 
-    private function guardarUsuario($datosUsuario){
+    // GUARDAR USUARIO (ADMIN)
+    private function guardarUsuario(IncomingRequest $datosUsuario){
         $formModel = new Usuarios_model();
         $direccionModel = new Direccion_model();
 
@@ -237,7 +245,7 @@ class Usuario_controller extends Controller{
     }
 
     // ACTUALIZAR USUARIO (ADMIN)
-    public function validarDatosUsuarioActualizar($datos){
+    public function validarDatosUsuarioActualizar(IncomingRequest $datos){
         $id = $datos->getVar('id');
 
         $valido = $this->validate([
@@ -278,7 +286,8 @@ class Usuario_controller extends Controller{
         }
     }
 
-    private function guardarUsuarioActualizado($idUsuario, $datosUsuario){
+    // GUARDAR USUARIO ACTUALIZADO 
+    private function guardarUsuarioActualizado(int $idUsuario, IncomingRequest $datosUsuario){
         $data = [
             'nombre' => $datosUsuario->getVar('nombre'),
             'apellido' => $datosUsuario->getVar('apellido'),
@@ -315,7 +324,7 @@ class Usuario_controller extends Controller{
         return redirect()->to('/mostrarListaUsuariosActualizarEliminar');
     }
 
-    // REGISTRO DE USUARIO
+    // MOSTRAR FORMULARIO DE REGISTRO DE USUARIO (CLIENTE)
     public function mostrarFormularioRegistrarse(){
         $categoriaModel = new Categoria_model();
         $dato['categorias'] = $categoriaModel->getCategoriasActivas();
@@ -333,12 +342,14 @@ class Usuario_controller extends Controller{
         echo view('plantillas/footer', $dato);
     }
 
+    // RECIBIR DATOS DEL FORMULARIO DE REGISTRO DE USUARIO 
     public function recibirDatosFormularioUsuarioCliente(){
         $datos = $this->request;
         return $this->validarDatosRegistro($datos);
     }
 
-    public function validarDatosRegistro($datos){
+    // VALIDAR DATOS DEL FORMULARIO DE REGISTRO DE USUARIO
+    public function validarDatosRegistro(IncomingRequest $datos){
         $session = session();
 
         $valido = $this->validate([
@@ -382,7 +393,8 @@ class Usuario_controller extends Controller{
         }
     }
 
-    private function guardarRegistro($datosRegistro){
+    // GUARDAR REGISTRO DE USUARIO (CLIENTE) Y LO REDIRIGE A LA PÁGINA DE REGISTRO CON UN MENSAJE DE ÉXITO         
+    private function guardarRegistro(IncomingRequest $datosRegistro){
         $formModel = new Usuarios_model();
         $direccionModel = new Direccion_model();
 
@@ -410,8 +422,8 @@ class Usuario_controller extends Controller{
         return redirect()->to('/registrarse');
     }
 
-    // LIMPIAR DATOS DE FORMULARIOS
-    public function limpiarDatosFormularioUsuario($tipo = null, $idUsuario = null) {
+    // LIMPIAR DATOS DE FORMULARIOS Y REDIRIGIR A LA PÁGINA CORRESPONDIENTE
+    public function limpiarDatosFormularioUsuario(string $tipo = null, int $idUsuario = null) {
         $session = session();
 
         switch($tipo) {

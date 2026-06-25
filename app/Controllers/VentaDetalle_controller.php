@@ -14,7 +14,8 @@ class VentaDetalle_controller extends Controller{
         helper(['form', 'url']);
     }
 
-    public function mostrarDetalleVenta($idVenta){
+    // MOSTRAR DETALLE DE VENTA
+    public function mostrarDetalleVenta(int $idVenta){
         $ventasCabeceraModel = new VentaCabecera_model();
         $ventaGeneral = $ventasCabeceraModel->find($idVenta);
         $data['venta_general'] = $ventaGeneral;

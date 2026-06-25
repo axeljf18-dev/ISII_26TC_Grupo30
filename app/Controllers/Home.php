@@ -10,6 +10,7 @@ use CodeIgniter\CLI\Console;
 
 class Home extends BaseController
 {
+    // Método para mostrar la página de inicio
     public function inicio(){
         $productoModel = new Producto_model();
         $data['productos'] = $productoModel->getProductosConMarcaYCategoria();
@@ -26,6 +27,7 @@ class Home extends BaseController
         echo view('plantillas/footer', $data);
     }
 
+    // Método para buscar y mostrar productos 
     public function buscador(){
         $session = session();
         $query = $this->request->getVar('query'); 
@@ -47,6 +49,7 @@ class Home extends BaseController
         echo view('plantillas/footer', $data);
     }
 
+    // Método privado para buscar productos según la consulta
     private function buscarProductos($query){
         $productoModel = new Producto_model();
 
@@ -61,6 +64,7 @@ class Home extends BaseController
             ->findAll();
     }
 
+    // Método privado para mostrar la vista de productos buscados
     private function mostrarProductosBuscados($data){
         $data['titulo'] = 'NetShop | Productos';
 
@@ -70,7 +74,8 @@ class Home extends BaseController
         echo view('plantillas/footer', $data);
     }
 
-    public function buscarPorRangoPrecioBuscador($valor){
+    // Método para buscar productos por rango de precio en el buscador
+    public function buscarPorRangoPrecioBuscador(string $valor){
         $precioMin = $this->request->getVar('precioMin');
         $precioMax = $this->request->getVar('precioMax');  
         $productosModel = new Producto_model();
@@ -100,7 +105,8 @@ class Home extends BaseController
         $this->mostrarProductosBuscados($data);
     }
 
-    public function ordenarProductosPorMayorPrecioBuscador($valor){
+    // Método para ordenar productos por mayor precio en el buscador
+    public function ordenarProductosPorMayorPrecioBuscador(string $valor){
         $productosModel = new Producto_model();
         $data['productosTotal'] = $productosModel->getProductosConMarcaYCategoria();
         $categoriaModel = new Categoria_model();
@@ -123,7 +129,8 @@ class Home extends BaseController
         $this->mostrarProductosBuscados($data);
     }
 
-    public function ordenarProductosPorMenorPrecioBuscador($valor){
+    // Método para ordenar productos por menor precio en el buscador
+    public function ordenarProductosPorMenorPrecioBuscador(string $valor){
         $productosModel = new Producto_model();
         $data['productosTotal'] = $productosModel->getProductosConMarcaYCategoria();
         $categoriaModel = new Categoria_model();
@@ -146,6 +153,7 @@ class Home extends BaseController
         $this->mostrarProductosBuscados($data);
     }
 
+    // Método para listar todos los productos
     public function listarProductos(){
         $productoModel = new Producto_model();
         $data['productos'] = $productoModel->getProductosConMarcaYCategoria();
@@ -157,6 +165,7 @@ class Home extends BaseController
         $this->mostrarVistaProductos($data, 'plantillas/productos');
     }
 
+    // Método privado para mostrar la vista de productos
     private function mostrarVistaProductos($data, $vista){
         $data['titulo'] = 'NetShop | Productos';
 
@@ -166,6 +175,7 @@ class Home extends BaseController
         echo view('plantillas/footer', $data);
     }
 
+    // Método para buscar productos por rango de precio en la vista de productos
     public function buscarPorRangoPrecioProductos(){
         $precioMin = $this->request->getVar('precioMin');
         $precioMax = $this->request->getVar('precioMax');  
@@ -195,6 +205,7 @@ class Home extends BaseController
         $this->mostrarVistaProductos($data, 'plantillas/productosPrecio');
     }
 
+    // Método para ordenar productos por mayor precio en la vista de productos
     public function ordenarProductosPorMayorPrecioProductos(){
         $categoriaModel = new Categoria_model();
         $data['categorias'] = $categoriaModel->getCategoriasActivas();
@@ -210,6 +221,7 @@ class Home extends BaseController
         $this->mostrarVistaProductos($data, 'plantillas/productosOrdenados');
     }
 
+    // Método para ordenar productos por menor precio en la vista de productos
     public function ordenarProductosPorMenorPrecioProductos(){
         $categoriaModel = new Categoria_model();
         $data['categorias'] = $categoriaModel->getCategoriasActivas();
@@ -225,7 +237,8 @@ class Home extends BaseController
         $this->mostrarVistaProductos($data, 'plantillas/productosOrdenados');
     }
 
-    public function listarProductosPorMarca($idMarca){
+    // Método para listar productos por marca
+    public function listarProductosPorMarca(int $idMarca){
         $productosModel = new Producto_model();
         $data['productosTotal'] = $productosModel->getProductosConMarcaYCategoria();
         $categoriaModel = new Categoria_model();
@@ -240,7 +253,8 @@ class Home extends BaseController
         $this->mostrarVistaProductos($data, 'plantillas/productosMarca');
     }
 
-    public function buscarPorRangoPrecioMarca($idMarca){
+    // Método para buscar productos por rango de precio en la vista de productos por marca
+    public function buscarPorRangoPrecioMarca(int $idMarca){
         $precioMin = $this->request->getVar('precioMin');
         $precioMax = $this->request->getVar('precioMax');  
         $productosModel = new Producto_model();
@@ -271,7 +285,8 @@ class Home extends BaseController
         $this->mostrarVistaProductos($data, 'plantillas/productosMarca');
     }
 
-    public function ordenarProductosPorMayorPrecioMarca($idMarca){
+    // Método para ordenar productos por mayor precio en la vista de productos por marca
+    public function ordenarProductosPorMayorPrecioMarca(int $idMarca){
         $productosModel = new Producto_model();
         $data['productosTotal'] = $productosModel->getProductosConMarcaYCategoria();
         $categoriaModel = new Categoria_model();
@@ -295,7 +310,8 @@ class Home extends BaseController
         $this->mostrarVistaProductos($data, 'plantillas/productosMarca');
     }
 
-    public function ordenarProductosPorMenorPrecioMarca($idMarca){
+    // Método para ordenar productos por menor precio en la vista de productos por marca
+    public function ordenarProductosPorMenorPrecioMarca(int $idMarca){
         $productosModel = new Producto_model();
         $data['productosTotal'] = $productosModel->getProductosConMarcaYCategoria();
         $categoriaModel = new Categoria_model();
@@ -319,7 +335,8 @@ class Home extends BaseController
         $this->mostrarVistaProductos($data, 'plantillas/productosMarca');
     }
 
-    public function listarProductosPorCategoria($idCategoria){
+    // Método para listar productos por categoría
+    public function listarProductosPorCategoria(int $idCategoria){
         $productoModel = new Producto_model();
         $dato['productosTotal'] = $productoModel->getProductosConMarcaYCategoria();
         $categoriaModel = new Categoria_model();
@@ -338,7 +355,8 @@ class Home extends BaseController
         echo view('plantillas/footer', $dato);
     }
 
-    public function buscarPorRangoPrecioCategoria($idCategoria){
+    // Método para buscar productos por rango de precio en la vista de productos por categoría
+    public function buscarPorRangoPrecioCategoria(int $idCategoria){
         $precioMin = $this->request->getVar('precioMin');
         $precioMax = $this->request->getVar('precioMax');
         $productosModel = new Producto_model();
@@ -369,7 +387,8 @@ class Home extends BaseController
         $this->mostrarVistaProductos($data, 'plantillas/productosCategoria');
     }
 
-    public function ordenarProductosPorMayorPrecioCategoria($idCategoria){
+    // Método para ordenar productos por mayor precio en la vista de productos por categoría
+    public function ordenarProductosPorMayorPrecioCategoria(int $idCategoria){
         $productosModel = new Producto_model();
         $data['productosTotal'] = $productosModel->getProductosConMarcaYCategoria();
         $categoriaModel = new Categoria_model();
@@ -393,7 +412,8 @@ class Home extends BaseController
         $this->mostrarVistaProductos($data, 'plantillas/productosCategoria');
     }
 
-    public function ordenarProductosPorMenorPrecioCategoria($idCategoria){
+    // Método para ordenar productos por menor precio en la vista de productos por categoría
+    public function ordenarProductosPorMenorPrecioCategoria(int $idCategoria){
         $productosModel = new Producto_model();
         $data['productosTotal'] = $productosModel->getProductosConMarcaYCategoria();
         $categoriaModel = new Categoria_model();
@@ -417,6 +437,7 @@ class Home extends BaseController
         $this->mostrarVistaProductos($data, 'plantillas/productosCategoria');
     }
 
+    // Método para mostrar la página de ayuda
     public function ayuda(){
         $categoriaModel = new Categoria_model();
         $dato['categorias'] = $categoriaModel->getCategoriasActivas();
@@ -430,6 +451,7 @@ class Home extends BaseController
         echo view('plantillas/footer', $dato);
     }
 
+    // Método para mostrar la página de contacto
     public function contacto(){
         $categoriaModel = new Categoria_model();
         $dato['categorias'] = $categoriaModel->getCategoriasActivas();
@@ -443,6 +465,7 @@ class Home extends BaseController
         echo view('plantillas/footer', $dato);
     }
 
+    // Método para mostrar la página de consultas
     public function consultas(){
         $categoriaModel = new Categoria_model();
         $dato['categorias'] = $categoriaModel->getCategoriasActivas();
@@ -456,6 +479,7 @@ class Home extends BaseController
         echo view('plantillas/footer', $dato);
     }
 
+    // Método para mostrar la página de quienes somos
     public function quienesSomos(){
         $categoriaModel = new Categoria_model();
         $dato['categorias'] = $categoriaModel->getCategoriasActivas();
@@ -469,6 +493,7 @@ class Home extends BaseController
         echo view('plantillas/footer', $dato);
     }
 
+    // Método para mostrar la página de comercialización
     public function comercializacion(){
         $categoriaModel = new Categoria_model();
         $dato['categorias'] = $categoriaModel->getCategoriasActivas();
@@ -482,6 +507,7 @@ class Home extends BaseController
         echo view('plantillas/footer', $dato);
     }
 
+    // Método para mostrar la página de términos y usos
     public function terminosUsos(){
         $categoriaModel = new Categoria_model();
         $dato['categorias'] = $categoriaModel->getCategoriasActivas();

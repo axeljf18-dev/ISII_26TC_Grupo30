@@ -23,6 +23,7 @@ class VentaCabecera_controller extends Controller{
         $this->productoModel = new Producto_model();
     }
 
+    // Metodo para recibir los datos de la venta desde el formulario
     public function recibirDatosDeLaVenta() {
         $request = \Config\Services::request();
 
@@ -37,7 +38,8 @@ class VentaCabecera_controller extends Controller{
         return $this->validarVenta($idMetodoPago, $carritoItems);
     }
 
-    public function validarVenta($idMetodoPago, $carritoItems){
+    // Validar venta (método de pago y stock de productos)
+    public function validarVenta(int $idMetodoPago,  array $carritoItems){
         $session = session();
 
         $metodoPagoModel = new MetodoPago_model();
@@ -81,7 +83,8 @@ class VentaCabecera_controller extends Controller{
         return $this->registrarVenta($productosValidos, $idMetodoPago, $total);
     }
 
-    public function registrarVenta($productosValidos, $idMetodoPago, $total){
+    // Registrar venta (cabecera y detalle)
+    public function registrarVenta(array $productosValidos, int $idMetodoPago, float $total){
         $session = session();
         $ventasModel = new VentaCabecera_model();
         $detalleModel = new VentaDetalle_model();
@@ -111,6 +114,7 @@ class VentaCabecera_controller extends Controller{
         return redirect()->to(base_url('vistaDetalleCompra/' . $idVenta));
     }
 
+    // Mostrar compras del cliente
     public function mostrarMisComprasCliente(){ 
         $categoriaModel = new Categoria_model();
         $data['categorias'] = $categoriaModel->getCategoriasActivas();
@@ -130,6 +134,7 @@ class VentaCabecera_controller extends Controller{
         echo view('plantillas/footer', $data);
     }
 
+    // Mostrar compras del cliente filtradas por fechas
     public function mostrarComprasPorFechasCliente(){
         $session = session();
         $queryFechaInicio = $this->request->getVar('fechaInicioQuery20');
@@ -150,7 +155,8 @@ class VentaCabecera_controller extends Controller{
         echo view('plantillas/footer', $data);
     }
 
-    private function filtrarComprasCliente($queryFechaInicio, $queryFechaFin){
+    // Metodo para filtrar compras del cliente por fechas
+    private function filtrarComprasCliente(?string $queryFechaInicio, ?string $queryFechaFin){
         $session = session();
         $userId = session()->get('id_usuario');
         $ventaModel = new VentaCabecera_model();
@@ -173,6 +179,7 @@ class VentaCabecera_controller extends Controller{
         return $data;
     }
 
+    // Mostrar todas las ventas para el administrador
     public function mostrarVentasAdmin(){
         $ventasCabeceraModel = new VentaCabecera_model();
         $ventaDetalleModel = new VentaDetalle_model();
@@ -198,7 +205,8 @@ class VentaCabecera_controller extends Controller{
         echo view('plantillas/footer');
     }
 
-    private function calcularResumenVentasAdmin($ventasCabecera, $ventaDetalle){
+    // Calcular resumen de ventas para el administrador
+    private function calcularResumenVentasAdmin(VentaCabecera_model $ventasCabecera, VentaDetalle_model $ventaDetalle){
         // Para el resumen (todas las ventas)
         $todasLasVentas = $ventasCabecera->select("venta_cabecera.*, CONCAT(usuario.apellido, ', ', usuario.nombre) as usuario_nombre, metodo_pago.nombre as metodo_pago_nombre")->join('usuario', 'usuario.id_usuario = venta_cabecera.id_usuario')->join('metodo_pago', 'metodo_pago.id_metodo_pago = venta_cabecera.id_metodo_pago')->orderBy('fecha', 'ASC')->findAll();
 
@@ -293,6 +301,7 @@ class VentaCabecera_controller extends Controller{
         return $resultado;
     }
 
+    // Mostrar ventas filtradas por fechas para el administrador
     public function mostrarVentasPorFechasAdmin(){
         $session = session();
         $queryFechaInicio = $this->request->getVar('fechaInicioQuery');
@@ -342,7 +351,8 @@ class VentaCabecera_controller extends Controller{
         echo view('plantillas/footer');
     }
 
-    private function calcularResumenVentasPorFechasAdmin($ventaCabecera, $ventaDetalle, $queryFechaInicio, $queryFechaFin){
+    // Calcular resumen de ventas filtradas por fechas para el administrador
+    private function calcularResumenVentasPorFechasAdmin(VentaCabecera_model $ventaCabecera, VentaDetalle_model $ventaDetalle, ?string $queryFechaInicio, ?string $queryFechaFin){
         $fechaFinMasUno = date('Y-m-d', strtotime($queryFechaFin . ' +1 day'));
         // Ventas completas para el resumen (filtradas por fechas)
         $todasLasVentas = $ventaCabecera->select("venta_cabecera.*, CONCAT(usuario.apellido, ', ', usuario.nombre) as usuario_nombre, metodo_pago.nombre as metodo_pago_nombre")->join('usuario', 'usuario.id_usuario = venta_cabecera.id_usuario')->join('metodo_pago', 'metodo_pago.id_metodo_pago = venta_cabecera.id_metodo_pago')->where('fecha >=', $queryFechaInicio)->where('fecha <', $fechaFinMasUno)->orderBy('fecha', 'ASC')->findAll();

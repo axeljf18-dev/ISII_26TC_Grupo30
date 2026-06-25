@@ -17,7 +17,8 @@ class Carrito_controller extends BaseController{
         $cart->contents();
     }
 
-    public function add($id = null){
+    // AGREGAR PRODUCTO AL CARRITO
+    public function add(int $id = null){
         $cart = \Config\Services::cart();
         $request = \Config\Services::request();
 
@@ -38,6 +39,7 @@ class Carrito_controller extends BaseController{
         return redirect()->back()->withInput();
     }
 
+    // ACTUALIZAR CARRITO
     public function update(){
         $cart = \Config\Services::cart();
         $request = \Config\Services::request();
@@ -53,12 +55,14 @@ class Carrito_controller extends BaseController{
         return redirect()->back()->withInput();
     }
 
+    // DEVOLVER CARRITO 
     public function devolverCarrito(){
         $cart = \Config\Services::cart(); 
         return $cart->contents();
     }
 
-    public function suma($rowid){
+    // SUMAR CANTIDAD DE PRODUCTOS EN EL CARRITO
+    public function suma(string $rowid){
         $cart = \Config\Services::cart();
         $item = $cart->getItem($rowid);
         if($item){
@@ -70,7 +74,8 @@ class Carrito_controller extends BaseController{
         return redirect()->to('/carrito');
     }
 
-    public function resta($rowid){
+    // RESTAR CANTIDAD DE PRODUCTOS EN EL CARRITO
+    public function resta(string $rowid){
         $cart = \Config\Services::cart();
         $item = $cart->getItem($rowid);
         if($item){
@@ -86,13 +91,15 @@ class Carrito_controller extends BaseController{
         return redirect()->to('/carrito');
     }
 
-    public function eliminarProducto($rowid){
+    // ELIMINAR PRODUCTO DEL CARRITO
+    public function eliminarProducto(string $rowid){
         $cart = \Config\Services::cart();
         $cart->remove($rowid);
 
         return redirect()->to('/carrito');
     }
 
+    // ELIMINAR CARRITO COMPLETO
     public function eliminarCarrito(){
         $cart = \Config\Services::cart();
         $cart->destroy();
@@ -100,6 +107,7 @@ class Carrito_controller extends BaseController{
         return redirect()->to('/carrito');
     }
 
+    // MOSTRAR CARRITO
     public function mostrarCarrito(){
         $metodoModel = new MetodoPago_model();
         $data['metodosPago'] = $metodoModel->getMetodosPagoActivos();
@@ -118,6 +126,7 @@ class Carrito_controller extends BaseController{
         echo view('plantillas/footer', $this->dato);
     }
 
+    // VERIFICAR SI HAY PRODUCTOS EN EL CARRITO
     private function verificarCarrito(){
         $cart = \Config\Services::cart();
         return !empty($cart->contents()); // da true si hay productos y false si está vacío

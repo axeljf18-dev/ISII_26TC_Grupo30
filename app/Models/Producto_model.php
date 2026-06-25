@@ -7,21 +7,25 @@ class Producto_model extends Model{
     protected $primaryKey = 'id_producto';
     protected $allowedFields = ['nombre', 'imagen', 'id_categoria', 'precio', 'precio_vta', 'stock', 'stock_min', 'eliminado', 'descripcion', 'id_marca', 'id_proveedor'];
 
+    // Método para obtener todos los productos con su categoría
     public function verificarProductos(){
         return $this->select('producto.*, categoria.descripcion as categoria_descripcion')
                     ->join('categoria', 'categoria.id_categoria = producto.id_categoria')
                     ->paginate(7);
     }
 
+    // Método para obtener todos los productos activados
     public function getProductosActivados(){
         return $this->select('producto.*, categoria.descripcion as categoria_descripcion')->join('categoria', 'categoria.id_categoria = producto.id_categoria')->where('producto.eliminado', 'NO')->paginate(7);
     }
 
+    // Método para obtener todos los productos desactivados
     public function getProductosDesactivados(){
         return $this->select('producto.*, categoria.descripcion as categoria_descripcion')->join('categoria', 'categoria.id_categoria = producto.id_categoria')->where('producto.eliminado', 'SI')->paginate(7);
     }
 
-    public function buscarProductosAll($query){
+    // Método para buscar productos por nombre
+    public function buscarProductosAll(string $query){
         if($query){
             return $this->select('producto.*, categoria.descripcion as categoria_descripcion')
                         ->join('categoria', 'categoria.id_categoria = producto.id_categoria')
@@ -31,7 +35,8 @@ class Producto_model extends Model{
         return [];
     }
 
-    public function buscarProductosActivos($query){
+    // Método para buscar productos activos por nombre
+    public function buscarProductosActivos(string $query){
         if($query){
             return $this->select('producto.*, categoria.descripcion as categoria_descripcion')
                         ->join('categoria', 'categoria.id_categoria = producto.id_categoria')
@@ -42,7 +47,8 @@ class Producto_model extends Model{
         return [];
     }
 
-    public function buscarProductosDesactivados($query){
+    // Método para buscar productos desactivados por nombre
+    public function buscarProductosDesactivados(string $query){
         if($query){
             return $this->select('producto.*, categoria.descripcion as categoria_descripcion')
                         ->join('categoria', 'categoria.id_categoria = producto.id_categoria')
@@ -53,6 +59,7 @@ class Producto_model extends Model{
         return [];
     }
 
+    // Método para obtener todos los productos con su marca y categoría
     public function getProductosConMarcaYCategoria(){
         return $this->select('producto.*, marca.activo as activo_marca, categoria.activo as activo_categoria')
                     ->join('marca', 'marca.id_marca = producto.id_marca')
@@ -60,6 +67,7 @@ class Producto_model extends Model{
                     ->findAll();
     }
 
+    // Método para obtener todos los productos con su marca y categoría, filtrando por activos
     public function getProductosConMarcaYCategoriaQuery(){
         return $this->select('producto.*, marca.activo as activo_marca, categoria.activo as activo_categoria, categoria.descripcion as categoria_descripcion')
                     ->join('marca', 'marca.id_marca = producto.id_marca')
@@ -69,16 +77,19 @@ class Producto_model extends Model{
                     ->where('categoria.activo', 1);
     }
 
-    public function validarStock($idProducto, $cantidad) {
+    // Método para validar si hay suficiente stock de un producto
+    public function validarStock(int $idProducto, int $cantidad) {
         $producto = $this->buscarProductoPorId($idProducto);
         return $producto && $producto['stock'] >= $cantidad;
     }
 
-    public function buscarProductoPorId($idProducto){
+    // Método para buscar un producto por su ID
+    public function buscarProductoPorId(int $idProducto){
         return $this->find($idProducto); 
     }
 
-    public function actualizarStockProducto ($idProducto, $nuevoStock){
+    // Método para actualizar el stock de un producto
+    public function actualizarStockProducto (int $idProducto, int $nuevoStock){
         return $this->update($idProducto, ['stock' => $nuevoStock]);
     }
 }

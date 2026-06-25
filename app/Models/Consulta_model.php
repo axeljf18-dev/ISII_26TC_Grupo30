@@ -7,6 +7,7 @@ class Consulta_model extends Model{
     protected $primaryKey = 'id_consulta';
     protected $allowedFields = ['nombre', 'apellido', 'dni', 'telefono', 'email', 'consulta', 'leido', 'baja'];
 
+    // Método para obtener todas las consultas
     public function getConsultaAll() {
         return $this->findAll();
     }

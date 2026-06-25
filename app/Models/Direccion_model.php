@@ -7,11 +7,13 @@ class Direccion_model extends Model{
     protected $primaryKey = 'id_direccion';
     protected $allowedFields = ['barrio', 'calle', 'numero', 'id_localidad', 'id_usuario'];
 
+    // Método para obtener todas las direcciones activas
     public function getDireccionActivas() {
         return $this->findAll();
     }
 
-    public function validarDireccion($barrio, $calle, $numero){
+    //  Método para validar si una dirección existe y está activa
+    public function validarDireccion(string $barrio, string $calle, string $numero){
         if(!empty($barrio) && strlen(trim($barrio)) > 100){
             return false;
         }

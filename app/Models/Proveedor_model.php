@@ -7,11 +7,13 @@ class Proveedor_model extends Model{
     protected $primaryKey = 'id_proveedor';
     protected $allowedFields = ['nombre', 'apellido', 'email'];
 
+    // Método para obtener todos los proveedores activos
     public function getProveedoresActivos() {
         return $this->findAll();
     }
 
-    public function validarProveedor($idProveedor){
+    // Método para validar si un proveedor existe
+    public function validarProveedor(int $idProveedor){
         $proveedor = $this->where('id_proveedor', $idProveedor)->first();
         return $proveedor !== null;
     }

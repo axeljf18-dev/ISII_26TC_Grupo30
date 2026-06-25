@@ -43,6 +43,7 @@ $RECYCLE.BIN/
 # as it poses a security risk.
 .env
 .vagrant
+.vs
 Vagrantfile
 
 #-------------------------
@@ -124,3 +125,4 @@ nb-configuration.xml
 
 /results/
 /phpunit*.xml
+/assets/uploads/1781218210_a10faf798f2746287d84.png

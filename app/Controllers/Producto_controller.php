@@ -8,6 +8,7 @@ use App\Models\Localidad_model;
 use App\Models\Marca_model;
 use App\Models\Proveedor_model;
 use App\models\Usuarios_model;
+use CodeIgniter\HTTP\IncomingRequest;
 
 class Producto_controller extends Controller{
     public function __construct(){
@@ -15,7 +16,8 @@ class Producto_controller extends Controller{
         $session = session();
     }
 
-    public function listarProductos($estadoProductos){
+    // LISTAR PRODUCTOS 
+    public function listarProductos(string $estadoProductos){
         $productoModel = new Producto_model();
 
         $hayProductosTotales = $productoModel->countAllResults() > 0;
@@ -45,7 +47,8 @@ class Producto_controller extends Controller{
         echo view('plantillas/footer');
     }
 
-    public function buscarProductos($estadoProductos){
+    // BUSCAR PRODUCTOS
+    public function buscarProductos(string $estadoProductos){
         $session = session();
         $productoModel = new Producto_model();
 
@@ -82,6 +85,7 @@ class Producto_controller extends Controller{
         echo view('plantillas/footer');
     }
 
+    // FORMULARIO DE ALTA DE PRODUCTO
     public function mostrarFormularioCrearProducto(){
         $marcaModel = new Marca_model();
         $data['marcas'] = $marcaModel->getMarcasActivas();
@@ -99,7 +103,8 @@ class Producto_controller extends Controller{
         echo view('plantillas/footer');
     }
 
-    public function mostrarFormularioActualizarProducto($idProducto){
+    // FORMULARIO DE ACTUALIZAR PRODUCTO
+    public function mostrarFormularioActualizarProducto(int $idProducto){
         $productoModel = new Producto_model();
         $data['producto'] = $productoModel->find($idProducto);
         $marcaModel = new Marca_model();
@@ -118,7 +123,8 @@ class Producto_controller extends Controller{
         echo view('plantillas/footer');
     }
 
-    public function mostrarMensajeConfirmacion($idProducto, $accion) {
+    // MENSAJE DE CONFIRMACIÓN DE ACCIÓN DE PRODUCTO (DESACTIVAR/REACTIVAR)
+    public function mostrarMensajeConfirmacion(int $idProducto, string $accion) {
         $productoModel = new Producto_model();
         $producto = $productoModel->find($idProducto);
 
@@ -128,7 +134,8 @@ class Producto_controller extends Controller{
         echo view('plantillas/footer');
     }
 
-    public function desactivarProducto($idProducto){
+    // DESACTIVAR PRODUCTO
+    public function desactivarProducto(int $idProducto){
         $productoModel = new Producto_model();
         $data['producto'] = $productoModel->find($idProducto);
 
@@ -139,7 +146,8 @@ class Producto_controller extends Controller{
         return redirect()->to('/mostrarListaProductosActualizarEliminar');
     }
 
-    public function reactivarProducto($idProducto){
+    // REACTIVAR PRODUCTO
+    public function reactivarProducto(int $idProducto){
         $productoModel = new Producto_model();
         $data['producto'] = $productoModel->find($idProducto);
 
@@ -150,6 +158,7 @@ class Producto_controller extends Controller{
         return redirect()->to('/mostrarListaProductosActualizarEliminar');
     }
 
+    // RECIBIR DATOS DEL FORMULARIO DE PRODUCTO (ALTA O ACTUALIZACIÓN)
     public function recibirDatosFormularioProducto(){
         $datos = $this->request;
 
@@ -162,7 +171,7 @@ class Producto_controller extends Controller{
     }
 
     // CREAR PRODUCTO
-    public function validarDatosProducto($datos){
+    public function validarDatosProducto(IncomingRequest $datos){
         $session = session();
 
         $valido = $this->validate([
@@ -211,7 +220,8 @@ class Producto_controller extends Controller{
         }
     }
 
-    private function guardarProducto($datosProducto){
+    // GUARDAR PRODUCTO
+    private function guardarProducto(IncomingRequest $datosProducto){
         $session = session();
 
         $img = $datosProducto->getFile('imagen');
@@ -238,8 +248,8 @@ class Producto_controller extends Controller{
         return $this->response->redirect(site_url('altaDeProductos'));
     }
 
-    // ACTUALIZAR PRODUCTO
-    public function validarDatosProductoActualizar($datos){
+    // VALIDAR DATOS DE PRODUCTO PARA ACTUALIZAR
+    public function validarDatosProductoActualizar(IncomingRequest $datos){
         $session = session();
 
         $valido = $this->validate([
@@ -279,7 +289,8 @@ class Producto_controller extends Controller{
         }
     }
 
-    private function guardarProductoActualizado($idProducto, $datosProducto){
+    // GUARDAR PRODUCTO ACTUALIZADO
+    private function guardarProductoActualizado(int $idProducto, IncomingRequest $datosProducto){
         $session = session();
 
         $img = $datosProducto->getFile('imagen');
@@ -313,7 +324,8 @@ class Producto_controller extends Controller{
         return $this->response->redirect(site_url('mostrarListaProductosActualizarEliminar'));
     }
 
-    public function limpiarDatosFormularioProducto($idProducto = null) {
+    // LIMPIAR DATOS DEL FORMULARIO DE PRODUCTO
+    public function limpiarDatosFormularioProducto(int $idProducto = null) {
         $session = session();
 
         if ($idProducto === null) { // Del formulario alta de producto
